@@ -59,6 +59,9 @@ use DNSCheck::Lookup::Resolver;
 use DNSCheck::Lookup::ASN;
 use DNSCheck::Logger;
 
+# Remove
+use Data::Dumper;
+
 our $VERSION = "1.3.0";
 
 ######################################################################
@@ -227,9 +230,29 @@ sub dbh {
             no warnings 'uninitialized';
             $tries += 1;
             my $conf = $self->config->get("dbi");
-            my $dsn  = sprintf("DBI:mysql:database=%s;hostname=%s;port=%s",
-                $conf->{"database"}, $conf->{"host"}, $conf->{"port"});
 
+			#
+			# Lets check what kind of database we are connecting to
+			# TODO: This is a poor check, should load in a better way
+			# imho.
+			#
+			if($conf->{"type"} eq "postgresql") {
+				$self->{"dbtype"} = {
+					connect => "DBI:Pg:database=%s;host=%s;port=%s",
+					tbl_begin => "started",
+					tbl_end => "finished",
+					tbl_level => "degree"
+				};
+			} elsif ($conf->{"type"} eq "mysql") {
+				$self->{"dbtype"} = {
+					connect => "DBI:mysql:database=%s;hostname=%s;port=%s",
+					tbl_begin => "begin",
+					tbl_end => "end",
+					tbl_level => "level"
+				};
+			}
+			# Setup actual connection
+            my $dsn  = sprintf($self->{"dbtype"}->{connect}, $conf->{"database"}, $conf->{"host"}, $conf->{"port"});
             eval {
                 $dbh =
                   DBI->connect($dsn, $conf->{"user"}, $conf->{"password"},
@@ -246,6 +269,7 @@ sub dbh {
             croak "Cannot connect to database.";
         }
     }
+
 
     return $self->{"dbh"};
 }

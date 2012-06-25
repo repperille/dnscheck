@@ -39,6 +39,9 @@ use Sys::Syslog;
 use POSIX qw(:sys_wait_h strftime setuid setgid);
 use Time::HiRes 'sleep';
 
+# TODO: Remove
+use Data::Dumper;
+
 use vars qw[
   %running
   %reaped
@@ -217,18 +220,19 @@ sub detach
 }
 
 # Clean up residue from earlier run(s), if any.
-sub inital_cleanup {
+sub initial_cleanup {
     my $dbh;
 
     eval { $dbh = $check->dbh; };
+	print "test";
     if ($@) {
         slog 'critical', 'Database not available. Exiting.';
         exit(1);
     }
 
-    $dbh->do(
-q[UPDATE queue SET inprogress = NULL WHERE inprogress IS NOT NULL AND tester_pid IS NULL]
-    );
+	my $query = $dbh->prepare(q{UPDATE queue SET inprogress = NULL WHERE
+	inprogress IS NOT NULL AND tester_pid IS NULL});
+	$query->execute();
     my $c = $dbh->selectall_hashref(
 q[SELECT id, domain, tester_pid FROM queue WHERE inprogress IS NOT NULL AND tester_pid IS NOT NULL],
         'tester_pid'
@@ -394,13 +398,17 @@ sub running_in_child {
    # On some OS:s (including Ubuntu Linux), this is visible in the process list.
     $0 = "dispatcher: testing $domain (queue id $id)";
 
-    $dbh->do(q[UPDATE queue SET tester_pid = ? WHERE id = ?], undef, $$, $id);
+	$dbh->do(q[UPDATE queue SET tester_pid = ? WHERE id = ?], undef, $$, $id);
     $dbh->do(
-q[INSERT INTO tests (domain,begin, source_id, source_data) VALUES (?,NOW(),?,?)],
-        undef, $domain, $source, $source_data
+		"INSERT INTO tests (domain," . $check->{"dbtype"}->{tbl_begin} .
+		", source_id, source_data)
+		VALUES (?,NOW(),?,?)",
+        	undef, $domain, $source, $source_data
     );
 
-    my $test_id = $dbh->{'mysql_insertid'};
+
+	# Database independence
+	my $test_id = $dbh->last_insert_id(undef, undef, qw(tests id));
     slog 'debug', "$$ running test number $test_id.";
     my $line = 0;
 
@@ -410,7 +418,7 @@ q[INSERT INTO tests (domain,begin, source_id, source_data) VALUES (?,NOW(),?,?)]
     my $sth = $dbh->prepare(
         q[
         INSERT INTO results
-          (test_id,line,module_id,parent_module_id,timestamp,level,message,
+          (test_id,line,module_id,parent_module_id,timestamp,degree,message,
           arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ]
@@ -428,10 +436,12 @@ q[INSERT INTO tests (domain,begin, source_id, source_data) VALUES (?,NOW(),?,?)]
             $e->{arg}[8],           $e->{arg}[9],
         );
     }
-
     $dbh->do(
-q[UPDATE tests SET end = NOW(), count_critical = ?, count_error = ?, count_warning = ?, count_notice = ?, count_info = ?
-  WHERE id = ?],
+		"UPDATE
+			tests
+			SET " . $check->{"dbtype"}->{tbl_end} . " = NOW(),
+			count_critical = ?, count_error = ?, count_warning = ?, count_notice = ?, count_info = ?
+  		WHERE id = ?",
         undef, $log->count_critical, $log->count_error, $log->count_warning,
         $log->count_notice, $log->count_info, $test_id
     );
@@ -503,7 +513,9 @@ sub cleanup {
         $dbh->do(q[UPDATE queue SET inprogress = NULL WHERE domain = ?],
             undef, $domain);
         $dbh->do(
-q[DELETE FROM tests WHERE begin IS NOT NULL AND end IS NULL AND domain = ?],
+			"DELETE FROM tests 
+			WHERE " . $check->{"dbtype"}->{tbl_begin} . " IS NOT NULL 
+			AND " . $check->{"dbtype"}->{tbl_end} . " IS NULL AND domain = ?",
             undef, $domain
         );
     }
@@ -525,7 +537,7 @@ sub REAPER {
 
 sub main {
     setup();
-    inital_cleanup();
+    initial_cleanup();
     while ($running) {
         my $skip = dispatch();
         monitor_children();
