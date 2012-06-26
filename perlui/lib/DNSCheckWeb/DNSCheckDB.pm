@@ -68,6 +68,7 @@ sub new {
 	return $self;
 }
 
+# Fire of a new check, return id.
 sub start_check {
 	my $self = shift;
 	my $domain = shift;
@@ -78,6 +79,18 @@ sub start_check {
 		or die "Could not prepare statement";
 	$query->execute($domain);
 	#$query = "INSERT INTO queue (domain, priority, source_id, source_data, fake_parent_glue) VALUES ('" . DatabasePackage::escape($domain) . "', 10, $id, '" . DatabasePackage::escape($sourceData) . "', '" . DatabasePackage::escape($sourceData) . "')";
+}
+
+# Fetches the version of DNSChecker that we are running.
+sub get_version {
+	my $self = shift;
+
+	my $dbh = $self->{dbh};
+	my $query = $dbh->prepare(q{
+		SELECT arg1 FROM results WHERE message = 'ZONE:BEGIN' and test_id = (select max(test_id) from results)
+		ORDER BY test_id DESC LIMIT 1;});
+	$query->execute();
+	return $query->fetchrow_arrayref;
 }
 
 1;

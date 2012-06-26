@@ -19,13 +19,13 @@ my $dbo = DNSCheckWeb::DNSCheckDB->new($config->{'dbi'});
 
 # Someone sent a query, no id hence insert in DB.
 if(defined($host)) {
-	my $dbh = DNSCheckWeb::DNSCheckDB->new($config->{'dbi'})->{dbh};
 	my $result = $dbo->start_check($host);
 }
 
 # Render result
 DNSCheckWeb::render('index.tpl', {
 	host => $host,
+	version => $dbo->get_version(),
 });
 
 1;
