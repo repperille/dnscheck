@@ -1,0 +1,7 @@
+dbi:
+    type: postgresql 				# PosgreSQL → Pg, MySQL → mysql
+    host: 127.0.0.1
+    port: 5432
+    database: dnscheckng
+    user: dnscheckng
+    password: gjesttest
