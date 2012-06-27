@@ -59,9 +59,6 @@ use DNSCheck::Lookup::Resolver;
 use DNSCheck::Lookup::ASN;
 use DNSCheck::Logger;
 
-# Remove
-use Data::Dumper;
-
 our $VERSION = "1.3.0";
 
 ######################################################################
@@ -229,33 +226,20 @@ sub dbh {
             # connect using what we were given and see if it works.
             no warnings 'uninitialized';
             $tries += 1;
-            my $conf = $self->config->get("dbi");
+			# Obtain handle to DBI configuratuib (type, username etc).
+            my $dbi = $self->config->get("dbi");
 
-			#
-			# Lets check what kind of database we are connecting to
-			# TODO: This is a poor check, should load in a better way
-			# imho.
-			#
-			if($conf->{"type"} eq "postgresql") {
-				$self->{"dbtype"} = {
-					connect => "DBI:Pg:database=%s;host=%s;port=%s",
-					tbl_begin => "started",
-					tbl_end => "finished",
-					tbl_level => "degree"
-				};
-			} elsif ($conf->{"type"} eq "mysql") {
-				$self->{"dbtype"} = {
-					connect => "DBI:mysql:database=%s;hostname=%s;port=%s",
-					tbl_begin => "begin",
-					tbl_end => "end",
-					tbl_level => "level"
-				};
-			}
-			# Setup actual connection
-            my $dsn  = sprintf($self->{"dbtype"}->{connect}, $conf->{"database"}, $conf->{"host"}, $conf->{"port"});
+			# Obtain and assign database specific information to dbh.
+			$self->{"dbtype"} = $self->config->get($dbi->{"type"});
+
+			# Setup DSN
+            my $dsn  = sprintf($self->{"dbtype"}->{driver},
+			$dbi->{"database"}, $dbi->{"host"}, $dbi->{"port"});
+
+			# Try to connect to given DSN
             eval {
                 $dbh =
-                  DBI->connect($dsn, $conf->{"user"}, $conf->{"password"},
+                  DBI->connect($dsn, $dbi->{"user"}, $dbi->{"password"},
                     { RaiseError => 1, AutoCommit => 1, PrintError => 0 });
             };
             if ($@) {
