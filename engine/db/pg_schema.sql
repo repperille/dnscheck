@@ -1,11 +1,10 @@
 -- $Id$
 
 -- DNSCheck Primary Data
--- AWESOME POSTGRES!
 
 /*! SET FOREIGN_KEY_CHECKS=0 */;
 
-CREATE TABLE IF NOT EXISTS messages (
+CREATE TABLE messages (
   id SERIAL PRIMARY KEY NOT NULL,
   tag TEXT NOT NULL default '',
   arguments smallint NOT NULL default 0,
@@ -24,7 +23,7 @@ CREATE TABLE IF NOT EXISTS messages (
 -- will be looked up in DNS as usual, or a name, a slash and an IP
 -- address. Example: "ns.example.com ns2.example.com/127.0.0.2"
 
-CREATE TABLE IF NOT EXISTS queue (
+CREATE TABLE queue (
   id SERIAL PRIMARY KEY NOT NULL,
   domain TEXT default NULL,
   priority smallint NOT NULL default '0',
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS queue (
   fake_parent_glue text NULL
 );
 
-CREATE TABLE IF NOT EXISTS tests (
+CREATE TABLE tests (
   id SERIAL PRIMARY KEY NOT NULL,
   domain TEXT NOT NULL default '',
   started timestamp default NULL, -- started instead of begin
@@ -49,7 +48,7 @@ CREATE TABLE IF NOT EXISTS tests (
   source_data TEXT NULL
 );
 
-CREATE TABLE IF NOT EXISTS results (
+CREATE TABLE results (
   id SERIAL PRIMARY KEY NOT NULL,
   test_id integer  NOT NULL,
   line integer  NOT NULL,
@@ -74,13 +73,13 @@ CREATE TABLE IF NOT EXISTS results (
 
 -- Name Service Providers
 
-CREATE TABLE IF NOT EXISTS nameservers (
+CREATE TABLE nameservers (
   id SERIAL PRIMARY KEY NOT NULL,
   nsp_id integer  NULL,
   nameserver TEXT UNIQUE NOT NULL default ''
 );
 
-CREATE TABLE IF NOT EXISTS nsp (
+CREATE TABLE nsp (
   id SERIAL PRIMARY KEY NOT NULL,
   name TEXT default '',
   email TEXT default ''
@@ -89,14 +88,14 @@ CREATE TABLE IF NOT EXISTS nsp (
 
 -- Domains and History
 
-CREATE TABLE IF NOT EXISTS domains (
+CREATE TABLE domains (
   id SERIAL PRIMARY KEY NOT NULL,
   domain TEXT NOT NULL default '',
   last_test timestamp default NULL,
   UNIQUE (domain)
 );
 
-CREATE TABLE IF NOT EXISTS delegation_history (
+CREATE TABLE delegation_history (
   id SERIAL PRIMARY KEY NOT NULL,
   domain TEXT NOT NULL default '',
   nameserver TEXT NOT NULL default '',
@@ -114,7 +113,7 @@ CREATE TABLE IF NOT EXISTS delegation_history (
 -- For most sources, this need only be done once on startup and then the
 -- numeric id can be used to insert into the queue or select from tests.
 
-CREATE TABLE IF NOT EXISTS source (
+CREATE TABLE source (
     id SERIAL PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     contact TEXT,
