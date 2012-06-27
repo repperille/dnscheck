@@ -416,12 +416,13 @@ sub running_in_child {
     $dc->zone->test($domain);
 
     my $sth = $dbh->prepare(
-        q[
+        "
         INSERT INTO results
-          (test_id,line,module_id,parent_module_id,timestamp,degree,message,
+          (test_id,line,module_id,parent_module_id,timestamp,
+		  " . $check->{"dbtype"}->{tbl_level} . ", message,
           arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        ]
+        "
     );
     while (defined(my $e = $log->get_next_entry)) {
         next if ($levels{ $e->{level} } < $levels{$savelevel});
