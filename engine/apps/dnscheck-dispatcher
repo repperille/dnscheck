@@ -186,6 +186,10 @@ sub setup {
     detach() unless $debug;
     open STDERR, '>>', $errfile or die "Failed to open error log: $!";
     printf STDERR "%s starting at %s\n", $0, scalar(localtime);
+    printf STDERR "%s using database %s (%s)\n",
+		$0,
+		$check->config->{"dbi"}->{"type"},
+		$check->config->{"dbi"}->{"host"};
     open PIDFILE, '>', $pidfile or die "Failed to open PID file: $!";
     print PIDFILE $$;
     close PIDFILE;
@@ -419,7 +423,7 @@ sub running_in_child {
         "
         INSERT INTO results
           (test_id,line,module_id,parent_module_id,timestamp,
-		  " . $check->{"dbtype"}->{tbl_level} . ", message,
+		  " . $check->{"dbtype"}->{"tbl_level"} . ", message,
           arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         "
@@ -440,7 +444,7 @@ sub running_in_child {
     $dbh->do(
 		"UPDATE
 			tests
-			SET " . $check->{"dbtype"}->{tbl_end} . " = NOW(),
+			SET " . $check->{"dbtype"}->{"tbl_end"} . " = NOW(),
 			count_critical = ?, count_error = ?, count_warning = ?, count_notice = ?, count_info = ?
   		WHERE id = ?",
         undef, $log->count_critical, $log->count_error, $log->count_warning,
