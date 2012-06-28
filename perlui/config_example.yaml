@@ -8,3 +8,24 @@ dbi:
     database: dnscheckng
     user: someuser
     password: somepassword
+
+
+#
+# Below are two database specific configurations. The database schemas
+# differs somewhat between postgresql and mysql, therefor this is
+# necessary. These standard settings should in most cases not be
+# changed.
+#
+# tbl_ are mappings to the actual database tables
+#
+mysql:
+    driver: DBI:mysql:database=%s;hostname=%s;port=%s
+    tbl_begin: begin
+    tbl_end: end
+    tbl_level: level
+
+postgresql:
+    driver: DBI:Pg:database=%s;host=%s;port=%s
+    tbl_begin: started
+    tbl_end: finished
+    tbl_level: degree

@@ -25,6 +25,6 @@ my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
 
 # Feed back result to browser
-print DNSCheckWeb::json_headers();
+print $dnscheck->json_headers();
 
 1;
