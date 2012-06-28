@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-package DNSCheckWeb::DNSCheckDB;
+package DNSCheckWeb::DB;
 
 use Carp;
 
@@ -33,7 +33,6 @@ sub new {
 			tbl_end => "finished",
 			tbl_level => "degree"
 		};
-
 	} elsif($db_info->{type} eq TYPE_MYSQL) {
 		$self = {
 			connect =>

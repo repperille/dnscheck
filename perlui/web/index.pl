@@ -4,18 +4,17 @@ use warnings;
 
 # Load needed libraries
 use DNSCheckWeb;
-use DNSCheckWeb::DNSCheckDB;
 use CGI;
 
 # Testing
 use Data::Dumper;
 
-my $cgi = new CGI;
+my $cgi = CGI->new();
 my $host = $cgi->param("host");
+my $sourceId = $cgi->param("host");
 
-# Load config
-my $config = DNSCheckWeb::config();
-my $dbo = DNSCheckWeb::DNSCheckDB->new($config->{'dbi'});
+my $dnscheck = DNSCheckWeb->new();
+my $dbo = $dnscheck->get_dbo();
 
 # Someone sent a query, no id hence insert in DB.
 if(defined($host)) {
@@ -23,7 +22,7 @@ if(defined($host)) {
 }
 
 # Render result
-DNSCheckWeb::render('index.tpl', {
+$dnscheck->render('index.tpl', {
 	host => $host,
 	version => $dbo->get_version(),
 });

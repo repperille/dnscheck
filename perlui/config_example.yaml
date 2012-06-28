@@ -1,0 +1,10 @@
+#
+# Edit this file to reflect your setup, then save as 'config.yaml'
+#
+dbi:
+    type: postgresql 				# PosgreSQL → Pg, MySQL → mysql
+    host: localhost
+    port: 5432
+    database: dnscheckng
+    user: someuser
+    password: somepassword
