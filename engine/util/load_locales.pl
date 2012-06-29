@@ -33,8 +33,8 @@ unless ( $dbh ) {
 }
 
 print "Clearing old content.\n" if $verbose;
-$dbh->do( q[DELETE FROM `messages`] );
-my $sth = $dbh->prepare( q[INSERT INTO `messages` (`tag`, `arguments`, `language`, `formatstring`, `description`) VALUES (?,?,?,?,?)] );
+$dbh->do( q[DELETE FROM messages] );
+my $sth = $dbh->prepare( q[INSERT INTO messages (tag, arguments, language, formatstring, description) VALUES (?,?,?,?,?)] );
 
 foreach my $filename ( <locale/*.yaml> ) {
     my $data = LoadFile( $filename );
