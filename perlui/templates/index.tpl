@@ -1,9 +1,8 @@
 [% INCLUDE header.tpl %]
-<form action="index.pl">
+<form action="pollResult.pl">
  <input type="hidden" name="test" value="standard" />
  Domenenavn: <input type="text" name="host" value="[% host %]"/> <br />
- <input type="submit" value="Test" /> <br />
- Versjon: [% version.0 %] <br />
- status: [% status %] <br />
- running id [% id %]
+ <input type="button" value="Test domene" onClick="load();" />
+ <span id="test"></span> </br >
+ <p>Versjon: [% version %]</p>
 [% INCLUDE footer.tpl %]
