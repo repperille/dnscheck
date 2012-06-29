@@ -1,11 +1,9 @@
 #!/usr/bin/perl
-
 #
 # This script should basically do the same things as getResult.php.
 # Poll for information from the database, and output that info as json
 # to the ajax call from the user.
 #
-
 use strict;
 use warnings;
 
@@ -59,7 +57,7 @@ if(defined($test_id) && $test_id > 0 && defined($locale)) {
 	$href_results->{tests} = $json;
 }
 # Feed result back to browser
-print $dnscheck->json_headers();
+$dnscheck->json_headers();
 print encode_json $href_results;
 
 exit;
