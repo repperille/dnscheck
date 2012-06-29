@@ -19,35 +19,45 @@ use constant TYPES => {
 	standard => "webgui",
 	undelegated => "webgui-undelegated"
 };
+
+use constant TEST_STARTED => "started";
+use constant TEST_RUNNING => "running";
+use constant TEST_FINISHED => "finished";
+
+
 # Some important objects
 my $cgi = new CGI;
 my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
 
 # Fetch parameters
-my $host = $cgi->param("host");
+my $domain = $cgi->param("domain");
 my $source = TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
 my $locale = 'en';
 
 # Variables for giving feedback
 my $test_id; # If test is finished, this will be set
-my $href_results = {}; # Final json-string containing status and results
+my $href_results = { # Final json-string containing status and results
+	status => TEST_STARTED,
+	domain => $domain,
+};
 
-# Received host name, check for running tests
-if(defined($host) && defined($source)) {
-	my $running = $dbo->get_running_result($host, $source, $source_data);
+# Received domain name, check for running tests
+if(defined($domain) && defined($source)) {
+	my $running = $dbo->get_running_result($domain, $source, $source_data);
 
 	if(@$running eq 0) {
 		# No tests running, fire of new test.
-		$dbo->start_check($host, $source, $source_data);
-		$href_results->{status} = "started new run";
+		$dbo->start_check($domain, $source, $source_data);
+		$href_results->{status} = TEST_STARTED;
 	} elsif($running->[0][2] eq 'NO') {
 		# Test for domain is running, but not finished
-		$href_results->{status} = "Not finished yet..";
+		$href_results->{status} = TEST_RUNNING;
 	} else {
 		# Finished test, set test_id
 		$test_id = $running->[0][0];
+		$href_results->{status} = TEST_FINISHED;
 	}
 }
 

@@ -1,3 +1,8 @@
+/**
+ * Global variables
+**/
+var interval;
+var loading_bar;
 
 // Loading stuff
 function load() {
@@ -19,7 +24,7 @@ function load() {
 	default:
 		v.innerHTML = s+'|';
 	}
-	setTimeout('load()',200);
+	loading_bar = setTimeout(load, 200);
 }
 
 // Ajax stuff going on
@@ -36,17 +41,35 @@ function pollResult() {
 	// Callbacks
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-			alert(xmlhttp.responseText);
+			var json = xmlhttp.responseText;
+			// TODO: Better parsing
+			json = eval ('(' + json + ')'); 
+			var json_status = json.status;
+			document.getElementById('status').innerHTML = json_status;
+
+			if(json_status == 'finished') {
+				clearInterval(interval);
+				clearTimeout(loading_bar);
+
+				// Update page
+				document.getElementById('test').innerHTML = '';
+			}
 		}
   	}
-
 	// What domain to query
 	var domain = document.getElementById('domain').value;
-	xmlhttp.open("GET","pollResult.pl?host="+domain + "&test=standard", false);
+	xmlhttp.open("GET","pollResult.pl?domain="+domain + "&test=standard", true);
 	xmlhttp.send();
+}
+
+
+function runAjax() {
+
+	interval = setInterval(pollResult, 1000);
 
 	load();
-
+	// Telling form to not submit?
+	return false;
 }
 // Do something when document loaded?
 window.onload = function () {
