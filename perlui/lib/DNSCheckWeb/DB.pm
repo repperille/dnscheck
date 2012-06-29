@@ -159,16 +159,19 @@ sub get_test_results {
 	return $query->fetchall_arrayref;
 }
 
-# Fetches the version of DNSChecker that we are running.
+# Returns the version of DNSChecker that we are running.
 sub get_version {
 	my $self = shift;
 
 	my $dbh = $self->{dbh};
 	my $query = $dbh->prepare(q{
-		SELECT arg1 FROM results WHERE message = 'ZONE:BEGIN' and test_id = (select max(test_id) from results)
+		SELECT arg1
+		FROM results
+		WHERE message = 'ZONE:BEGIN' and test_id = (select max(test_id) from results)
 		ORDER BY test_id DESC LIMIT 1;});
 	$query->execute();
-	return $query->fetchrow_arrayref;
+
+	return $query->fetchrow_arrayref->[0];
 }
 
 1;
