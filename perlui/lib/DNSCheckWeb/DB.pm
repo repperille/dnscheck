@@ -109,8 +109,7 @@ sub get_running_result {
 
 	$source_data = '';
 
-	my $dbh = $self->{dbh};
-	my $query = $dbh->prepare(q{
+	my $query = $self->{dbh}->prepare(q{
 		(SELECT
 			NULL AS id, NULL AS time, 'NO' AS finished,
 			source_data AS source_data
@@ -137,6 +136,25 @@ sub get_running_result {
 
 	$query->execute($source, $domain, $source_data, $source, $domain,
 	$source_data) or die "Could not execute query";
+
+	return $query->fetchall_arrayref;
+}
+
+sub get_test_results {
+	my ($self, $test_id, $locale) = @_;
+
+	my $query = $self->{dbh}->prepare(q{
+		SELECT *
+		FROM (
+			SELECT *
+			FROM results
+			WHERE results.test_id = ? AND results.degree != 'DEBUG'
+		) AS tmp
+		LEFT JOIN messages ON
+		tmp.message = messages.tag
+		AND messages.language = ?
+		ORDER BY tmp.id ASC}) or die "Prepare statement failed";
+	$query->execute($test_id, $locale) or die "Execute failed";
 
 	return $query->fetchall_arrayref;
 }
