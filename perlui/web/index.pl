@@ -31,17 +31,24 @@ if(defined($host) && defined($source)) {
 
 
 	my $running = $dbo->get_running_result($host, $source, $source_data);
-	
+
+
 	if(@$running eq 0) {
-		$status = "started new run";	
 		# No tests running, fire of new test.
 		$dbo->start_check($host, $source, $source_data);
-	} 
+		$status = "started new run";
+	}
 
 	if($running->[0][2] eq 'NO') {
 		$status = "it's not finished...";
 	}
 	$test_id = $running->[0][0];
+}
+
+# Lets redirect when we get results.
+if(defined($test_id) && $test_id > 0) {
+	print "Location: pollResult.pl?id=$test_id\n\n";
+	exit;
 }
 
 # Render result

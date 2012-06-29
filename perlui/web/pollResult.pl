@@ -12,19 +12,34 @@ use warnings;
 # Load needed libraries
 use DNSCheckWeb;
 use CGI;
+use JSON;
 
 # Testing
 use Data::Dumper;
 
 my $cgi = new CGI;
-my $host = $cgi->param("host");
-my $sourceId = $cgi->param("host");
+my $test_id = $cgi->param("id");
+my $locale = $cgi->param("locale");
 
 # Load config
 my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
 
+my $results;
+
 # Feed back result to browser
 print $dnscheck->json_headers();
+
+# Fetch all results on the given test_id 
+if(defined($test_id) && $test_id > 0 && defined($locale)) {
+	$results = $dbo->get_test_results($test_id, $locale);
+
+	my $json = encode_json $results;
+	$json = "{\"results\": ".$json."}";
+
+	print $json;
+}
+
+exit;
 
 1;
