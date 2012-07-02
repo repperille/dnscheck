@@ -41,7 +41,7 @@ sub render {
 
 	# Setup template and prepare browser
 	my $template = Template->new({INCLUDE_PATH => ['../templates']});
-	html_headers();
+	print html_headers();
 
 	# Adding some static variables
 	$vars->{title} = 'Zone checker!';
@@ -65,10 +65,10 @@ sub get_dbo {
 
 # Print headers to browser
 sub html_headers {
-	print CGI::header(-type=>'text/html; charset=utf-8', -expires=>'now');
+	return CGI::header(-type=>'text/html; charset=utf-8', -expires=>'now');
 }
 sub json_headers {
-	print CGI::header(-type=>'application/json; charset=utf-8', -expires=>'now');
+	return CGI::header(-type=>'application/json; charset=utf-8', -expires=>'now');
 }
 
 # Only for internal use when loading config.

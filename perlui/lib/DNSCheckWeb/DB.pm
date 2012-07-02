@@ -140,6 +140,7 @@ sub get_running_result {
 	return $query->fetchall_arrayref;
 }
 
+# Returns all test results for a given test id, and its locale
 sub get_test_results {
 	my ($self, $test_id, $locale) = @_;
 
