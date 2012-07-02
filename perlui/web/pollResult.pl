@@ -20,6 +20,7 @@ use constant TYPES => {
 	undelegated => "webgui-undelegated"
 };
 
+# Constants for feedback
 use constant TEST_STARTED => "started";
 use constant TEST_RUNNING => "running";
 use constant TEST_FINISHED => "finished";
@@ -39,8 +40,7 @@ my $locale = 'en';
 # Variables for giving feedback
 my $test_id; # If test is finished, this will be set
 my $href_results = { # Final json-string containing status and results
-	status => TEST_STARTED,
-	domain => $domain,
+	domain => $domain
 };
 
 # Received domain name, check for running tests
@@ -66,9 +66,11 @@ if(defined($test_id) && $test_id > 0 && defined($locale)) {
 	my $json =  $dbo->get_test_results($test_id, $locale);
 	$href_results->{tests} = $json;
 }
+
 # Feed result back to browser
 $dnscheck->json_headers();
 print encode_json $href_results;
 
 exit;
+
 1;

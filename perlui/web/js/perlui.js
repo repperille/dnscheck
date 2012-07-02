@@ -4,7 +4,7 @@
 var interval;
 var loading_bar;
 
-// Loading stuff
+// Loading indicator
 function load() {
 	var v = document.getElementById('test');
 	var s = 'Laster... ';
@@ -27,7 +27,7 @@ function load() {
 	loading_bar = setTimeout(load, 200);
 }
 
-// Ajax stuff going on
+// Polling for result
 function pollResult() {
 	var xmlhttp;
 	if (window.XMLHttpRequest)
@@ -62,10 +62,9 @@ function pollResult() {
 	xmlhttp.send();
 }
 
-
+// This will fire off polling
 function runAjax() {
-
-	interval = setInterval(pollResult, 1000);
+	interval = setInterval(pollResult, 2000);
 
 	load();
 	// Telling form to not submit?
