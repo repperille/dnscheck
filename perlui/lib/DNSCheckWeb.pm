@@ -78,6 +78,9 @@ sub json_headers {
 sub build_tree {
 	my ($self, $result) = @_;
 
+	#
+	# TODO: Some way of building a raw output tree?
+
 	# De reference
 	my @tests = @{ $result->{tests} };
 	my @modules = ();
@@ -107,21 +110,21 @@ sub build_tree {
 			level => lc($level)
 		};
 
-		# Pop previous level
-		if($type =~ m/END$/) {
-			$child_module->{tag_end} = '</li></ul>';
-			$indent--;
-		}
-		# Assign indentation
-		$child_module->{indent} = $indent;
-
-		# New level
+		# Format for new level
 		if($type=~ m/BEGIN$/) {
-			$child_module->{tag_end} = '<ul><li>';
+			$child_module->{tag_start} = '<ul><li>';
+			#$child_module->{tag_end} = '</li>';
 			$indent++;
 		} 
-		
 
+		# Format for end level
+		if($type =~ m/END$/) {
+			$child_module->{tag_start} = '</li><li>';
+			$child_module->{tag_end} = '</ul>';
+			$indent--;
+		}
+
+		# Check whether we encountered an error
 		if($child_module->{level} eq 'warn') {
 			$result_status = 'WARNING';
 		} elsif($child_module->{level} eq 'error') {

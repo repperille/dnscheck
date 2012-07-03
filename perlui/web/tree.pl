@@ -21,7 +21,7 @@ my $json = decode_json($file_contents);
 my $tree = $dnscheck->build_tree($json);
 
 $dnscheck->render('tree.tpl', {
-	page_title => "Results",
+	page_title => 'Results',
 	domain => $tree->{domain},
 	status => $tree->{status},
 	tests => $tree->{tests}
