@@ -90,7 +90,7 @@ sub build_tree {
 	foreach my $node (@tests) {
 
 		# Assign some variables from the set
-		my $module_id = $node->[3];
+		my $module_id = $node->[0];
 		my $parent_id = $node->[4];
 		my $module = $modules[$module_id];
 		my $level = $node->[6];
@@ -105,6 +105,7 @@ sub build_tree {
 
 		# Start to build module
 		my $child_module = {
+			id => $module_id,
 			caption => $caption,
 			description => $desc,
 			level => lc($level)
@@ -113,7 +114,7 @@ sub build_tree {
 		# Format for new level
 		if($type=~ m/BEGIN$/) {
 			$child_module->{tag_start} = '<ul><li>';
-			#$child_module->{tag_end} = '</li>';
+			#$child_module->{level} = "none";
 			$indent++;
 		} 
 
@@ -121,6 +122,7 @@ sub build_tree {
 		if($type =~ m/END$/) {
 			$child_module->{tag_start} = '</li><li>';
 			$child_module->{tag_end} = '</ul>';
+			#$child_module->{level} = "none";
 			$indent--;
 		}
 

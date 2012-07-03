@@ -27,7 +27,7 @@ use constant TEST_FINISHED => "finished";
 
 
 # Some important objects
-my $cgi = new CGI;
+my $cgi = CGI->new();
 my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
 
@@ -37,8 +37,7 @@ my $source = TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
 my $locale = 'en';
 
-# Variables for giving feedback
-my $test_id; # If test is finished, this will be set
+# The results 
 my $href_results = { # Final json-string containing status and results
 	domain => $domain
 };
@@ -56,19 +55,13 @@ if(defined($domain) && defined($source)) {
 		$href_results->{status} = TEST_RUNNING;
 	} else {
 		# Finished test, set test_id
-		$test_id = $running->[0][0];
+		$href_results->{test_id} = $running->[0][0];
 		$href_results->{status} = TEST_FINISHED;
 	}
 }
 
-# Fetch the results given that we got a test id
-if(defined($test_id) && $test_id > 0 && defined($locale)) {
-	my $json =  $dbo->get_test_results($test_id, $locale);
-	$href_results->{tests} = $json;
-}
-
 # Feed result back to browser
-$dnscheck->json_headers();
+print $dnscheck->json_headers();
 print encode_json $href_results;
 
 exit;

@@ -8,26 +8,40 @@ use JSON;
 
 use Data::Dumper;
 
+
+my $cgi = CGI->new();
 my $dnscheck = DNSCheckWeb->new();
+my $dbo = $dnscheck->get_dbo();
 
-# Read json
-open FILE, "json" or die $!;
-my $file_contents = do { local $/; <FILE> };
+my $test_id = $cgi->param('test_id');
+my $result = { };
 
-# Should not be necessary
-my $json = decode_json($file_contents);
+# Get results for the given test
+eval {
+	if(!defined($test_id) || $test_id <= 0) {
+		die "Invalid test id provided";
+	}
+	# Fetch results for the given test_id
+	$result->{tests} =  $dbo->get_test_results($test_id, 'en');
 
-#print $dnscheck->json_headers();
-my $tree = $dnscheck->build_tree($json);
+	# Dereference to check length
+	if(@{$result->{tests}} == 0) {
+		die "No results for the domain";
+	}
+	$result->{domain} = $result->{tests}->[0]->[8];
+	$result = $dnscheck->build_tree($result);
 
-$dnscheck->render('tree.tpl', {
-	page_title => 'Results',
-	domain => $tree->{domain},
-	status => $tree->{status},
-	tests => $tree->{tests}
-});
+	$dnscheck->render('tree.tpl', {
+		page_title => 'Results',
+		domain => $result->{domain},
+		status => $result->{status},
+		tests => $result->{tests}
+	});
 
-#print $dnscheck->json_headers();
-#print Dumper($tree);
+};
+if($@) {
+	print $dnscheck->html_headers();
+	print $@;
+}
 
 1;

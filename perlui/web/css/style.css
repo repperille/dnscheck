@@ -1,0 +1,31 @@
+.info {
+} 
+.notice {
+	text-style: bold;
+}
+.warning {
+	color: orange;
+}
+.error {
+	color: red;
+}
+
+.description {
+	display: none;
+	color: black;
+}
+
+.menu li {
+	display: inline;
+}
+
+ul, ol {
+	list-style: none;
+	margin-left:1.5em; 
+	padding-left:0px;
+}
+li {
+	margin-top: 0.25em
+	margin-bottom:0.25em; 
+}
+

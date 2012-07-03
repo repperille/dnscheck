@@ -52,7 +52,8 @@ function pollResult() {
 				clearTimeout(loading_bar);
 
 				// Update page
-				document.getElementById('test').innerHTML = '';
+				//document.getElementById('test').innerHTML = '';
+				window.location = 'tree.pl?test_id=' + json.test_id;
 			}
 		}
   	}
@@ -69,6 +70,15 @@ function runAjax() {
 	load();
 	// Telling form to not submit?
 	return false;
+}
+
+
+function toggleId(id) {
+	var e = document.getElementById(id);
+	if(e.style.display == 'block')
+		e.style.display = 'none';
+	else
+		e.style.display = 'block';
 }
 // Do something when document loaded?
 window.onload = function () {
