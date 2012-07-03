@@ -100,24 +100,24 @@ sub build_tree {
 		$node->[10], $node->[11], $node->[12], $node->[13], $node->[14],
 		$node->[15], $node->[16], $node->[18]);
 
-		# Clean output somehow
-		if(!defined($desc)) {
-			$desc = "-";
-		}
-
-		# Pop previous leve
-		if($type =~ m/END$/) {
-			$indent--;
-		}
-		# Actual output
+		# Start to build module
 		my $child_module = {
 			caption => $caption,
-			indent => $indent,
 			description => $desc,
-			level => lc($level),
+			level => lc($level)
 		};
+
+		# Pop previous level
+		if($type =~ m/END$/) {
+			$child_module->{tag_end} = '</li></ul>';
+			$indent--;
+		}
+		# Assign indentation
+		$child_module->{indent} = $indent;
+
 		# New level
 		if($type=~ m/BEGIN$/) {
+			$child_module->{tag_end} = '<ul><li>';
 			$indent++;
 		} 
 		
