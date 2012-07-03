@@ -2,9 +2,13 @@
 <h2>[% page_title %]</h2>
  <p>Domain: [% domain %]</p>
  <p>
+  Test started: [% started %]<br />
+  Test finished: [% finished %]
+ </p>
+ <p>
   Final result for this test:
-  <div class="[% test.status %]">
-   [% status %]
+  <div class="[% class %]">
+   [% class %]
   </div>
  <!-- Loop all the tests -->
  [% FOREACH test IN tests %]
@@ -12,7 +16,7 @@
    [% test.tag_start %]
   [% END %]
   <!-- Caption -->
-  <div id="mod_[% test.id %]" class="[% test.level %]">
+  <div id="mod_[% test.id %]" class="[% test.class %]">
    [% test.caption %]
    <!-- Description, if it exists -->
    [% IF test.description %] 

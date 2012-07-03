@@ -79,7 +79,7 @@ sub build_tree {
 	my ($self, $result) = @_;
 
 	#
-	# TODO: Some way of building a raw output tree?
+	# TODO: This "tree" includes HTML, should also have a raw tree?
 
 	# De reference
 	my @tests = @{ $result->{tests} };
@@ -93,7 +93,7 @@ sub build_tree {
 		my $module_id = $node->[0];
 		my $parent_id = $node->[4];
 		my $module = $modules[$module_id];
-		my $level = $node->[6];
+		my $class = $node->[6];
 		my $type = $node->[7];
 		my $caption = $node->[22];
 		my $desc = $node->[23];
@@ -108,29 +108,29 @@ sub build_tree {
 			id => $module_id,
 			caption => $caption,
 			description => $desc,
-			level => lc($level)
+			class => lc($class)
 		};
 
-		# Format for new level
+		# Format for new class
 		if($type=~ m/BEGIN$/) {
 			$child_module->{tag_start} = '<ul><li>';
-			#$child_module->{level} = "none";
+			#$child_module->{class} = "none";
 			$indent++;
 		} 
 
-		# Format for end level
+		# Format for end class
 		if($type =~ m/END$/) {
 			$child_module->{tag_start} = '</li><li>';
 			$child_module->{tag_end} = '</ul>';
-			#$child_module->{level} = "none";
+			#$child_module->{class} = "none";
 			$indent--;
 		}
 
 		# Check whether we encountered an error
-		if($child_module->{level} eq 'warn') {
-			$result_status = 'WARNING';
-		} elsif($child_module->{level} eq 'error') {
-			$result_status = 'ERROR';
+		if($child_module->{class} eq 'warn') {
+			$result_status = $child_module->{class};
+		} elsif($child_module->{class} eq 'error') {
+			$result_status = $child_module->{class};
 		}
 
 		push @modules, $child_module;
@@ -138,7 +138,7 @@ sub build_tree {
 
 	# Assign new reference, and return
 	$result->{tests} = \@modules;
-	$result->{status} = $result_status;
+	$result->{class} = $result_status;
 	return $result;
 }
 

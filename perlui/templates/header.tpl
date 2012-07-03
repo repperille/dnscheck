@@ -9,6 +9,6 @@
  <body>
  <h1>Domain tester</h1>
  <ul class="menu">
-  <li><a href="index.pl">Standard</a></li>
-  <li><a href="index.pl">Undelegated</a></li>
+  <li><a href="index.pl?type=standard">Standard</a></li>
+  <li><a href="index.pl?type=undelegated">Undelegated</a></li>
  </ul>
