@@ -10,6 +10,9 @@ use Template;
 use File::Spec::Functions;
 use Config::Any;
 
+# Testing
+use Data::Dumper;
+
 # Custom modules
 use DNSCheckWeb::DB;
 
@@ -69,6 +72,69 @@ sub html_headers {
 }
 sub json_headers {
 	return CGI::header(-type=>'application/json; charset=utf-8', -expires=>'now');
+}
+
+# Build output tree.
+sub build_tree {
+	my ($self, $result) = @_;
+
+	# De reference
+	my @tests = @{ $result->{tests} };
+	my @modules = ();
+	my $indent = 0;
+	my $result_status = 'OK'; # Presume that everything is ok
+
+	foreach my $node (@tests) {
+
+		# Assign some variables from the set
+		my $module_id = $node->[3];
+		my $parent_id = $node->[4];
+		my $module = $modules[$module_id];
+		my $level = $node->[6];
+		my $type = $node->[7];
+		my $caption = $node->[22];
+		my $desc = $node->[23];
+
+		# Construct caption given the arguments
+		$caption = sprintf($caption, $node->[8], $node->[9],
+		$node->[10], $node->[11], $node->[12], $node->[13], $node->[14],
+		$node->[15], $node->[16], $node->[18]);
+
+		# Clean output somehow
+		if(!defined($desc)) {
+			$desc = "-";
+		}
+
+		# Pop previous leve
+		if($type =~ m/END$/) {
+			$indent--;
+		}
+		# Actual output
+		my $child_module = {
+			caption => $caption,
+			indent => $indent,
+			description => $desc,
+			level => lc($level),
+		};
+		# New level
+		if($type=~ m/BEGIN$/) {
+			$indent++;
+		} 
+		
+
+		if($child_module->{level} eq 'warn') {
+			$result_status = 'WARNING';
+		} elsif($child_module->{level} eq 'error') {
+			$result_status = 'ERROR';
+		}
+
+		push @modules, $child_module;
+	}
+
+	# Assign new reference, and return
+	$result->{tests} = \@modules;
+	$result->{status} = $result_status;
+	return $result;
 }
 
 # Only for internal use when loading config.
