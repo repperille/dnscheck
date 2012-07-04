@@ -19,7 +19,8 @@
   <div id="mod_[% test.id %]" class="[% test.class %]">
    [% test.caption %]
    <!-- Description, if it exists -->
-   [% IF test.description %] 
+   [% IF test.description %]
+    <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[ - ]</a>
     <blockquote id="info_[% test.id %]" class="description"><b>Note:</b> [% test.description %]</blockquote>
    [% END %]
   </div>

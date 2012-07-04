@@ -62,7 +62,7 @@ function pollResult() {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
 				window.location = 'tree.pl?test_id=' + json.test_id;
-			} else if(json_status = 'error') {
+			} else if(json_status == 'error') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
 				// Stop loading indicator
@@ -143,7 +143,7 @@ function add_nameserver() {
 	ul.appendChild(new_li);
 }
 // Displayes or hides the specified element
-function toggleId(id) {
+function toggle_id(id) {
 	var e = document.getElementById(id);
 	if(e.style.display == 'block')
 		e.style.display = 'none';
