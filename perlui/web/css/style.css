@@ -1,7 +1,8 @@
+/* For the different classes in the checker */
 .info {
 } 
 .notice {
-	text-style: bold;
+	font-weight: bold;
 }
 .warning {
 	color: orange;
@@ -9,7 +10,13 @@
 .error {
 	color: red;
 }
+.critical {
+	color: red;
+	font-weight: bold;
+}
 
+
+/* Some general styling */
 .description {
 	display: none;
 	color: black;
@@ -27,5 +34,12 @@ ul, ol {
 li {
 	margin-top: 0.25em
 	margin-bottom:0.25em; 
+}
+h2 {
+	color: #0233DF;
+}
+
+h3 {
+	color: #0233DF;
 }
 
