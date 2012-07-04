@@ -142,6 +142,28 @@ sub build_tree {
 	return $result;
 }
 
+
+# Resolves the given hostname to an A address
+sub resolve {
+	my ($self, $ns) = @_;
+	
+	# Results
+	my $result = {
+		hostname => $ns
+	};
+
+	my $res = Net::DNS::Resolver->new();
+	my $query = $res->search($ns);
+
+	if ($query) {
+    	foreach my $rr ($query->answer) {
+    		next unless $rr->type eq "A";
+			$result->{addr} = $rr->address;
+    	}
+	}
+	return $result;
+}
+
 # Only for internal use when loading config.
 sub _catfile {
     my @tmp = grep {$_} @_;
