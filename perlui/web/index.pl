@@ -16,7 +16,7 @@ my $dbo = $dnscheck->get_dbo();
 my $type = $cgi->param('type');
 
 if(defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
-	# TODO: Do something	
+	# TODO: Do something
 } else {
 	$type = 'standard';
 }
@@ -25,6 +25,5 @@ if(defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
 $dnscheck->render('index.tpl', {
 	version => $dbo->get_version(),
 	type => $type,
+	page_title => "Test domain",
 });
-
-1;

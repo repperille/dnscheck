@@ -14,7 +14,7 @@ use JSON;
 # Testing
 use Data::Dumper;
 
-# Constants for the "legal" types
+# Constants for the valid types
 use constant TYPES => {
 	standard => "webgui",
 	undelegated => "webgui-undelegated"
@@ -24,7 +24,7 @@ use constant TYPES => {
 use constant TEST_STARTED => "started";
 use constant TEST_RUNNING => "running";
 use constant TEST_FINISHED => "finished";
-
+use constant TEST_ERROR => "error";
 
 # Some important objects
 my $cgi = CGI->new();
@@ -37,13 +37,19 @@ my $source = TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
 my $locale = 'en';
 
-# The results 
-my $href_results = { # Final json-string containing status and results
+# Final json-string containing status and results
+my $href_results = {
 	domain => $domain
 };
 
 # Received domain name, check for running tests
-if(defined($domain) && defined($source)) {
+if(defined($domain) && length($domain) > 0 && defined($source)) {
+
+	if(!defined($source_data)) {
+		$source_data = '';
+	}
+
+	# Check if dispatcher is already testing this specific case
 	my $running = $dbo->get_running_result($domain, $source, $source_data);
 
 	if(@$running eq 0) {
@@ -58,12 +64,12 @@ if(defined($domain) && defined($source)) {
 		$href_results->{test_id} = $running->[0][0];
 		$href_results->{status} = TEST_FINISHED;
 	}
+} else {
+	$href_results->{error_msg} = "Invalid domain name given, check
+	cannot continue.";
+	$href_results->{status} = TEST_ERROR;
 }
 
 # Feed result back to browser
 print $dnscheck->json_headers();
 print encode_json $href_results;
-
-exit;
-
-1;
