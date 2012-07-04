@@ -77,7 +77,7 @@ sub start_check {
 		queue (domain, priority, source_id, source_data, fake_parent_glue)
 		VALUES (?, 10, ?, ?, ?)})
 		or die "Could not prepare statement";
-	$query->execute($domain, $source_id, '', $source_data);
+	$query->execute($domain, $source_id, $source_data, $source_data);
 }
 
 # Returns id for the given source, or creates a new one.
@@ -106,8 +106,6 @@ sub get_source_id {
 # Checks the queue for a running result
 sub get_running_result {
 	my ($self, $domain, $source, $source_data) = @_;
-
-	$source_data = '';
 
 	my $query = $self->{dbh}->prepare(q{
 		(SELECT
