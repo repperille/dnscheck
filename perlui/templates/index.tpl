@@ -1,12 +1,18 @@
 [% INCLUDE header.tpl %]
-<h2>DNS-sjekker</h2>
+<h2>[% page_title %]</h2>
 <form>
  <input type="hidden" name="test" value="standard" />
- Domenenavn: <input id="domain" type="text" name="host" value="[% host %]"/>
-  [% IF type == "undelegated" %]
-  <br />Host: <input type="text" name"ns1" /> IP: <input type="text" name="ip1" />
-  [% END %]
- <br /><input type="submit" value="Test domene" onClick="return runAjax();" />
- <span id="test"></span> <br />
- <span id="status"></span> <br />
+ Domain name: <input id="domain" type="text" name="host" value="[% host %]"/> <span id="test"></span> <br />
+ [% IF type == "undelegated" %]
+  <ul id="nameservers">
+   Host: <input type="text" class="host" onChange="return resolve(get_nameservers());"/> IP: <input type="text" class="IP"/></li>
+  </ul>
+  <input type="button" value="Add nameserver" onClick="add_nameserver()"/>
+  <br />
+ [% END %]
+ <br /><input type="submit" value="Test domain" onClick="return run_dnscheck();" />
+</form>
+<span id="status"></span>
+<span id="error_msg"></span>
+ 
 [% INCLUDE footer.tpl %]

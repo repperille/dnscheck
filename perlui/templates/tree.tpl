@@ -5,11 +5,11 @@
   Test started: [% started %]<br />
   Test finished: [% finished %]
  </p>
- <p>
-  Final result for this test:
+ <h3>Final result for this test:</h3>
   <div class="[% class %]">
    [% class %]
   </div>
+ <h3>Progress:</h3>
  <!-- Loop all the tests -->
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
@@ -20,7 +20,6 @@
    [% test.caption %]
    <!-- Description, if it exists -->
    [% IF test.description %] 
-    <a href="#" onclick="toggleId('info_[% test.id %]'); return false;">[ ? ]</a> <br />
     <blockquote id="info_[% test.id %]" class="description"><b>Note:</b> [% test.description %]</blockquote>
    [% END %]
   </div>
