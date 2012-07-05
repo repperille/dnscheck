@@ -107,6 +107,7 @@ sub build_tree {
 	my @modules = ();
 	my $indent = 0;
 	my $result_status = 'OK'; # Presume that everything is ok
+	my $version;
 
 	foreach my $node (@tests) {
 
@@ -129,20 +130,31 @@ sub build_tree {
 			id => $module_id,
 			caption => $caption,
 			description => $desc,
-			class => lc($class)
+			class => lc($class),
+			tag_start => '<li>',
+			tag_end => '</li>',
 		};
 
 		# Format for new class
 		if($type=~ m/BEGIN$/) {
-			$child_module->{tag_start} = '<ul><li>';
+			$child_module->{tag_start} = '<li>';
 			#$child_module->{class} = "none";
+			$child_module->{tag_end} = '<ul>';
 			$indent++;
 		} 
 
+		# Skip some overhead, and set version
+		if($indent == 1) {
+			if(!defined($version)) {
+				$version = $node->[9];
+			}
+			next;
+		}
+
 		# Format for end class
 		if($type =~ m/END$/) {
-			$child_module->{tag_start} = '</li><li>';
-			$child_module->{tag_end} = '</ul>';
+			$child_module->{tag_start} = '<li></ul>';
+			#$child_module->{tag_end} = '</ul>';
 			#$child_module->{class} = "none";
 			$indent--;
 		}
@@ -160,6 +172,7 @@ sub build_tree {
 	# Assign new reference, and return
 	$result->{tests} = \@modules;
 	$result->{class} = $result_status;
+	$result->{version} = $version;
 	return $result;
 }
 

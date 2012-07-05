@@ -36,6 +36,10 @@ eval {
 	# Loop through test set and build (HTML) tree
 	$result = $dnscheck->build_tree($result);
 
+	#print $dnscheck->json_headers;
+	#print Dumper($result);
+	#exit;
+
 	# Render result
 	$dnscheck->render('tree.tpl', {
 		page_title => 'Results',

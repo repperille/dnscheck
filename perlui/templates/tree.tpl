@@ -17,6 +17,7 @@
   </div>
  <h3>[% lng.advanced_results %]:</h3>
  <!-- Loop all the tests -->
+ <ol>
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
    [% test.tag_start %]
@@ -24,12 +25,13 @@
   <!-- Caption -->
   <div id="mod_[% test.id %]" class="[% test.class %]">
    [% test.caption %]
-   <!-- Description, if it exists -->
    [% IF test.description %]
+   	<!-- Description, if it exists -->
     <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[ - ]</a>
     <blockquote id="info_[% test.id %]" class="description"><b>Note:</b> [% test.description %]</blockquote>
    [% END %]
   </div>
   [% test.tag_end %]
  [% END %]
+ </ol>
 [% INCLUDE footer.tpl %]
