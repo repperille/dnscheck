@@ -36,6 +36,7 @@ eval {
 	# Loop through test set and build (HTML) tree
 	$result = $dnscheck->build_tree($result);
 
+	# Some debugging help
 	#print $dnscheck->json_headers;
 	#print Dumper($result);
 	#exit;
@@ -48,6 +49,7 @@ eval {
 		tests => $result->{tests},
 		started => $result->{started},
 		finished => $result->{finished},
+		version => $result->{version},
 		locale => "en",
 	});
 };

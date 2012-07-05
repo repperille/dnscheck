@@ -152,4 +152,5 @@ function toggle_id(id) {
 }
 // Do something when document loaded?
 window.onload = function () {
+	//CollapsibleLists.applyTo(document.getElementById('result_list'));
 }

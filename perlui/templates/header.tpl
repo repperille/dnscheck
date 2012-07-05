@@ -4,6 +4,7 @@
     <title>[% title %]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="js/perlui.js"></script>
+    <script type="text/javascript" src="js/collapseable.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
  <body>

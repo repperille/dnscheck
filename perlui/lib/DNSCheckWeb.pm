@@ -138,7 +138,6 @@ sub build_tree {
 		# Format for new class
 		if($type=~ m/BEGIN$/) {
 			$child_module->{tag_start} = '<li>';
-			#$child_module->{class} = "none";
 			$child_module->{tag_end} = '<ul>';
 			$indent++;
 		} 
@@ -154,8 +153,6 @@ sub build_tree {
 		# Format for end class
 		if($type =~ m/END$/) {
 			$child_module->{tag_start} = '<li></ul>';
-			#$child_module->{tag_end} = '</ul>';
-			#$child_module->{class} = "none";
 			$indent--;
 		}
 

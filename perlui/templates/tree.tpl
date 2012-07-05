@@ -3,7 +3,8 @@
  <p>Domain: [% domain %]</p>
  <p>
   Test started: [% started %]<br />
-  Test finished: [% finished %]
+  Test finished: [% finished %] <br />
+  [% lng.test_was_performed_with_version %] [% version %]
  </p>
  <h3>Final result for this test:</h3>
   <div class="[% class %]">
@@ -17,7 +18,7 @@
   </div>
  <h3>[% lng.advanced_results %]:</h3>
  <!-- Loop all the tests -->
- <ol>
+ <ul id="result_list" class="collapsibleList">
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
    [% test.tag_start %]
@@ -33,5 +34,5 @@
   </div>
   [% test.tag_end %]
  [% END %]
- </ol>
+ </ul>
 [% INCLUDE footer.tpl %]
