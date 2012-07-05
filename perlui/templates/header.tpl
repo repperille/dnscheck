@@ -12,4 +12,12 @@
  <ul class="menu">
   <li><a href="index.pl?type=standard">[% lng.domain_test %]</a></li>
   <li><a href="index.pl?type=undelegated">[% lng.undelegated_domain_test %]</a></li>
+  <li>
+   <select>
+   [% FOREACH key IN locales.keys %]
+    <option value="[% key %]">[% locales.$key %]</option>
+   [% END %]
+   </select>
+  </li>
+
  </ul>
