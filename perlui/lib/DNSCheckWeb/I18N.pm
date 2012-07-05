@@ -4,9 +4,8 @@ use strict;
 
 package DNSCheckWeb::I18N;
 
-use File::Spec::Functions;
-use Config::Any;
-
+use YAML::Tiny;
+use Encode;
 use Data::Dumper;
 
 # Current language dir, should be changed.
@@ -22,26 +21,24 @@ sub new {
 	my @list = readdir(D);
 	closedir(D);
 
-	my @languages = ();
-
+	# Loop through available files
+	my %languages;
 	foreach my $file (@list) {
 		my $end = substr($file, 2, 5);
 		if($end eq '.yaml') {
 			# Reads the whole files (just to list languages)
-			my $read_file = _get_with_path(_catfile($dir, "en.yaml"));
-			my $language = {
-				name => $read_file->{languageName},
-				id => $read_file->{languageId}
-			};
-			push @languages, $language;
+			my $read_file = parse_yaml($file);
+			# Add to hash
+			$languages{$read_file->{languageId}} = $read_file->{languageName};
 		}
 	}
-	$self->{languages} = \@languages;
+	$self->{languages} = \%languages;
 
 	bless $self, $class;
 	return $self;
 }
 
+# Loads the give local from languge files
 sub load_locale {
 	my ($self, $locale, $type) = @_;
 
@@ -49,31 +46,24 @@ sub load_locale {
 		$type = ".yaml";
 	}
 
-	my $read_lng = _get_with_path(_catfile($dir, $locale . $type));
+	my $read_lng = parse_yaml($locale . $type);
+
 	$self->{keys} = $read_lng;
 
 	return $self;
 }
 
+# Parses the yaml file and returns the result.
+sub parse_yaml {
+	my $file_name = shift;
+	my $yaml = YAML::Tiny->new();
 
-# Non public functions,
-# Duplicate from DNSCheckWeb ..
-sub _catfile {
-    my @tmp = grep {$_} @_;
+	$yaml = YAML::Tiny->read($dir . $file_name) or die YAML::Tiny->errstr;
 
-    return catfile(@tmp);
-}
+	#TODO: Get some weird encoding here?
+	my %values = %{ $yaml->[0] };
 
-sub _get_with_path {
-    my @files = grep {$_} @_;
-
-    my $cfg = Config::Any->load_files({
-        files => \@files,
-        use_ext => 1,
-    });
-
-    my ($c) = values %{$cfg->[0]};
-    return $c;
+	return $yaml->[0];
 }
 
 1;

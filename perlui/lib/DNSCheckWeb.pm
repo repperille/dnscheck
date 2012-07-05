@@ -50,7 +50,7 @@ sub render {
 	# Add some important values 
 	$vars->{title} = 'Zone checker!';
 
-	# Checks whether languages has been loaded already
+	# Checks whether some language have been loaded already
 	if(!defined($self->{lng})) {
 		$self->{lng} = get_lng();
 	}
@@ -59,6 +59,7 @@ sub render {
 	}
 	# Assign language to the template
 	$vars->{lng} = $self->{lng}->{keys};
+	$vars->{locales} = $self->{lng}->{languages};
 
 	# Process the data
 	$template->process($file, $vars) or die "Template rendering failed",
