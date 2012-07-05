@@ -15,6 +15,7 @@ use Data::Dumper;
 
 # Custom modules
 use DNSCheckWeb::DB;
+use DNSCheckWeb::I18N;
 
 # Config
 my $cf_dbh;
@@ -46,8 +47,18 @@ sub render {
 	my $template = Template->new({INCLUDE_PATH => ['../templates']});
 	print html_headers();
 
-	# Adding some static variables
+	# Add some important values 
 	$vars->{title} = 'Zone checker!';
+
+	# Checks whether languages has been loaded already
+	if(!defined($self->{lng})) {
+		$self->{lng} = get_lng();
+	}
+	if(!defined($self->{lng}->{keys})) {
+		$self->{lng}->load_locale($vars->{locale});
+	}
+	# Assign language to the template
+	$vars->{lng} = $self->{lng}->{keys};
 
 	# Process the data
 	$template->process($file, $vars) or die "Template rendering failed",
@@ -64,6 +75,16 @@ sub get_dbo {
 	}
 
 	return $self->{dbo};
+}
+
+sub get_lng {
+	my $self = shift;
+
+	unless (defined($self->{lng})) {
+		$self->{lng} = DNSCheckWeb::I18N->new();
+	}
+
+	return $self->{lng};
 }
 
 # Print headers to browser
