@@ -13,6 +13,7 @@ my $cgi = CGI->new();
 my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
 
+# Parameters
 my $type = $cgi->param('type');
 
 if(defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
@@ -26,4 +27,5 @@ $dnscheck->render('index.tpl', {
 	version => $dbo->get_version(),
 	type => $type,
 	page_title => "Test domain",
+	locale => "en",
 });

@@ -43,7 +43,8 @@ eval {
 		class => $result->{class},
 		tests => $result->{tests},
 		started => $result->{started},
-		finished => $result->{finished}
+		finished => $result->{finished},
+		locale => "en",
 	});
 };
 if($@) {

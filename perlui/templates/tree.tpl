@@ -7,9 +7,15 @@
  </p>
  <h3>Final result for this test:</h3>
   <div class="[% class %]">
-   [% class %]
+   [% IF class == 'error' %]
+    [% lng.error_header %]
+   [% ELSIF class == 'warning' %]
+    [% lng.warning_header %]
+   [% ELSE %]
+    [% lng.test_was_ok %]
+   [% END %]
   </div>
- <h3>Progress:</h3>
+ <h3>[% lng.advanced_results %]:</h3>
  <!-- Loop all the tests -->
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
