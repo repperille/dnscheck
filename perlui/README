@@ -1,0 +1,5 @@
+An experimental (and a bit more minimalistic) perl front-end for the
+DNSChecker. Currently only uses PostgreSQL as database back-end.
+
+Using template toolkit for some distinction between generating the data
+and presenting it.
