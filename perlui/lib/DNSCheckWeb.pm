@@ -5,10 +5,10 @@ use warnings;
 package DNSCheckWeb;
 
 use CGI;
+#use CGI::Session;
 use DBI;
 use Template;
-use File::Spec::Functions;
-use Config::Any;
+use YAML::Tiny;
 
 # Testing
 use Data::Dumper;
@@ -25,18 +25,9 @@ sub new {
 	my $class = shift;
 	my $self = {};
 
-	$self->{config} = config();
+	$self->{config} = parse_yaml('../', 'config.yaml');
 
 	bless $self, $class;
-}
-
-# Routine for reading the config (similar to the one in
-# DNSCheck/Config.pm)
-sub config {
-	my $config = _get_with_path(
-		_catfile('../', 'config.yaml')
-    );
-	return $config;
 }
 
 # Print headers and process the template.
@@ -54,6 +45,7 @@ sub render {
 	if(!defined($self->{lng})) {
 		$self->{lng} = get_lng();
 	}
+	# Load the language strings
 	if(!defined($self->{lng}->{keys})) {
 		$self->{lng}->load_locale($vars->{locale});
 	}
@@ -78,6 +70,7 @@ sub get_dbo {
 	return $self->{dbo};
 }
 
+# Retuns te I18N object.
 sub get_lng {
 	my $self = shift;
 
@@ -196,21 +189,16 @@ sub resolve {
 	return $result;
 }
 
-# Only for internal use when loading config.
-sub _catfile {
-    my @tmp = grep {$_} @_;
-    return catfile(@tmp);
-}
-sub _get_with_path {
-    my @files = grep {$_} @_;
+# Parses the yaml file and returns the result.
+sub parse_yaml {
+	my ($dir, $file) = @_;
+	my $yaml = YAML::Tiny->new();
 
-    my $cfg = Config::Any->load_files({
-        files => \@files,
-        use_ext => 1,
-    });
+	$yaml = YAML::Tiny->read($dir . $file) or die YAML::Tiny->errstr;
 
-    my ($c) = values %{$cfg->[0]};
-    return $c;
+	my %values = %{ $yaml->[0] };
+
+	return $yaml->[0];
 }
 
 1;
