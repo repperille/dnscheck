@@ -27,15 +27,14 @@ use constant TEST_FINISHED => "finished";
 use constant TEST_ERROR => "error";
 
 # Some important objects
-my $cgi = CGI->new();
 my $dnscheck = DNSCheckWeb->new();
 my $dbo = $dnscheck->get_dbo();
+my $cgi = $dnscheck->get_cgi();
 
 # Fetch parameters
 my $domain = $cgi->param("domain");
 my $source = TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
-my $locale = 'en';
 
 # Final json-string containing status and results
 my $href_results = {

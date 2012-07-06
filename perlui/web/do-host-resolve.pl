@@ -9,12 +9,11 @@ use warnings;
 
 # Load needed libraries
 use DNSCheckWeb;
-use CGI;
 use JSON;
 use Net::DNS;
 
 my $dnscheck = DNSCheckWeb->new();
-my $cgi = CGI->new();
+my $cgi = $dnscheck->get_cgi();
 
 # Params
 my $nameservers = $cgi->param('nameservers');

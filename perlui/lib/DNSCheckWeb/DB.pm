@@ -5,6 +5,7 @@ use strict;
 package DNSCheckWeb::DB;
 
 use Carp;
+use Data::Dumper;
 
 # Constants
 use constant TYPE_PG => "postgresql";
@@ -15,7 +16,7 @@ my $dbo;
 sub new {
 	my ($class, $db_info) = @_;
 	# Create empty object, will be filled.
-	my $self = {};
+	my $self = { };
 
 	if(!defined($db_info)) {
 		croak "No database information given";

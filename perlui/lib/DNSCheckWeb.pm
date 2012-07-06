@@ -44,6 +44,7 @@ sub render {
 
 	# Given that locale is defined, and exists in language map store in
 	# persistent storage.
+	# TODO: Split into I18N module
 	if(defined($vars->{locale}) &&
 		exists($self->{lng}->{languages}->{$vars->{locale}})) {
 		$self->{session}->param("locale", $vars->{locale});

@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use DNSCheckWeb;
-use CGI;
 use JSON;
 
 use Data::Dumper;
@@ -23,7 +22,7 @@ eval {
 		die "Invalid test id provided";
 	}
 	# Fetch results for the given test_id
-	$result->{tests} =  $dbo->get_test_results($test_id, 'en');
+	$result->{tests} =  $dbo->get_test_results($test_id, $locale);
 	my $tests = @{$result->{tests}};
 
 	if($tests == 0) {
@@ -36,11 +35,6 @@ eval {
 
 	# Loop through test set and build (HTML) tree
 	$result = $dnscheck->build_tree($result);
-
-	# Some debugging help
-	#print $dnscheck->json_headers;
-	#print Dumper($result);
-	#exit;
 
 	# Render result
 	$dnscheck->render('tree.tpl', {
