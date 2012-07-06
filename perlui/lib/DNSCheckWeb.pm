@@ -4,18 +4,19 @@ use warnings;
 
 package DNSCheckWeb;
 
+# Standard modules
 use CGI;
-#use CGI::Session;
+use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
 
-# Testing
-use Data::Dumper;
-
 # Custom modules
 use DNSCheckWeb::DB;
 use DNSCheckWeb::I18N;
+
+# Testing
+use Data::Dumper;
 
 # Config
 my $cf_dbh;
@@ -36,14 +37,30 @@ sub render {
 
 	# Setup template and prepare browser
 	my $template = Template->new({INCLUDE_PATH => ['../templates']});
-	print html_headers();
 
-	# Add some important values 
+	# Add some important values
 	$vars->{title} = 'Zone checker!';
 
-	# Checks whether some language have been loaded already
+	# Check available language
 	if(!defined($self->{lng})) {
 		$self->{lng} = get_lng();
+	}
+
+	get_session($self);
+
+	# Given that locale is defined, and exists in language map store in
+	# persistent storage.
+	if(defined($vars->{locale}) &&
+		exists($self->{lng}->{languages}->{$vars->{locale}})) {
+		$self->{session}->param("locale", $vars->{locale}) or die "asdf";
+	} else {
+		# Try to load locale
+		$vars->{locale} = $self->{session}->param("locale");
+
+		# Some default value
+		if(!defined($vars->{locale})) {
+			$vars->{locale} = "en";
+		}
 	}
 	# Load the language strings
 	if(!defined($self->{lng}->{keys})) {
@@ -53,7 +70,8 @@ sub render {
 	$vars->{lng} = $self->{lng}->{keys};
 	$vars->{locales} = $self->{lng}->{languages};
 
-	# Process the data
+	# Set cookie and print headers
+	print html_headers($self->{cookie});
 	$template->process($file, $vars) or die "Template rendering failed",
 	$template->error(), "\n";
 	exit;
@@ -70,7 +88,7 @@ sub get_dbo {
 	return $self->{dbo};
 }
 
-# Retuns te I18N object.
+# Retuns the I18N object.
 sub get_lng {
 	my $self = shift;
 
@@ -81,9 +99,45 @@ sub get_lng {
 	return $self->{lng};
 }
 
+# Returns the request interface
+sub get_cgi {
+	my $self = shift;
+	unless(defined($self->{cgi})) {
+		$self->{cgi} = CGI->new();
+	}
+
+	return $self->{cgi};
+}
+# Load session for the provided cookie
+sub get_session {
+	my $self = shift;
+
+	my $cgi = $self->{cgi};
+
+	my $sid = $cgi->cookie("CGISESSID");
+	my $session;
+
+	# Check whether the user already have a session id
+	if(defined($sid)) {
+		$session = new CGI::Session(undef, $sid, {Directory=>'/tmp'});
+	} else {
+		$session = new CGI::Session("driver:File", $cgi, {Directory=>'/tmp'});
+	}
+	$self->{session} = $session;
+	$self->{cookie} = $cgi->cookie(CGISESSID => $session->id);
+
+	return $self->{session};
+}
+
 # Print headers to browser
 sub html_headers {
-	return CGI::header(-type=>'text/html; charset=utf-8', -expires=>'now');
+	my $cookie = shift;
+	if(defined($cookie)) {
+		return CGI::header(-type=>'text/html; charset=utf-8',
+		-expires=>'now', -cookie=>$cookie);
+	} else {
+		return CGI::header(-type=>'text/html; charset=utf-8', -expires=>'now');
+	}
 }
 sub json_headers {
 	return CGI::header(-type=>'application/json; charset=utf-8', -expires=>'now');
@@ -95,8 +149,6 @@ sub build_tree {
 
 	#
 	# TODO: This "tree" includes HTML, should also have a raw tree?
-
-	# De reference
 	my @tests = @{ $result->{tests} };
 	my @modules = ();
 	my $indent = 0;
@@ -134,7 +186,7 @@ sub build_tree {
 			$child_module->{tag_start} = '<li>';
 			$child_module->{tag_end} = '<ul>';
 			$indent++;
-		} 
+		}
 
 		# Skip some overhead, and set version
 		if($indent == 1) {
@@ -171,7 +223,7 @@ sub build_tree {
 # Resolves the given hostname to an A address
 sub resolve {
 	my ($self, $ns) = @_;
-	
+
 	# Results
 	my $result = {
 		hostname => $ns

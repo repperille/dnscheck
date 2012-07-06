@@ -9,11 +9,12 @@ use JSON;
 use Data::Dumper;
 
 
-my $cgi = CGI->new();
 my $dnscheck = DNSCheckWeb->new();
+my $cgi = $dnscheck->get_cgi();
 my $dbo = $dnscheck->get_dbo();
 
 my $test_id = $cgi->param('test_id');
+my $locale = $cgi->param('locale');
 my $result = { };
 
 # Get results for the given test
@@ -50,7 +51,7 @@ eval {
 		started => $result->{started},
 		finished => $result->{finished},
 		version => $result->{version},
-		locale => "en",
+		locale => $locale,
 	});
 };
 if($@) {
