@@ -10,6 +10,7 @@ use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
+use encoding 'utf8';
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -17,10 +18,6 @@ use DNSCheckWeb::I18N;
 
 # Testing
 use Data::Dumper;
-
-# Config
-my $cf_dbh;
-my $config_hash;
 
 sub new {
 	my $class = shift;
@@ -38,26 +35,23 @@ sub render {
 	# Setup template and prepare browser
 	my $template = Template->new({INCLUDE_PATH => ['../templates']});
 
-	# Add some important values
-	$vars->{title} = 'Zone checker!';
-
 	# Check available language
 	if(!defined($self->{lng})) {
 		$self->{lng} = get_lng();
 	}
-
+	# Try to load session id
 	get_session($self);
 
 	# Given that locale is defined, and exists in language map store in
 	# persistent storage.
 	if(defined($vars->{locale}) &&
 		exists($self->{lng}->{languages}->{$vars->{locale}})) {
-		$self->{session}->param("locale", $vars->{locale}) or die "asdf";
+		$self->{session}->param("locale", $vars->{locale});
 	} else {
 		# Try to load locale
 		$vars->{locale} = $self->{session}->param("locale");
 
-		# Some default value
+		# Set default if not loaded from session
 		if(!defined($vars->{locale})) {
 			$vars->{locale} = "en";
 		}

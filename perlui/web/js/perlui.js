@@ -150,6 +150,26 @@ function toggle_id(id) {
 	else
 		e.style.display = 'block';
 }
+// Function that will be triggered when selecting option in select box.
+function load_locale() {
+	var e = document.getElementById("locale_select");
+	var params = get_params();
+	// Check if we need to pass other parameters
+	if(params.test_id != undefined) {
+		window.location = '?test_id=' + params.test_id + '&locale=' + e.value;
+	} else {
+		window.location = '?locale=' + e.value;
+	}
+}
+
+function get_params() {
+	var params = {};
+	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+	function (str, key, value) {
+		params[key] = value;
+	});
+    return params;
+}
 // Do something when document loaded?
 window.onload = function () {
 	//CollapsibleLists.applyTo(document.getElementById('result_list'));
