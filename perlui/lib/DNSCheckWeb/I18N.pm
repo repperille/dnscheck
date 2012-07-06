@@ -23,7 +23,8 @@ sub new {
 	# Loop through available files
 	my %languages;
 	foreach my $file (@list) {
-		my $end = substr($file, 2, 5);
+		my $end = substr($file, length($file) - 5, length($file) - 1);
+
 		if($end eq '.yaml') {
 			# Reads the whole files (just to list languages)
 			my $read_file = DNSCheckWeb::parse_yaml($dir, $file);

@@ -172,5 +172,5 @@ function get_params() {
 }
 // Do something when document loaded?
 window.onload = function () {
-	//CollapsibleLists.applyTo(document.getElementById('result_list'));
+	CollapsibleLists.applyTo(document.getElementById('result_list'));
 }

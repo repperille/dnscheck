@@ -179,6 +179,11 @@ sub build_tree {
 		if($type=~ m/BEGIN$/) {
 			$child_module->{tag_start} = '<li>';
 			$child_module->{tag_end} = '<ul>';
+
+			if($indent < 2) {
+				my @test = split(':', $node->[7]);
+				$child_module->{caption} = lc(@test->[0]);
+			}
 			$indent++;
 		}
 
@@ -192,8 +197,11 @@ sub build_tree {
 
 		# Format for end class
 		if($type =~ m/END$/) {
-			$child_module->{tag_start} = '<li></ul>';
+			$child_module->{tag_start} = '</ul>';
 			$indent--;
+			if($indent < 2) {
+				$child_module->{caption} = undef;
+			}
 		}
 
 		# Check whether we encountered an error

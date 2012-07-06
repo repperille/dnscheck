@@ -18,17 +18,22 @@
   </div>
  <h3>[% lng.advanced_results %]:</h3>
  <!-- Loop all the tests -->
- <ul id="result_list" class="collapsibleList">
+ <ul id="result_list">
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
    [% test.tag_start %]
   [% END %]
   <!-- Caption -->
   <div id="mod_[% test.id %]" class="[% test.class %]">
-   [% test.caption %]
+   [% custom = test.caption %]
+   [% IF lng.$custom %]
+    [% lng.$custom %]
+   [% ELSE %]
+    [% test.caption %]
+   [% END %]
    [% IF test.description %]
    	<!-- Description, if it exists -->
-    <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[ - ]</a>
+    <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[+]</a>
     <blockquote id="info_[% test.id %]" class="description"><b>Note:</b> [% test.description %]</blockquote>
    [% END %]
   </div>

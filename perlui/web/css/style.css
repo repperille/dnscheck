@@ -25,21 +25,59 @@
 .menu li {
 	display: inline;
 }
+a {
+	font-weight: normal;
+}
+
 
 ul, ol {
 	list-style: none;
 	margin-left:1.5em; 
 	padding-left:0px;
 }
+#result_list {
+	color: white;
+}
+
+#result_list li {
+	background: #8e9acc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 1px;
+}
+
+#result_list ul {
+	color: black;
+}
+#result_list li li {
+	color: black;
+	background: white;
+	size: 10px;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	-khtml-border-radius: 1px;
+	border-radius: 1px;
+}
+
 li {
 	margin-top: 0.25em
 	margin-bottom:0.25em; 
 }
-h2 {
-	color: #0233DF;
+.collapsibleList li{
+  list-style-image:url('button.png');
+  cursor:auto;
 }
 
-h3 {
-	color: #0233DF;
+li.collapsibleListOpen{
+  list-style-image:url('button-open.png');
+  cursor:pointer;
+}
+
+li.collapsibleListClosed{
+  list-style-image:url('button-closed.png');
+  cursor:pointer;
 }
 
