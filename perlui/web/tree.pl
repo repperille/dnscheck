@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use DNSCheckWeb;
+use DNSCheckWeb::Exceptions;
 use JSON;
 
 use Data::Dumper;
@@ -24,14 +25,15 @@ if(!defined($locale)) {
 # Get results for the given test
 eval {
 	if(!defined($test_id) || $test_id <= 0) {
-		die "Invalid test id provided";
+		TestException->throw();
 	}
+
 	# Fetch results for the given test_id
 	$result->{tests} =  $dbo->get_test_results($test_id, $locale);
 	my $tests = @{$result->{tests}};
 
 	if($tests == 0) {
-		die "No results for the domain";
+		TestException->throw();
 	}
 	# TODO: Not the cleanest way of getting the data
 	$result->{domain} = $result->{tests}->[0]->[8];
@@ -53,9 +55,12 @@ eval {
 		locale => $locale,
 	});
 };
-if($@) {
-	print $dnscheck->html_headers();
-	print $@;
+# Catch errors
+if( my $e = TestException->caught() ) {
+	$dnscheck->render('tree_error.tpl', {
+		title => 'Error',
+		error => $e->description()
+	});
 }
 
 1;

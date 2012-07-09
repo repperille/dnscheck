@@ -57,7 +57,6 @@ function pollResult() {
 			// TODO: Better parsing
 			json = eval ('(' + json + ')'); 
 			var json_status = json.status;
-			document.getElementById('status').innerHTML = json_status;
 			if(json_status == 'finished') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
@@ -65,10 +64,9 @@ function pollResult() {
 			} else if(json_status == 'error') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
-				// Stop loading indicator
-				document.getElementById('test').innerHTML = '';
-				// Display the error
-				document.getElementById('status').innerHTML = json.error_msg;
+				var error = '<span style="color: red;">' + json.error_msg + '</span>';
+				// Replace indicator with error
+				document.getElementById('test').innerHTML = error;
 			}
 		}
   	}

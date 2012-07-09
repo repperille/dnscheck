@@ -9,8 +9,11 @@ use warnings;
 
 # Load needed libraries
 use DNSCheckWeb;
+use DNSCheckWeb::Exceptions;
 use CGI;
 use JSON;
+use Data::Validate::Domain qw(is_domain);
+
 # Testing
 use Data::Dumper;
 
@@ -42,8 +45,18 @@ my $href_results = {
 };
 
 # Received domain name, check for running tests
-if(defined($domain) && length($domain) > 0 && defined($source)) {
+eval {
+	# Will do these tests for each poll.
 
+	# Check if domain is valid
+	if(!defined($domain) || length($domain) <= 2 || !is_domain($domain)) {
+		DomainException->throw();
+	}
+	if(!defined($source)) {
+		DomainException->throw();
+	}
+
+	# Source data can be undefined
 	if(!defined($source_data)) {
 		$source_data = '';
 	}
@@ -63,10 +76,11 @@ if(defined($domain) && length($domain) > 0 && defined($source)) {
 		$href_results->{test_id} = $running->[0][0];
 		$href_results->{status} = TEST_FINISHED;
 	}
-} else {
-	$href_results->{error_msg} = "Invalid domain name given, check
-	cannot continue.";
+};
+# Catch errors
+if (my $e = DomainException->caught()) {
 	$href_results->{status} = TEST_ERROR;
+	$href_results->{error_msg} = 'Error: ' . $e->description();
 }
 
 # Feed result back to browser
