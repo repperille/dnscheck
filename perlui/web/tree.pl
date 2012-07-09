@@ -16,6 +16,11 @@ my $test_id = $cgi->param('test_id');
 my $locale = $cgi->param('locale');
 my $result = { };
 
+if(!defined($locale)) {
+	my $lng = $dnscheck->get_lng();
+	$locale = $lng->get_stored_locale($locale, $dnscheck->{session});
+}
+
 # Get results for the given test
 eval {
 	if(!defined($test_id) || $test_id <= 0) {

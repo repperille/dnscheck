@@ -10,7 +10,7 @@ use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
-use encoding 'utf8';
+#use encoding 'utf8';
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -33,33 +33,21 @@ sub render {
 	my ($self, $file, $vars) = @_;
 
 	# Setup template and prepare browser
-	my $template = Template->new({INCLUDE_PATH => ['../templates']});
+	my $template = Template->new({ENCODING => 'utf8', INCLUDE_PATH => ['../templates']});
 
-	# Check available language
+	# Initialize I18N module
 	if(!defined($self->{lng})) {
 		$self->{lng} = get_lng();
 	}
-	# Try to load session id
-	get_session($self);
 
 	# Given that locale is defined, and exists in language map store in
 	# persistent storage.
-	# TODO: Split into I18N module
-	if(defined($vars->{locale}) &&
-		exists($self->{lng}->{languages}->{$vars->{locale}})) {
-		$self->{session}->param("locale", $vars->{locale});
-	} else {
-		# Try to load locale
-		$vars->{locale} = $self->{session}->param("locale");
+	$vars->{locale}= $self->{lng}->get_stored_locale($vars->{locale},
+	$self->{session});
 
-		# Set default if not loaded from session
-		if(!defined($vars->{locale})) {
-			$vars->{locale} = "en";
-		}
-	}
 	# Load the language strings
 	if(!defined($self->{lng}->{keys})) {
-		$self->{lng}->load_locale($vars->{locale});
+		$self->{lng}->load_language($vars->{locale});
 	}
 	# Assign language to the template
 	$vars->{lng} = $self->{lng}->{keys};
@@ -99,16 +87,15 @@ sub get_cgi {
 	my $self = shift;
 	unless(defined($self->{cgi})) {
 		$self->{cgi} = CGI->new();
+		#$self->{cgi}->charset('UTF-8');
+		load_session($self);
 	}
-
 	return $self->{cgi};
 }
 # Load session for the provided cookie
-sub get_session {
+sub load_session {
 	my $self = shift;
-
 	my $cgi = $self->{cgi};
-
 	my $sid = $cgi->cookie("CGISESSID");
 	my $session;
 
@@ -128,14 +115,15 @@ sub get_session {
 sub html_headers {
 	my $cookie = shift;
 	if(defined($cookie)) {
-		return CGI::header(-type=>'text/html; charset=utf-8',
-		-expires=>'now', -cookie=>$cookie);
+		return CGI::header(-type=>'text/html', -expires=>'now',
+		charset=>'UTF-8', -cookie=>$cookie);
 	} else {
-		return CGI::header(-type=>'text/html; charset=utf-8', -expires=>'now');
+		return CGI::header(-type=>'text/html', -expires=>'now',
+		-charset=>'UTF-8');
 	}
 }
 sub json_headers {
-	return CGI::header(-type=>'application/json; charset=utf-8', -expires=>'now');
+	return CGI::header(-type=>'application/json', -expires=>'now', -charset=>'UTF-8');
 }
 
 # Build output tree.
@@ -162,9 +150,11 @@ sub build_tree {
 		my $desc = $node->[23];
 
 		# Construct caption given the arguments
-		$caption = sprintf($caption, $node->[8], $node->[9],
-		$node->[10], $node->[11], $node->[12], $node->[13], $node->[14],
-		$node->[15], $node->[16], $node->[18]);
+		if(defined($caption)) {
+			$caption = sprintf($caption, $node->[8], $node->[9],
+			$node->[10], $node->[11], $node->[12], $node->[13], $node->[14],
+			$node->[15], $node->[16], $node->[18]);
+		}
 
 		# Start to build module
 		my $child_module = {
@@ -183,7 +173,7 @@ sub build_tree {
 
 			if($indent < 2) {
 				my @test = split(':', $node->[7]);
-				$child_module->{caption} = lc(@test->[0]);
+				$child_module->{caption} = lc($test[0]);
 			}
 			$indent++;
 		}
@@ -247,11 +237,15 @@ sub resolve {
 # Parses the yaml file and returns the result.
 sub parse_yaml {
 	my ($dir, $file) = @_;
+
+	my $path;
+	if(!defined($file)) {
+		$path = $dir;
+	} else {
+		$path = $dir . $file;
+	}
 	my $yaml = YAML::Tiny->new();
-
-	$yaml = YAML::Tiny->read($dir . $file) or die YAML::Tiny->errstr;
-
-	my %values = %{ $yaml->[0] };
+	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr;
 
 	return $yaml->[0];
 }

@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>[% title %]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" src="js/perlui.js"></script>
     <script type="text/javascript" src="js/collapseable.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
