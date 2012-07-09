@@ -1,8 +1,12 @@
 /* For the different classes in the checker */
+.ok {
+	color: green;
+}
 .info {
 }
 .notice {
 	font-weight: bold;
+	font-style: italic;
 }
 .warning {
 	color: orange;
@@ -15,8 +19,24 @@
 	font-weight: bold;
 }
 
+#domain_info {
+	float: left;
+}
+#domain_history {
+	float: right;
+	color: white;
+	background: #8e9acc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	padding: 10px;
+}
 
-/* Some general styling */
+.clear-both {
+	clear: both;
+}
+
 .description {
 	display: none;
 	color: black;
@@ -65,6 +85,10 @@ ul, ol {
 li {
 	margin-top: 0.25em
 	margin-bottom:0.25em; 
+}
+
+#domain_history li {
+	list-style-type: circle;
 }
 .collapsibleList li{
   list-style-image:url('button.png');

@@ -19,6 +19,12 @@ use DNSCheckWeb::I18N;
 # Testing
 use Data::Dumper;
 
+# Constants for the valid types
+use constant TYPES => {
+	standard => "webgui",
+	undelegated => "webgui-undelegated"
+};
+
 sub new {
 	my $class = shift;
 	my $self = {};
@@ -135,7 +141,7 @@ sub build_tree {
 	my @tests = @{ $result->{tests} };
 	my @modules = ();
 	my $indent = 0;
-	my $result_status = 'OK'; # Presume that everything is ok
+	my $result_status = 'ok'; # Presume that everything is ok
 	my $version;
 
 	foreach my $node (@tests) {
@@ -196,9 +202,11 @@ sub build_tree {
 		}
 
 		# Check whether we encountered an error
-		if($child_module->{class} eq 'warn') {
+		if($child_module->{class} eq 'warning') {
 			$result_status = $child_module->{class};
 		} elsif($child_module->{class} eq 'error') {
+			$result_status = $child_module->{class};
+		} elsif($child_module->{class} eq 'critical') {
 			$result_status = $child_module->{class};
 		}
 

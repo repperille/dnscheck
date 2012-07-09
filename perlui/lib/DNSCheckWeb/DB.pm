@@ -159,6 +159,34 @@ sub get_test_results {
 	return $query->fetchall_arrayref;
 }
 
+# Returns the latest test history for a given domain.
+sub get_test_history {
+	my($self, $source, $domain) = @_;
+
+	my $dbh = $self->{dbh};
+	my $query = $dbh->prepare(q{
+		SELECT 
+			tests.id AS id,
+			to_char(tests.started, 'YYYY-MM-DD  HH24:MI:SS') AS time,
+			CASE
+				WHEN tests.count_error > 0 THEN 'error' 
+				WHEN tests.count_warning > 0 THEN 'warning' 
+				ELSE 'ok' 
+			END AS status
+		FROM tests
+			INNER JOIN source ON source.id = tests.source_id
+			AND source.name = ?
+		WHERE
+			tests.domain = ?
+			AND tests.finished IS NOT NULL
+		ORDER BY tests.started DESC
+		LIMIT 5;
+	}) or die "Prepare statement failed";
+	$query->execute("webgui", $domain) or die "Execute failed";
+
+	return $query->fetchall_arrayref;
+}
+
 # Returns the version of DNSChecker that we are running.
 sub get_version {
 	my $self = shift;

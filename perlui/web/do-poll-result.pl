@@ -17,11 +17,6 @@ use Data::Validate::Domain qw(is_domain);
 # Testing
 use Data::Dumper;
 
-# Constants for the valid types
-use constant TYPES => {
-	standard => "webgui",
-	undelegated => "webgui-undelegated"
-};
 
 # Constants for feedback
 use constant TEST_STARTED => "started";
@@ -36,12 +31,13 @@ my $cgi = $dnscheck->get_cgi();
 
 # Fetch parameters
 my $domain = $cgi->param("domain");
-my $source = TYPES->{$cgi->param("test")};
+my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
 
 # Final json-string containing status and results
 my $href_results = {
-	domain => $domain
+	domain => $domain,
+	source => $source
 };
 
 # Received domain name, check for running tests

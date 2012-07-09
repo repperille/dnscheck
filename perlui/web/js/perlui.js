@@ -60,7 +60,8 @@ function pollResult() {
 			if(json_status == 'finished') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
-				window.location = 'tree.pl?test_id=' + json.test_id;
+				window.location = 'tree.pl?test_id=' + json.test_id +
+				'&test=' + json.source; 
 			} else if(json_status == 'error') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
