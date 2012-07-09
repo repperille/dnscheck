@@ -1,7 +1,7 @@
 [% INCLUDE header.tpl %]
 <div>
+ <h2>[% lng.domain_test %]</h2>
  <div id="domain_info">
-  <h2>[% lng.domain_test %]</h2>
   <p>Domain: [% domain %]</p>
    Test started: [% started %]<br />
    Test finished: [% finished %] <br />

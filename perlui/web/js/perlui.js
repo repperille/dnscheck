@@ -73,7 +73,9 @@ function pollResult() {
   	}
 	// What domain to check
 	var domain = document.getElementById('domain').value;
-	xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=standard", true);
+	var type = document.getElementById('type').value;
+	xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type
+	+"&parameters="+source_params(), true);
 	xmlhttp.send();
 }
 
@@ -86,7 +88,7 @@ function resolve(params) {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			var json = xmlhttp.responseText;
 			// TODO: Better parsing
-			json = eval ('(' + json + ')'); 
+			json = eval ('(' + json + ')');
 			print_resolvers(json);
 		}
   	}
@@ -94,7 +96,7 @@ function resolve(params) {
 	xmlhttp.send();
 }
 // Returns the field values, to be queried
-function get_params() {
+function source_params() {
 	var el = document.getElementById("nameservers").getElementsByTagName("*");
 	var params = "";
 	// Check the fields
@@ -105,6 +107,7 @@ function get_params() {
 			params += "/" + el[i].value + " ";
 		}
 	}
+	alert(params);
 	return params;
 }
 
@@ -116,7 +119,7 @@ function get_nameservers() {
 	for (var i=0; i<el.length; i++) {
 		if(el[i].className == "host") {
 			params += el[i].value + "|";
-		} 	
+		}
 	}
 	return params;
 }

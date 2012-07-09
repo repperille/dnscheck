@@ -1,6 +1,6 @@
 [% INCLUDE header.tpl %]
 <form>
- <input type="hidden" name="test" value="standard" />
+ <input type="hidden" name="test" id="type" value="[% type %]" />
  [% lng.domain_name %]: <input id="domain" type="text" name="host"
 value="[% host %]"/> <span id="test" style="color: green;"></span> <br />
  <p>[% lng.enter_your_domain_name %]</p>
