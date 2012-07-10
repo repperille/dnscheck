@@ -47,6 +47,7 @@ eval {
 
 	# Extracts keys from result to avoid deep tree
 	$dnscheck->render('tree.tpl', {
+		id => $test_id,
 		domain => $result->{domain},
 		class => $result->{class},
 		tests => $result->{tests},

@@ -53,4 +53,7 @@
   [% test.tag_end %]
  [% END %]
  </ul>
+ <div style="text-align: center; font-size: 12px;">
+  <a href="tree.pl?test_id=[% id %]">[% lng.link_to_this_test %]</a>
+ </div>
 [% INCLUDE footer.tpl %]
