@@ -159,30 +159,29 @@ sub get_test_results {
 	return $query->fetchall_arrayref;
 }
 
-# Returns the latest test history for a given domain.
-sub get_test_history {
-	my($self, $source, $domain) = @_;
-
+# Returns the latest test history for the given test id
+sub get_history {
+	my ($self, $test_id) = @_;
+	# Could constraint join on source_data also.
 	my $dbh = $self->{dbh};
 	my $query = $dbh->prepare(q{
 		SELECT 
-			tests.id AS id,
-			to_char(tests.started, 'YYYY-MM-DD  HH24:MI:SS') AS time,
+			test2.id, 
+			to_char(test2.started, 'YYYY-MM-DD  HH24:MI:SS') AS time,
 			CASE
-				WHEN tests.count_error > 0 THEN 'error' 
-				WHEN tests.count_warning > 0 THEN 'warning' 
+				WHEN test2.count_error > 0 THEN 'error' 
+				WHEN test2.count_warning > 0 THEN 'warning' 
 				ELSE 'ok' 
 			END AS status
-		FROM tests
-			INNER JOIN source ON source.id = tests.source_id
-			AND source.name = ?
-		WHERE
-			tests.domain = ?
-			AND tests.finished IS NOT NULL
-		ORDER BY tests.started DESC
+		FROM tests AS test1 
+			INNER JOIN tests AS test2 ON test1.domain = test2.domain
+			AND test1.source_id = test2.source_id 
+			AND test1.source_data = test2.source_data
+		WHERE test1.id = ?
+		ORDER BY test2.id DESC
 		LIMIT 5;
 	}) or die "Prepare statement failed";
-	$query->execute("webgui", $domain) or die "Execute failed";
+	$query->execute($test_id);
 
 	return $query->fetchall_arrayref;
 }

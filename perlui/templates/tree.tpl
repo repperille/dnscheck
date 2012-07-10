@@ -23,7 +23,7 @@
   <ul style="padding: 10px;">
    [% FOREACH sample IN history %]
     <li class="[% sample.2 %]">
-     <a href="tree.pl?test_id=[% sample.0 %]&test=[% source %]">[% sample.1 %]</a>
+     <a href="tree.pl?test_id=[% sample.0 %]">[% sample.1 %]</a>
     </li>
    [% END %]
   </ul>

@@ -132,7 +132,7 @@ sub json_headers {
 	return CGI::header(-type=>'application/json', -expires=>'now', -charset=>'UTF-8');
 }
 
-# Build output tree.
+# Build output tree. This tree mixes HTML and raw output
 sub build_tree {
 	my ($self, $result) = @_;
 

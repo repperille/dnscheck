@@ -41,8 +41,7 @@ eval {
 	$result->{domain} = $result->{tests}->[0]->[8];
 	$result->{started} = $result->{tests}->[0]->[5];
 	$result->{finished} = $result->{tests}->[$tests-1]->[5];
-
-	$result->{history} = $dbo->get_test_history($source, $result->{domain});
+	$result->{history} = $dbo->get_history($test_id);
 
 	# Bit of a hack to retrieve the source for this test
 	if(defined($source)) {
@@ -61,8 +60,7 @@ eval {
 		finished => $result->{finished},
 		version => $result->{version},
 		history => $result->{history},
-		source => $result->{source},
-		locale => $locale,
+		locale => $locale
 	});
 };
 # Catch errors
