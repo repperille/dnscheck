@@ -39,17 +39,17 @@
    [% test.tag_start %]
   [% END %]
   <!-- Caption -->
-   [% custom = test.caption %]
-   [% IF lng.$custom %]
-    [% lng.$custom %]
-   [% ELSE %]
-    [% test.caption %]
-   [% END %]
-   [% IF test.description %]
-   	<!-- Description -->
-    <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[+]</a>
-    <blockquote id="info_[% test.id %]" class="description">[% test.description %]</blockquote>
-   [% END %]
+  [% custom = test.caption %]
+  [% IF lng.$custom %]
+   [% lng.$custom %]
+  [% ELSE %]
+   [% test.caption %]
+  [% END %]
+  [% IF test.description %]
+  	<!-- Description -->
+   <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[+]</a>
+   <blockquote id="info_[% test.id %]" class="description">[% test.description %]</blockquote>
+  [% END %]
   [% test.tag_end %]
  [% END %]
  </ul>

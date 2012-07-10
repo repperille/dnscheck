@@ -145,7 +145,7 @@ function print_resolvers(json) {
 function add_nameserver() {
 	var ul = document.getElementById("nameservers");
 	var new_li = document.createElement('li');
-	new_li.innerHTML = "Host: <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/> IP: <input type=\"text\" class=\"IP\"/></li>";
+	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/> IP: <input type=\"text\" class=\"" + lbl_ip + "\"/></li>";
 	ul.appendChild(new_li);
 }
 // Displayes or hides the specified element

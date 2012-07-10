@@ -50,6 +50,7 @@ sub new {
 	    $dbh =
 	      DBI->connect($dsn, $db_info->{user}, $db_info->{password},
 	        { RaiseError => 1, AutoCommit => 1, PrintError => 0 });
+		$dbh->{pg_enable_utf8} = 1;
 	};
 	if ($@) {
 		carp "Failed to connect to database: $@";

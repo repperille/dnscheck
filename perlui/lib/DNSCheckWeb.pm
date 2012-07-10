@@ -10,7 +10,7 @@ use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
-#use encoding 'utf8';
+use encoding 'UTF-8';
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -25,6 +25,8 @@ use constant TYPES => {
 	undelegated => "webgui-undelegated"
 };
 
+
+# "New" instance of this "object"
 sub new {
 	my $class = shift;
 	my $self = {};
@@ -132,7 +134,9 @@ sub json_headers {
 	return CGI::header(-type=>'application/json', -expires=>'now', -charset=>'UTF-8');
 }
 
-# Build output tree. This tree mixes HTML and raw output
+# Build output tree.
+# This tree mixes HTML and raw output (data structure easier to
+# manipulate perl side, but clutters the program flow).
 sub build_tree {
 	my ($self, $result) = @_;
 
@@ -207,10 +211,10 @@ sub build_tree {
 		# Collect the most critical case
 		if($child_module->{class} eq 'critical') {
 			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'error' 
+		} elsif($child_module->{class} eq 'error'
 		&& $result_status ne 'critical') {
 			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'warning' 
+		} elsif($child_module->{class} eq 'warning'
 		&& ($result_status ne 'critical' && $result_status ne 'error')) {
 			$result_status = $child_module->{class};
 		}
@@ -223,7 +227,6 @@ sub build_tree {
 	$result->{version} = $version;
 	return $result;
 }
-
 
 # Resolves the given hostname to an A address
 sub resolve {
@@ -246,7 +249,7 @@ sub resolve {
 	return $result;
 }
 
-# Parses the yaml file and returns the result.
+# Parses the yaml file and returns the result
 sub parse_yaml {
 	my ($dir, $file) = @_;
 

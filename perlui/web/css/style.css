@@ -20,7 +20,7 @@
 	color: red;
 	font-weight: bold;
 }
-
+/** Some "general" styling  */
 #domain_info {
 	float: left;
 }
@@ -68,18 +68,35 @@ ul, ol {
 	border-radius: 5px;
 	padding: 5px;
 	margin-bottom: 1px;
+	list-style: disc;
+}
+/** Could re-use the above? */
+#nameservers {
+	background: #8e9acc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 1px;
+	color: white;
 }
 
 #result_list ul {
 	color: black;
+	padding-left: 10px;
 }
 #result_list li li {
-	background: white;
+	background: #E8E8E8;
 	size: 10px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-khtml-border-radius: 3px;
 	border-radius: 3px;
+}
+
+#nameservers li {
+	list-style: none;
 }
 
 li {

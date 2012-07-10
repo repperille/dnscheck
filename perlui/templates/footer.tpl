@@ -1,6 +1,3 @@
- <br /><hr> 
- <div>
-  
- </div>
+ <hr> 
 </body>
 </html>
