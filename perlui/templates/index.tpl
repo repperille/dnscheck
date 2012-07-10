@@ -4,6 +4,7 @@
   var lbl_host = "[% lng.host %]";
   var lbl_ip = "[% lng.ip %]";
   var lbl_domain_syntax = "[% lng.domain_syntax_label %]";
+  var lbl_loading = "[% lng.loading_header %]";
 </script>
 <form>
  <input type="hidden" name="test" id="type" value="[% type %]" />

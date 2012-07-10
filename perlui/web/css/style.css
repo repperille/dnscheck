@@ -69,6 +69,7 @@ ul, ol {
 	padding: 5px;
 	margin-bottom: 1px;
 	list-style: disc;
+	font-size: 16px;
 }
 /** Could re-use the above? */
 #nameservers {
@@ -87,8 +88,8 @@ ul, ol {
 	padding-left: 10px;
 }
 #result_list li li {
-	background: #E8E8E8;
-	size: 10px;
+	background: white;
+	font-size: 14px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	-khtml-border-radius: 3px;
@@ -124,5 +125,9 @@ li.collapsibleListClosed{
   list-style-image:url('button-closed.png');
   cursor:pointer;
 	*/
+}
+
+body, form {
+	font-family: sans-serif;
 }
 

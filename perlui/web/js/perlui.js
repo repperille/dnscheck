@@ -7,7 +7,7 @@ var loading_bar;
 // Loading indicator
 function load() {
 	var v = document.getElementById('test');
-	var s = 'Loading... ';
+	var s = lbl_loading + '.. ';
 	switch (v.innerHTML) {
 	case s+'|':
 		v.innerHTML = s+'/';
