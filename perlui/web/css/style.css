@@ -5,7 +5,7 @@
 .info {
 }
 .notice {
-	font-weight: bold;
+font-weight: bold;
 	font-style: italic;
 }
 .warning {

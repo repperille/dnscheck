@@ -107,7 +107,6 @@ function source_params() {
 			params += "/" + el[i].value + " ";
 		}
 	}
-	alert(params);
 	return params;
 }
 

@@ -38,7 +38,7 @@
    [% test.tag_start %]
   [% END %]
   <!-- Caption -->
-  <div id="mod_[% test.id %]" class="[% test.class %]">
+  <div class="[% test.class %]">
    [% custom = test.caption %]
    [% IF lng.$custom %]
     [% lng.$custom %]
