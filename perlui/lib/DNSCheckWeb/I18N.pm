@@ -13,11 +13,11 @@ my $dir = '../../webui/languages/';
 
 sub new {
 	my ($class) = @_;
-
 	my $self = {};
 
-	# Check available languages, should handle proper error messages
-	opendir(D, "$dir") || die "Can't opedir $dir: $!\n";
+	# Check available languages. Uses the absoulte path given from main
+	# module.
+	opendir(D, DNSCheckWeb::get_abs().$dir) || die "Can't opedir $dir: $!\n";
 	my @list = readdir(D);
 	closedir(D);
 

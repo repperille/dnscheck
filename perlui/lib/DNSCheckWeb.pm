@@ -19,6 +19,9 @@ use DNSCheckWeb::I18N;
 # Testing
 use Data::Dumper;
 
+# Temporary "fix" for testing mod_perl
+use constant DIR => "/var/www/perlui/lib/";
+
 # Constants for the valid types
 use constant TYPES => {
 	standard => "webgui",
@@ -41,7 +44,8 @@ sub render {
 	my ($self, $file, $vars) = @_;
 
 	# Setup template and prepare browser
-	my $template = Template->new({ENCODING => 'utf8', INCLUDE_PATH => ['../templates']});
+	my $template = Template->new({ENCODING => 'utf8', INCLUDE_PATH =>
+	[DIR . '../templates']});
 
 	# Initialize I18N module
 	if(!defined($self->{lng})) {
@@ -84,7 +88,7 @@ sub get_lng {
 	my $self = shift;
 
 	unless (defined($self->{lng})) {
-		$self->{lng} = DNSCheckWeb::I18N->new();
+		$self->{lng} = DNSCheckWeb::I18N->new(DIR);
 	}
 
 	return $self->{lng};
@@ -251,18 +255,22 @@ sub resolve {
 
 # Parses the yaml file and returns the result
 sub parse_yaml {
-	my ($dir, $file) = @_;
+	my ($rel_dir, $file) = @_;
 
 	my $path;
 	if(!defined($file)) {
-		$path = $dir;
+		$path = get_abs() . $rel_dir;
 	} else {
-		$path = $dir . $file;
+		$path = get_abs() . $rel_dir . $file;
 	}
 	my $yaml = YAML::Tiny->new();
-	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr;
+	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr . " $path";
 
 	return $yaml->[0];
+}
+# A routine for retrieving the absolute path
+sub get_abs {
+	return DIR;
 }
 
 1;
