@@ -60,8 +60,7 @@ function pollResult() {
 			if(json_status == 'finished') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
-				window.location = 'tree.pl?test_id=' + json.test_id +
-				'&test=' + json.source; 
+				window.location = 'tree.pl?test_id=' + json.test_id;
 			} else if(json_status == 'error') {
 				clearInterval(interval);
 				clearTimeout(loading_bar);
@@ -74,8 +73,14 @@ function pollResult() {
 	// What domain to check
 	var domain = document.getElementById('domain').value;
 	var type = document.getElementById('type').value;
-	xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type
-	+"&parameters="+source_params(), true);
+
+	// Pass parameters given type of test
+	if(type == 'standard') {
+		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type, true);
+	} else {
+		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type
+		+"&parameters="+source_params(), true);
+	}
 	xmlhttp.send();
 }
 
@@ -171,7 +176,40 @@ function get_params() {
 	});
     return params;
 }
+// Triggered by viewing the 'advanced results'
+function show_results() {
+	var results = document.getElementById('result_list');
+	CollapsibleLists.applyTo(results, true);
+	var children = results.getElementsByTagName('li');
+	for (var i = 0, len = children.length; i < len; i++ ) {
+		var child_class = children[i].className;
+		if(child_class == 'info' || child_class == 'notice') {
+			children[i].style.display= 'block';
+		}
+	}
+	// Hack to actual display the lists
+	CollapsibleLists.applyTo(results, true);
+	// Update buttons
+	toggle_buttons(false);
+}
+// Triggered by viewing the 'basic results'
+function hide_results() {
+	var results = document.getElementById('result_list');
+	var children = results.getElementsByTagName('li');
+	for (var i = 0, len = children.length; i < len; i++ ) {
+		var child_class = children[i].className;
+		if(child_class == 'info' || child_class == 'notice') {
+			children[i].style.display = 'none';
+		}
+	}
+	toggle_buttons(true);
+}
+// Toggles enable state of the buttons
+function toggle_buttons(basic) {
+	document.getElementById('btn_basic').disabled = basic;
+	document.getElementById('btn_advanced').disabled = !basic;
+}
+
 // Do something when document loaded?
 window.onload = function () {
-	CollapsibleLists.applyTo(document.getElementById('result_list'));
 }

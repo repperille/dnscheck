@@ -3,10 +3,12 @@
 	color: green;
 }
 .info {
+	display: none;
 }
 .notice {
-font-weight: bold;
+	font-weight: bold;
 	font-style: italic;
+	display: none;
 }
 .warning {
 	color: orange;
@@ -38,6 +40,7 @@ font-weight: bold;
 
 .description {
 	display: none;
+	font-style: italic;
 	color: black;
 }
 
@@ -50,7 +53,6 @@ a {
 
 
 ul, ol {
-	list-style: none;
 	margin-left:1.5em; 
 	padding-left:0px;
 }
@@ -72,13 +74,12 @@ ul, ol {
 	color: black;
 }
 #result_list li li {
-	color: black;
 	background: white;
 	size: 10px;
-	-moz-border-radius: 1px;
-	-webkit-border-radius: 1px;
-	-khtml-border-radius: 1px;
-	border-radius: 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	border-radius: 3px;
 }
 
 li {
@@ -87,7 +88,7 @@ li {
 }
 
 #domain_history li {
-	list-style-type: circle;
+	list-style-type: disc;
 }
 .collapsibleList li{
   list-style-image:url('button.png');
@@ -95,12 +96,16 @@ li {
 }
 
 li.collapsibleListOpen{
+	/**
   list-style-image:url('button-open.png');
   cursor:pointer;
+	*/
 }
 
 li.collapsibleListClosed{
+	/**
   list-style-image:url('button-closed.png');
   cursor:pointer;
+	*/
 }
 

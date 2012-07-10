@@ -168,7 +168,7 @@ sub build_tree {
 			caption => $caption,
 			description => $desc,
 			class => lc($class),
-			tag_start => '<li>',
+			tag_start => '<li class="' . lc($class) . '">',
 			tag_end => '</li>',
 		};
 
@@ -180,6 +180,8 @@ sub build_tree {
 			if($indent < 2) {
 				my @test = split(':', $node->[7]);
 				$child_module->{caption} = lc($test[0]);
+			} else {
+				$child_module->{tag_start} = '<li class="info">';
 			}
 			$indent++;
 		}
@@ -202,14 +204,16 @@ sub build_tree {
 		}
 
 		# Check whether we encountered an error
-		if($child_module->{class} eq 'warning') {
+		# Collect the most critical case
+		if($child_module->{class} eq 'critical') {
 			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'error') {
+		} elsif($child_module->{class} eq 'error' 
+		&& $result_status ne 'critical') {
 			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'critical') {
+		} elsif($child_module->{class} eq 'warning' 
+		&& ($result_status ne 'critical' && $result_status ne 'error')) {
 			$result_status = $child_module->{class};
 		}
-
 		push @modules, $child_module;
 	}
 

@@ -15,7 +15,6 @@ my $dbo = $dnscheck->get_dbo();
 
 my $test_id = $cgi->param('test_id');
 my $locale = $cgi->param('locale');
-my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 
 my $result = { };
 
@@ -42,11 +41,6 @@ eval {
 	$result->{started} = $result->{tests}->[0]->[5];
 	$result->{finished} = $result->{tests}->[$tests-1]->[5];
 	$result->{history} = $dbo->get_history($test_id);
-
-	# Bit of a hack to retrieve the source for this test
-	if(defined($source)) {
-		$result->{source} = $cgi->param("test");
-	}
 
 	# Loop through test set and build (HTML) tree
 	$result = $dnscheck->build_tree($result);

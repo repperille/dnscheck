@@ -30,7 +30,8 @@
  </div>
  <div class="clear-both"></div>
 </div>
- <h3>[% lng.advanced_results %]:</h3>
+ <input type="button" onClick="hide_results();" id="btn_basic" value="[% lng.basic_results %]">
+ <input type="button" onClick="show_results();" id="btn_advanced" value="[% lng.advanced_results %]">
  <!-- Loop all the tests -->
  <ul id="result_list">
  [% FOREACH test IN tests %]
@@ -38,7 +39,6 @@
    [% test.tag_start %]
   [% END %]
   <!-- Caption -->
-  <div class="[% test.class %]">
    [% custom = test.caption %]
    [% IF lng.$custom %]
     [% lng.$custom %]
@@ -48,9 +48,8 @@
    [% IF test.description %]
    	<!-- Description -->
     <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[+]</a>
-    <blockquote id="info_[% test.id %]" class="description"><b>Note:</b> [% test.description %]</blockquote>
+    <blockquote id="info_[% test.id %]" class="description">[% test.description %]</blockquote>
    [% END %]
-  </div>
   [% test.tag_end %]
  [% END %]
  </ul>

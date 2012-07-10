@@ -148,9 +148,4 @@ var CollapsibleLists =
         }
 
       }
-
-	this.toggle = function toggle_test(node) {
-		toggle(node);
-	};
-
     }();
