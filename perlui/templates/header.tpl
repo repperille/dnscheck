@@ -14,13 +14,21 @@
   <li><a href="index.pl?type=undelegated">[% lng.undelegated_domain_test %]</a></li>
   <li style="float: right;">
    [% lng.language %]:
-   <select id="locale_select" onChange="load_locale();">
-   [% FOREACH key IN locales.keys %]
-    <option value="[% key %]" [% 'selected="SELECTED"' IF key == locale %]>
-     [% locales.$key %]
-    </option>
-   [% END %]
-   </select>
+   <form>
+    <select name="locale" id="locale_select" onChange="load_locale();">
+     [% FOREACH key IN locales.keys %]
+      <option value="[% key %]" [% 'selected="SELECTED"' IF key == locale %]>
+       [% locales.$key %]
+      </option>
+     [% END %]
+    </select>
+    <noscript>
+     [% IF id %]
+      <!-- Carry through to get back to the test result -->
+      <input type="hidden" name="test_id" value="[% id %]" />
+     [% END %]
+     <input type="submit" value="[% lng.btn_save %]">
+    </noscript>
+   </form>
   </li>
-
  </ul>

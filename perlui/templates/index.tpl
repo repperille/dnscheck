@@ -12,13 +12,16 @@
  [% IF type == "undelegated" %]
   <p>[% lng.enter_your_undelegated_domain_name %]</p>
   [% lng.name_servers %]:
-  <ul id="nameservers">
-   <noscript>
+  <noscript>
+   <ul id="nameservers">
     <!-- Add some slots -->
     <li>[% lng.host %]: <input type="text" class="host" name="host0"/> IP: <input type="text" class="IP" name="ip0"/></li>
     <li>[% lng.host %]: <input type="text" class="host" name="host1"/> IP: <input type="text" class="IP" name="ip1"/></li>
-   </noscript>
-  </ul>
+   </ul>
+  </noscript>
+  <script>
+   document.write('<ul id="nameservers"></ul>');
+  </script>
   <br />
   <script>
   document.write('<input type="button" value="[% lng.add_name_server %]" onClick="add_nameserver()"/>');
@@ -34,9 +37,8 @@
  <noscript>
   <input type="submit" value="[% lng.test_now %]" /><br /><br />
   <fieldset class="noscript">
-   <legend>Notice</legend>
-   You are running without javascript. Please remain calm while the test
-   carries out, and you will be redirected to the results in a little while.
+   <legend>[% lng.no_script_header%]</legend>
+    [% lng.no_script_label %]
   </fieldset>
  </noscript>
 </form>

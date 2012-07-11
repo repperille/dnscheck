@@ -16,11 +16,10 @@ my $cgi = $dnscheck->get_cgi();
 my $type = $cgi->param('type');
 my $locale = $cgi->param('locale');
 
-if(defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
-	# TODO: Do something
-} else {
+# Unless type was valid, assign standard
+unless (defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
 	$type = 'standard';
-}
+} 
 
 # Render result
 $dnscheck->render('index.tpl', {

@@ -5,6 +5,7 @@ use warnings;
 use DNSCheckWeb;
 use DNSCheckWeb::Exceptions;
 use JSON;
+use Scalar::Util qw(looks_like_number);
 
 use Data::Dumper;
 
@@ -25,7 +26,7 @@ if(!defined($locale)) {
 
 # Get results for the given test
 eval {
-	if(!defined($test_id) || $test_id <= 0) {
+	if(!defined($test_id) || !looks_like_number($test_id)) {
 		TestException->throw();
 	}
 

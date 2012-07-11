@@ -57,7 +57,7 @@ eval {
 		DomainException->throw();
 	}
 	if(!defined($source)) {
-		DomainException->throw();
+		SourceException->throw();
 	}
 	if(!defined($source_data)) {
 		$source_data = '';
@@ -85,10 +85,15 @@ eval {
 # Catch errors
 if (my $e = DomainException->caught()) {
 	$dnscheck->render_error(TEST_ERROR, $e->description());
-} elsif(defined($generated_id)) {
+} elsif(my $e = SourceException->caught()) {
+	$dnscheck->render_error(TEST_ERROR, $e->description());
+}
+
+if(defined($generated_id)) {
 	# Redirects to itself, with the test_id parameter
 	print "Location: do-noscript-lookup.pl?test_id=" . $generated_id . "\n\n";
 } else {
+	# Catch all generic errors, and exit
 	$dnscheck->render_error(TEST_ERROR, "No generated id, try again.");
 }
 # Script should not "naturally" progress to this section.

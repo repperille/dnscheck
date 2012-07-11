@@ -46,10 +46,11 @@ eval {
 
 	# Check if domain is valid
 	if(!defined($domain) || !is_domain($domain)) {
+		die "lolo";
 		DomainException->throw();
 	}
 	if(!defined($source)) {
-		DomainException->throw();
+		SourceException->throw();
 	}
 
 	# Source data can be undefined
@@ -75,6 +76,9 @@ eval {
 };
 # Catch errors
 if (my $e = DomainException->caught()) {
+	$href_results->{status} = TEST_ERROR;
+	$href_results->{error_msg} = 'Error: ' . $e->description();
+} elsif (my $e = SourceException->caught()) {
 	$href_results->{status} = TEST_ERROR;
 	$href_results->{error_msg} = 'Error: ' . $e->description();
 }
