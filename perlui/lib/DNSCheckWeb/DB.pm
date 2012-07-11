@@ -139,8 +139,60 @@ sub get_running_result {
 
 	return $query->fetchall_arrayref;
 }
+# Fetch the test_id for a running case
+sub get_running_test_id {
+	my ($self, $domain, $source, $source_data) = @_;
+	my $query = $self->{dbh}->prepare(q{
+		SELECT test.id AS id
+		FROM tests AS test
+			INNER JOIN queue ON
+			queue.domain = test.domain
+			AND queue.source_id = test.source_id
+			AND queue.source_data = test.source_data
+		WHERE
+			test.domain = ?
+			AND test.source_data = ?
+			AND test.finished IS NULL
+		LIMIT 1;
+	}) or die "Prepare statement failed";
+	$query->execute($domain, $source_data) or die "Execute failed";
+	return $query->fetchrow_hashref;
+}
 
-# Returns all test results for a given test id, and its locale
+sub get_last_test_id {
+	my ($self, $domain, $source, $source_data) = @_;
+	my $query = $self->{dbh}->prepare(q{
+		SELECT test.id AS id
+		FROM tests AS test
+		WHERE
+			test.domain = ?
+			AND test.source_data = ?
+		ORDER BY id DESC
+		LIMIT 1;
+	}) or die "Prepare statement failed";
+	$query->execute($domain, $source_data) or die "Execute failed";
+	return $query->fetchrow_hashref;
+}
+
+# Call to check whether the results are ready, or still being processed
+sub get_running_result_on_id {
+	my ($self, $test_id) = @_;
+	
+	my $query = $self->{dbh}->prepare(q{
+		SELECT 
+			CASE
+				WHEN finished IS NULL THEN 'NO' 
+				ELSE 'YES' 
+			END AS finished
+		FROM tests
+		WHERE id = ?;
+	});
+	$query->execute($test_id);
+	return $query->fetchrow_hashref;
+}
+
+# Returns all test results for a given test id. Joins on messages for those
+# results (using the locale).
 sub get_test_results {
 	my ($self, $test_id, $locale) = @_;
 

@@ -72,6 +72,16 @@ sub render {
 	exit;
 }
 
+sub render_error {
+	my ($self, $title, $errors) = @_;	
+
+	my $result = {
+		title => $title,
+		error => $errors,
+	};
+	$self->render('error_page.tpl', $result);
+}
+
 # Returns the database object.
 sub get_dbo {
 	my $self = shift;
@@ -136,6 +146,9 @@ sub html_headers {
 }
 sub json_headers {
 	return CGI::header(-type=>'application/json', -expires=>'now', -charset=>'UTF-8');
+}
+sub plain_headers {
+	return CGI::header(-type=>'text/plain', -expires=>'now', -charset=>'UTF-8');
 }
 
 # Build output tree.
