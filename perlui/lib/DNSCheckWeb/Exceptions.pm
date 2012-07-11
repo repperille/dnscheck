@@ -9,6 +9,9 @@ use Exception::Class (
 	TestException => {
 		description => 'The test id was invalid.',
 	},
+	SourceException => {
+		description => 'Specified source is not valid.',
+	},
 );
 
 1;
