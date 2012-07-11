@@ -63,13 +63,13 @@ eval {
 		$source_data = '';
 	}
 
-	# TODO: Clean into something simple .. 
+	# TODO: Clean into something simple ..
 	# TODO: Not sure if all cases are covered
 
 	# Check if dispatcher is already testing this specific case
 	# TODO: Use get_running_result instead
 	$running = $dbo->get_running_test_id($domain, $source, $source_data);
-	
+
 	# No tests running, fire of new test.
 	if(!defined($running)) {
 		$dbo->start_check($domain, $source, $source_data);
@@ -79,13 +79,13 @@ eval {
 			sleep 2;
 			$running = $dbo->get_last_test_id($domain, $source, $source_data);
 		}
-	} 
+	}
 	$generated_id = $running->{id};
 };
 # Catch errors
 if (my $e = DomainException->caught()) {
 	$dnscheck->render_error(TEST_ERROR, $e->description());
-} elsif(my $e = SourceException->caught()) {
+} elsif($e = SourceException->caught()) {
 	$dnscheck->render_error(TEST_ERROR, $e->description());
 }
 
