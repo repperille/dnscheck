@@ -45,7 +45,7 @@ eval {
 	# Will do these tests for each poll.
 
 	# Check if domain is valid
-	if(!defined($domain) || length($domain) <= 2 || !is_domain($domain)) {
+	if(!defined($domain) || !is_domain($domain)) {
 		DomainException->throw();
 	}
 	if(!defined($source)) {

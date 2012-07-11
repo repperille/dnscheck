@@ -1,14 +1,17 @@
+body, form {
+	font-family: sans-serif;
+}
 /* For the different classes in the checker */
 .ok {
 	color: green;
 }
+/* should be hid when loading with js */
 .info {
-	display: none;
 }
+/* should be hid when loading with js */
 .notice {
 	font-weight: bold;
 	font-style: italic;
-	display: none;
 }
 .warning {
 	color: orange;
@@ -20,7 +23,7 @@
 	color: red;
 	font-weight: bold;
 }
-/** Some "general" styling  */
+/* Some "general" styling  */
 #domain_info {
 	float: left;
 }
@@ -71,7 +74,7 @@ ul, ol {
 	list-style: disc;
 	font-size: 16px;
 }
-/** Could re-use the above? */
+/* Could re-use the above? */
 #nameservers {
 	background: #8e9acc;
 	-moz-border-radius: 5px;
@@ -94,6 +97,7 @@ ul, ol {
 	-webkit-border-radius: 3px;
 	-khtml-border-radius: 3px;
 	border-radius: 3px;
+	list-style: none;
 }
 
 #nameservers li {
@@ -114,20 +118,20 @@ li {
 }
 
 li.collapsibleListOpen{
-	/**
+	/*
   list-style-image:url('button-open.png');
   cursor:pointer;
 	*/
 }
 
 li.collapsibleListClosed{
-	/**
+	/*
   list-style-image:url('button-closed.png');
   cursor:pointer;
 	*/
 }
 
-body, form {
-	font-family: sans-serif;
+.noscript {
+	color: red;
+	border: 1px dotted;
 }
-

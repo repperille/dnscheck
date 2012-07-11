@@ -60,10 +60,7 @@ eval {
 };
 # Catch errors
 if( my $e = TestException->caught() ) {
-	$dnscheck->render('tree_error.tpl', {
-		title => 'Error',
-		error => $e->description()
-	});
+	$dnscheck->render_error('Error', $e->description());
 }
 
 1;

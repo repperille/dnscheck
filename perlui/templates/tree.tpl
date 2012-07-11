@@ -1,4 +1,7 @@
 [% INCLUDE header.tpl %]
+<script type="text/javascript">
+ var tree_view = true;
+</script>
 <div>
  <h2>[% lng.domain_test %]</h2>
  <div id="domain_info">
@@ -30,8 +33,10 @@
  </div>
  <div class="clear-both"></div>
 </div>
- <input type="button" onClick="hide_results();" id="btn_basic" value="[% lng.basic_results %]">
- <input type="button" onClick="show_results();" id="btn_advanced" value="[% lng.advanced_results %]">
+ <script>
+  document.write('<input type="button" disabled="true" onClick="hide_results();" id="btn_basic" value="[% lng.basic_results %]">');
+  document.write('<input type="button" onClick="show_results();" id="btn_advanced" value="[% lng.advanced_results %]">');
+ </script>
  <!-- Loop all the tests -->
  <ul id="result_list">
  [% FOREACH test IN tests %]
