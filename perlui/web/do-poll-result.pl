@@ -34,7 +34,7 @@ my $domain = $cgi->param("domain");
 my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
 
-# Final json-string containing status and results
+# Final JSON-string containing status and results
 my $href_results = {
 	domain => $domain,
 	source => $source
@@ -78,7 +78,7 @@ eval {
 if (my $e = DomainException->caught()) {
 	$href_results->{status} = TEST_ERROR;
 	$href_results->{error_msg} = 'Error: ' . $e->description();
-} elsif (my $e = SourceException->caught()) {
+} elsif ($e = SourceException->caught()) {
 	$href_results->{status} = TEST_ERROR;
 	$href_results->{error_msg} = 'Error: ' . $e->description();
 }
