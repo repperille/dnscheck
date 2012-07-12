@@ -26,8 +26,8 @@ use constant TEST_ERROR => "error";
 
 # Some important objects
 my $dnscheck = DNSCheckWeb->new();
-my $dbo = $dnscheck->get_dbo();
 my $cgi = $dnscheck->get_cgi();
+my $dbo = $dnscheck->get_dbo();
 
 # Fetch parameters
 my $domain = $cgi->param("domain");
@@ -46,7 +46,6 @@ eval {
 
 	# Check if domain is valid
 	if(!defined($domain) || !is_domain($domain)) {
-		die "lolo";
 		DomainException->throw();
 	}
 	if(!defined($source)) {

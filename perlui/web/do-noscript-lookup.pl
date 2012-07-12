@@ -22,8 +22,8 @@ use constant TIMER_INIT => 1; # Seconds to wait before trying to poll test_id
 
 # Instantiate main dnscheck object
 my $dnscheck = DNSCheckWeb->new();
-my $dbo = $dnscheck->get_dbo();
 my $cgi = $dnscheck->get_cgi();
+my $dbo = $dnscheck->get_dbo();
 
 # If a test id was provided, continue to the polling state
 # Else, continue to the start state, and fire of new check.
@@ -54,7 +54,7 @@ my $running;
 # Checks whether provided domain is valid
 eval {
 	if(!defined($domain) || !is_domain($domain)) {
-		DomainException->throw();
+		DomainException->throw( error=> "Failed on: $domain");
 	}
 	if(!defined($source)) {
 		SourceException->throw();
@@ -76,25 +76,30 @@ eval {
 		# Immediately check for results
 		$running = $dbo->get_running_test_id($domain, $source, $source_data);
 		if(!defined($running)) {
-			sleep 2;
+			# Highly experimental
+			sleep 5;
 			$running = $dbo->get_last_test_id($domain, $source, $source_data);
 		}
 	}
 	$generated_id = $running->{id};
+
+	if(!defined($generated_id)) {
+		# No way to continue, get out
+		TestException->throw( error => "Failed on: $domain, source: $source, source_data: $source_data");
+	} else {
+		# Redirects to itself, with the test_id parameter
+		print "Location: do-noscript-lookup.pl?test_id=" . $generated_id . "\n\n";
+	}
 };
 # Catch errors
 if (my $e = DomainException->caught()) {
-	$dnscheck->render_error(TEST_ERROR, $e->description());
+	$dnscheck->render_error($e);
 } elsif($e = SourceException->caught()) {
-	$dnscheck->render_error(TEST_ERROR, $e->description());
-}
-
-if(defined($generated_id)) {
-	# Redirects to itself, with the test_id parameter
-	print "Location: do-noscript-lookup.pl?test_id=" . $generated_id . "\n\n";
-} else {
-	# Catch all generic errors, and exit
-	$dnscheck->render_error(TEST_ERROR, "No generated id, try again.");
+	$dnscheck->render_error($e);
+} elsif($e = TestException->caught()) {
+	$dnscheck->render_error($e);
+} elsif($e = DBException->caught()) {
+	$dnscheck->render_error($e);
 }
 # Script should not "naturally" progress to this section.
 exit;

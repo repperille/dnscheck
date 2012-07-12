@@ -61,7 +61,9 @@ eval {
 };
 # Catch errors
 if( my $e = TestException->caught() ) {
-	$dnscheck->render_error('Error', $e->description());
+	$dnscheck->render_error($e);
+} elsif($e = DBException->caught() ) {
+	$dnscheck->render_error($e);
 }
 
 1;

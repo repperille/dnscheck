@@ -21,6 +21,7 @@ use Data::Dumper;
 
 # Temporary "fix" for testing mod_perl
 use constant DIR => "/var/www/perlui/lib/";
+use constant DEBUG => 1;
 
 # Constants for the valid types
 use constant TYPES => {
@@ -29,7 +30,7 @@ use constant TYPES => {
 };
 
 
-# "New" instance of this "object"
+# Load config an create a "new" instance
 sub new {
 	my $class = shift;
 	my $self = {};
@@ -72,12 +73,25 @@ sub render {
 	exit;
 }
 
+# Creates a generic error page with stack trace etc, if debug is turned on
 sub render_error {
-	my ($self, $title, $errors) = @_;	
+	my ($self, $e) = @_;
 
+	# Error is the specific error, while trace is the stack trace for that error
+	my $error;
+	my $trace;
+
+	# Add some more verbose output given that we are debugging
+	if(DEBUG) {
+		$trace = $e->trace();
+		$error = $e->error();
+	}
+	# A description is the "high level" description for the user
 	my $result = {
-		title => $title,
-		error => $errors,
+		title => 'Error',
+		description => $e->description(),
+		trace => $trace,
+		error => $error,
 	};
 	$self->render('error_page.tpl', $result);
 }
@@ -87,7 +101,12 @@ sub get_dbo {
 	my $self = shift;
 
 	unless (defined($self->{dbo})) {
-		$self->{dbo} = DNSCheckWeb::DB->new($self->{config}->{dbi});
+		eval {
+			$self->{dbo} = DNSCheckWeb::DB->new($self->{config}->{dbi});
+		};
+		if(my $e = DBException->caught()) {
+			$self->render_error($e);
+		}
 	}
 
 	return $self->{dbo};
@@ -109,7 +128,6 @@ sub get_cgi {
 	my $self = shift;
 	unless(defined($self->{cgi})) {
 		$self->{cgi} = CGI->new();
-		#$self->{cgi}->charset('UTF-8');
 		load_session($self);
 	}
 	return $self->{cgi};

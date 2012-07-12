@@ -2,15 +2,19 @@
 
 package DNSCheckWeb::Exceptions;
 
+# Some simple exception classes
 use Exception::Class (
 	DomainException => {
-		description => 'Domain name was invalid.',
+		description => 'Domain name was not valid.',
 	},
 	TestException => {
-		description => 'The test id was invalid.',
+		description => 'Test id was not valid.',
 	},
 	SourceException => {
-		description => 'Specified source is not valid.',
+		description => 'Source was not valid.',
+	},
+	DBException => {
+		description => 'A database error occurred.',
 	},
 );
 

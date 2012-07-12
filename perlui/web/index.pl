@@ -5,11 +5,7 @@ use warnings;
 # Load needed libraries
 use DNSCheckWeb;
 
-# Testing
-use Data::Dumper;
-
 my $dnscheck = DNSCheckWeb->new();
-my $dbo = $dnscheck->get_dbo();
 my $cgi = $dnscheck->get_cgi();
 
 # Parameters
@@ -23,8 +19,6 @@ unless (defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
 
 # Render result
 $dnscheck->render('index.tpl', {
-	version => $dbo->get_version(),
 	type => $type,
-	page_title => "Test domain",
 	locale => $locale,
 });

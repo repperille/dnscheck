@@ -42,4 +42,9 @@
   </fieldset>
  </noscript>
 </form>
+<!--
+<div class="about">
+ [% INSERT 'test.html' %]
+</div>
+-->
 [% INCLUDE footer.tpl %]
