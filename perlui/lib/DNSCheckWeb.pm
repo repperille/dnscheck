@@ -157,21 +157,20 @@ sub plain_headers {
 sub build_tree {
 	my ($self, $result) = @_;
 
-	#
-	# TODO: This "tree" includes HTML, should also have a raw tree?
 	my @tests = @{ $result->{tests} };
 	my @modules = ();
 	my $indent = 0;
-	my $result_status = 'ok'; # Presume that everything is ok
 	my $version;
+	my @ancestors = ();
+	my $parent;
+	my $result_class = 'ok';
 
+	# Build the tree
 	foreach my $node (@tests) {
 
 		# Assign some variables from the set
 		my $module_id = $node->[0];
-		my $parent_id = $node->[4];
-		my $module = $modules[$module_id];
-		my $class = $node->[6];
+		my $class = lc($node->[6]); # We want class definition in lowercase
 		my $type = $node->[7];
 		my $caption = $node->[22];
 		my $desc = $node->[23];
@@ -188,60 +187,60 @@ sub build_tree {
 			id => $module_id,
 			caption => $caption,
 			description => $desc,
-			class => lc($class),
-			tag_start => '<li class="' . lc($class) . '">',
+			class => $class,
 			tag_end => '</li>',
 		};
 
-		# Format for new class
+		# Cases for begin tags
 		if($type=~ m/BEGIN$/) {
-			$child_module->{tag_start} = '<li>';
+			# Stepping into module, push
+			push @ancestors, $child_module;
+			# Start building new list
 			$child_module->{tag_end} = '<ul>';
-
-			if($indent < 2) {
+			# Root node, set version and then skip to next module
+			if(@ancestors == 1) {
+				$version = $node->[9];
+				next;
+			}
+			# Level 1 node, clean output
+			elsif(@ancestors == 2) {
+				$child_module->{class} = 'ok';
 				my @test = split(':', $node->[7]);
 				$child_module->{caption} = lc($test[0]);
-			} else {
-				$child_module->{tag_start} = '<li class="info">';
 			}
-			$indent++;
 		}
-
-		# Skip some overhead, and set version
-		if($indent == 1) {
-			if(!defined($version)) {
-				$version = $node->[9];
-			}
-			next;
-		}
-
-		# Format for end class
+		# Cases for end tags
 		if($type =~ m/END$/) {
+			# Stepping out of module, pop
+			pop(@ancestors);
+			# End this list tag
 			$child_module->{tag_start} = '</ul>';
-			$indent--;
-			if($indent < 2) {
+			# Level 1 node, clean output
+			if(@ancestors == 1) {
 				$child_module->{caption} = undef;
 			}
+			# Skip to next module (there should not be one)
+			elsif(@ancestors == 0) {
+				next;
+			}
 		}
-
-		# Check whether we encountered an error
-		# Collect the most critical case
-		if($child_module->{class} eq 'critical') {
-			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'error'
-		&& $result_status ne 'critical') {
-			$result_status = $child_module->{class};
-		} elsif($child_module->{class} eq 'warning'
-		&& ($result_status ne 'critical' && $result_status ne 'error')) {
-			$result_status = $child_module->{class};
+		# Propagate 'important' flags to ancestor modules
+		unless($class eq 'ok' || $class eq 'info' || $class eq 'notice') {
+			foreach my $parent_node (@ancestors) {
+				unless ($parent_node->{class} eq 'error') {
+					$parent_node->{class} = $class;
+					$result_class = $class;
+				}
+			}
 		}
+		# Remember "last" parent
+		$parent = $child_module;
 		push @modules, $child_module;
 	}
 
-	# Assign new reference, and return
 	$result->{tests} = \@modules;
-	$result->{class} = $result_status;
 	$result->{version} = $version;
+	$result->{class} = $result_class;
 	return $result;
 }
 
