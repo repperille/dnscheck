@@ -42,6 +42,8 @@
  [% FOREACH test IN tests %]
   [% IF test.tag_start %]
    [% test.tag_start %]
+  [% ELSE %]
+   <li class="[% test.class %]">
   [% END %]
   <!-- Caption -->
   [% custom = test.caption %]
