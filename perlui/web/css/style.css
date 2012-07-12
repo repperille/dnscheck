@@ -42,7 +42,7 @@ body, form {
 }
 
 .description {
-	display: none;
+	display: block;
 	font-style: italic;
 	color: black;
 }

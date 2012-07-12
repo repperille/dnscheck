@@ -202,6 +202,12 @@ function hide_results() {
 			children[i].style.display = 'none';
 		}
 	}
+	// Hide all descriptions?
+	var descriptions = results.getElementsByTagName('blockquote');
+	for (var i = 0, len = descriptions.length; i < len; i++ ) {
+			descriptions[i].style.display = 'none';
+	}
+
 	toggle_buttons(true);
 }
 // Toggles enable state of the buttons
