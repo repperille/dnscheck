@@ -21,7 +21,6 @@ use Data::Dumper;
 
 # Temporary "fix" for testing mod_perl
 use constant DIR => "/var/www/perlui/lib/";
-use constant DEBUG => 1;
 
 # Constants for the valid types
 use constant TYPES => {
@@ -82,7 +81,7 @@ sub render_error {
 	my $trace;
 
 	# Add some more verbose output given that we are debugging
-	if(DEBUG) {
+	if($self->{config}->{debug}) {
 		$trace = $e->trace();
 		$error = $e->error();
 	}

@@ -9,6 +9,8 @@ dbi:
     user: someuser
     password: somepassword
 
+# When debug is turned on, errors will be more verbose
+debug: 1
 
 #
 # Below are two database specific configurations. The database schemas
