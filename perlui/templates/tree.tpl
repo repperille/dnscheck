@@ -53,9 +53,18 @@
    [% test.caption %]
   [% END %]
   [% IF test.description %]
-  	<!-- Description -->
-   <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">[+]</a>
-   <blockquote id="info_[% test.id %]" class="description">[% test.description %]</blockquote>
+   <!-- Description -->
+   <a href="#" onClick="toggle_id('info_[% test.id %]'); return false;">
+   <script>
+    document.write('[+]');
+   </script>
+   </a>
+   <blockquote id="info_[% test.id %]" class="description">
+    <noscript> 
+	 [% lng.note %]: 
+	</noscript>
+	[% test.description %]
+   </blockquote>
   [% END %]
   [% test.tag_end %]
  [% END %]
