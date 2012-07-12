@@ -3,7 +3,7 @@ body, form {
 }
 /* For the different classes in the checker */
 .ok {
-	color: green;
+	color: #7CFC00;
 }
 /* should be hid when loading with js */
 .info {
@@ -14,7 +14,7 @@ body, form {
 	font-style: italic;
 }
 .warning {
-	color: orange;
+	color: #FF8C00;
 }
 .error {
 	color: red;
@@ -134,4 +134,7 @@ li.collapsibleListClosed{
 .noscript {
 	color: red;
 	border: 1px dotted;
+}
+
+.about {
 }
