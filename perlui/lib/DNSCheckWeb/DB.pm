@@ -46,13 +46,12 @@ sub new {
 	# Try to set up connection
 	my $dsn  = sprintf($self->{connect}, $db_info->{database}, $db_info->{host}, $db_info->{port});
 	my $dbh = DBI->connect($dsn, $db_info->{user}, $db_info->{password}, {
-		RaiseError => 0, AutoCommit => 1, PrintError => 0
+		RaiseError => 0, AutoCommit => 1, PrintError => 0, pg_enable_utf8 => 1
 	})
 	or die DBException->throw( error=> $DBI::errstr);
 
 	# Assign reference if everything worked out
 	if(defined($dbh)) {
-		$dbh->{pg_enable_utf8} = 1;
 		$self->{dbh} = $dbh;
 	} else {
 		DBException->throw( error => "Could  not connect to database");

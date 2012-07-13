@@ -48,8 +48,7 @@ sub render {
 	my ($self, $file, $vars) = @_;
 
 	# Setup template and prepare browser
-	my $template = Template->new({ENCODING => 'utf8', INCLUDE_PATH =>
-	[get_dir() . '../templates']});
+	my $template = Template->new({INCLUDE_PATH => [get_dir() . '../templates']});
 
 	# Initialize I18N module
 	if(!defined($self->{lng})) {
@@ -158,11 +157,9 @@ sub load_session {
 sub html_headers {
 	my $cookie = shift;
 	if(defined($cookie)) {
-		return CGI::header(-type=>'text/html', -expires=>'now',
-		charset=>'UTF-8', -cookie=>$cookie);
+		return CGI::header(-type=>'text/html', -expires=>'now', -charset=>'UTF-8', -cookie=>$cookie);
 	} else {
-		return CGI::header(-type=>'text/html', -expires=>'now',
-		-charset=>'UTF-8');
+		return CGI::header(-type=>'text/html', -expires=>'now', -charset=>'UTF-8');
 	}
 }
 sub json_headers {
