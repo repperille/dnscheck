@@ -109,3 +109,10 @@ load_error_label: Could not connect to main database, try again later
 add_name_server: Add name server
 
 language: Language
+
+no_script_header: Notice
+
+no_script_label: You are visiting without javascript. Please remain calm while the test carries out, and you will be redirected to the results in a little while.
+
+btn_save: Save
+
