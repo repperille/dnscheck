@@ -54,6 +54,12 @@ function pollResult() {
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			var json = xmlhttp.responseText;
+			if(json == undefined) {
+				clearInterval(interval);
+				clearTimeout(loading_bar);
+				var error = '<span style="color: red;">Malformed response from server.</span>';
+				document.getElementById('test').innerHTML = error;
+			}
 			// TODO: Better parsing
 			json = eval ('(' + json + ')'); 
 			var json_status = json.status;
