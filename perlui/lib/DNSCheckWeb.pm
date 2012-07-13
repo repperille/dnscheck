@@ -19,8 +19,12 @@ use DNSCheckWeb::I18N;
 # Testing
 use Data::Dumper;
 
-# Temporary "fix" for testing mod_perl
-use constant DIR => "/var/www/perlui/lib/";
+# When running mod_perl DIR needs to be pointed to the directory
+# containing this library.
+use constant DIR => undef;
+
+# Example:
+#use constant DIR => "/var/www/dnscheck/lib/";
 
 # Constants for the valid types
 use constant TYPES => {
@@ -45,7 +49,7 @@ sub render {
 
 	# Setup template and prepare browser
 	my $template = Template->new({ENCODING => 'utf8', INCLUDE_PATH =>
-	[DIR . '../templates']});
+	[get_dir() . '../templates']});
 
 	# Initialize I18N module
 	if(!defined($self->{lng})) {
@@ -116,7 +120,7 @@ sub get_lng {
 	my $self = shift;
 
 	unless (defined($self->{lng})) {
-		$self->{lng} = DNSCheckWeb::I18N->new(DIR);
+		$self->{lng} = DNSCheckWeb::I18N->new(get_dir());
 	}
 
 	return $self->{lng};
@@ -288,18 +292,24 @@ sub parse_yaml {
 
 	my $path;
 	if(!defined($file)) {
-		$path = get_abs() . $rel_dir;
+		$path = get_dir() . $rel_dir;
 	} else {
-		$path = get_abs() . $rel_dir . $file;
+		$path = get_dir() . $rel_dir . $file;
 	}
 	my $yaml = YAML::Tiny->new();
 	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr . " $path";
 
 	return $yaml->[0];
 }
-# A routine for retrieving the absolute path
-sub get_abs {
-	return DIR;
+
+# This routine should return the path to this package. If we are running
+# mod_perl this path needs to be absolute.
+sub get_dir {
+	if(defined(DIR)) {
+		return DIR;
+	} else {
+		return '';
+	}
 }
 
 1;

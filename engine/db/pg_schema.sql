@@ -55,7 +55,7 @@ CREATE TABLE results (
   module_id integer  NOT NULL,
   parent_module_id integer  NOT NULL,
   timestamp timestamp default NULL,
-  degree TEXT  default NULL, -- degree ? instead of level
+  class TEXT  default NULL, -- class, instead of level
   message TEXT NOT NULL default '',
   arg0 TEXT default NULL,
   arg1 TEXT default NULL,

@@ -17,7 +17,7 @@ sub new {
 
 	# Check available languages. Uses the absoulte path given from main
 	# module.
-	opendir(D, DNSCheckWeb::get_abs().$dir) || die "Can't opedir $dir: $!\n";
+	opendir(D, DNSCheckWeb::get_dir().$dir) || die "Can't opedir $dir: $!\n";
 	my @list = readdir(D);
 	closedir(D);
 
