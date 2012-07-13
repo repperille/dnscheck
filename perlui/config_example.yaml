@@ -30,4 +30,4 @@ postgresql:
     driver: DBI:Pg:database=%s;host=%s;port=%s
     tbl_begin: started
     tbl_end: finished
-    tbl_level: degree
+    tbl_level: class
