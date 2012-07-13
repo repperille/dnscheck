@@ -80,6 +80,9 @@ if (my $e = DomainException->caught()) {
 } elsif ($e = SourceException->caught()) {
 	$href_results->{status} = TEST_ERROR;
 	$href_results->{error_msg} = 'Error: ' . $e->description();
+} elsif ($e = DBException->caught()) {
+	$href_results->{status} = TEST_ERROR;
+	$href_results->{error_msg} = 'Error: ' . $e->description();
 }
 
 # Feed result back to browser
