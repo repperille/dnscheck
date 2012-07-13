@@ -104,7 +104,7 @@ sub get_dbo {
 
 	unless (defined($self->{dbo})) {
 		eval {
-			$self->{dbo} = DNSCheckWeb::DB->new($self->{config}->{dbi});
+			$self->{dbo} = DNSCheckWeb::DB->new($self->{config});
 		};
 		if(my $e = DBException->caught()) {
 			$self->render_error($e);

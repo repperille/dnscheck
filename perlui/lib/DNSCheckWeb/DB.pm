@@ -14,49 +14,37 @@ use constant TYPE_MYSQL => "mysql";
 my $dbo;
 
 sub new {
-	my ($class, $db_info) = @_;
-	# Create empty object, will be filled.
-	my $self = { };
+	my ($class, $config) = @_;
 
-	unless(defined($db_info)) {
+	# Check that we have database information
+	unless(defined($config) || defined($config->{dbi})) {
 		die DBException->throw( error => "No database information provided.");
 	}
 
-	# Initialize variables, should load database depending on what type.
-	if($db_info->{type} eq TYPE_PG) {
-		$self = {
-			connect =>
-			"DBI:Pg:database=%s;host=%s;port=%s",
-			tbl_begin => "started",
-			tbl_end => "finished",
-			tbl_level => "class"
-		};
-	} elsif($db_info->{type} eq TYPE_MYSQL) {
-		$self = {
-			connect =>
-			"DBI:Pg:database=%s;host=%s;port=%s",
-			tbl_begin => "begin",
-			tbl_end => "end",
-			tbl_level => "level"
-		};
-	} else {
-		die DBException->throw( error => "Database: $db_info->{type} is not a known DB type.");
+	# Assign database meta information on the specified type
+	my $dbi = $config->{dbi};
+	my $db_meta = $config->{$dbi->{type}};
+
+	# Check that given database type matches one in config
+	unless(defined($db_meta)) {
+		die DBException->throw( error => "Could not load db information for the type: $dbi->{type}");
 	}
 
-	# Try to set up connection
-	my $dsn  = sprintf($self->{connect}, $db_info->{database}, $db_info->{host}, $db_info->{port});
-	my $dbh = DBI->connect($dsn, $db_info->{user}, $db_info->{password}, {
+	# Construct connect statement
+	my $dsn  = sprintf($db_meta->{driver}, $dbi->{database}, $dbi->{host}, $dbi->{port});
+	# Do connection
+	my $dbh = DBI->connect($dsn, $dbi->{user}, $dbi->{password}, {
 		RaiseError => 0, AutoCommit => 1, PrintError => 0, pg_enable_utf8 => 1
 	})
 	or die DBException->throw( error=> $DBI::errstr);
 
 	# Assign reference if everything worked out
+	my $self = { };
 	if(defined($dbh)) {
 		$self->{dbh} = $dbh;
 	} else {
 		DBException->throw( error => "Could  not connect to database");
 	}
-
 
 	bless $self, $class;
 	return $self;
