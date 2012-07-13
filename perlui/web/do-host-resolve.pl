@@ -31,4 +31,4 @@ if(defined($nameservers)) {
 
 # Encode and return result
 print $dnscheck->json_headers();
-print encode_json(\@results);
+print JSON::to_json(\@results);
