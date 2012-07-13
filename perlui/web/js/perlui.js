@@ -147,11 +147,13 @@ function get_nameservers() {
 // Writes the resolved IP addresses to DOM
 function print_resolvers(json) {
 	var el = document.getElementById("nameservers").getElementsByTagName("*");
-	for (var i=0; i<el.length; i++) {
+	for (var i=0; i < el.length; i++) {
 		if(el[i].className == "IP") {
-			var address = json.shift().addr;
-			if(address != undefined) {
-				el[i].value = address;
+			var tuple = json.shift();
+			if(tuple != undefined && tuple.addr != undefined) {
+				el[i].value = tuple.addr;
+			} else {
+				el[i].value = '';
 			}
 		}
 	}
@@ -160,10 +162,10 @@ function print_resolvers(json) {
 function add_nameserver() {
 	var ul = document.getElementById("nameservers");
 	var new_li = document.createElement('li');
-	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/> IP: <input type=\"text\" class=\"" + lbl_ip + "\"/></li>";
+	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/>" + lbl_ip + ": <input type=\"text\" class=\"IP\" /></li>";
 	ul.appendChild(new_li);
 }
-// Displayes or hides the specified element
+// Displays or hides the specified element
 function toggle_id(id) {
 	var e = document.getElementById(id);
 	if(e.style.display == 'block')
