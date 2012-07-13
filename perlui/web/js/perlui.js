@@ -3,6 +3,7 @@
 **/
 var interval;
 var loading_bar;
+var tree_view;
 
 // Loading indicator
 function load() {
@@ -26,7 +27,7 @@ function load() {
 	}
 	loading_bar = setTimeout(load, 200);
 }
-
+// Builds a new AJAX request for this browser
 function initAjax() {
 	if (window.XMLHttpRequest)
 		{// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -36,7 +37,6 @@ function initAjax() {
 		return new ActiveXObject("Microsoft.XMLHTTP");
 	}
 }
-
 // This will fire off polling
 function run_dnscheck() {
 	interval = setInterval(pollResult, 2000);
@@ -54,20 +54,31 @@ function pollResult() {
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			var json = xmlhttp.responseText;
-			// TODO: Better parsing
-			json = eval ('(' + json + ')'); 
-			var json_status = json.status;
-			if(json_status == 'finished') {
-				clearInterval(interval);
-				clearTimeout(loading_bar);
-				window.location = 'tree.pl?test_id=' + json.test_id;
-			} else if(json_status == 'error') {
-				clearInterval(interval);
-				clearTimeout(loading_bar);
-				var error = '<span style="color: red;">' + json.error_msg + '</span>';
-				// Replace indicator with error
-				document.getElementById('test').innerHTML = error;
+			try {
+  				json = JSON.parse(json);
+			} catch (exception) {
+  				json = null;
 			}
+			// Valid
+			var error_msg;
+			if(json) {
+				var json_status = json.status;
+				if(json_status == 'finished') {
+					window.location = 'tree.pl?test_id=' + json.test_id;
+				} else if(json_status == 'error') {
+					error_msg = json.error_msg;
+				} else {
+					// Let polling continue
+					return;
+				}
+			} else {
+				error_msg = 'Malformed response returned from server.';
+			}
+			// Down  here we know that some error occurred
+			clearInterval(interval);
+			clearTimeout(loading_bar);
+			document.getElementById('test').innerHTML = '<span style="color: red;">' + error_msg + '</span>';
+
 		}
   	}
 	// What domain to check
@@ -92,9 +103,14 @@ function resolve(params) {
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			var json = xmlhttp.responseText;
-			// TODO: Better parsing
-			json = eval ('(' + json + ')');
-			print_resolvers(json);
+			try {
+  				json = JSON.parse(json);
+			} catch (exception) {
+  				json = null;
+			}
+			if(json) {
+				print_resolvers(json);
+			}
 		}
   	}
 	xmlhttp.open("GET","do-host-resolve.pl?nameservers=" + params, true);
@@ -139,7 +155,6 @@ function print_resolvers(json) {
 			}
 		}
 	}
-	
 }
 // Adds a new nameserver item to the initial list
 function add_nameserver() {
@@ -167,7 +182,7 @@ function load_locale() {
 		window.location = '?locale=' + e.value;
 	}
 }
-
+// Returns a value key par for the parameters for this location
 function get_params() {
 	var params = {};
 	window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
@@ -216,13 +231,13 @@ function toggle_buttons(basic) {
 	document.getElementById('btn_advanced').disabled = !basic;
 }
 
-// Do something when document loaded?
+// Load some stuff when document finishes.
 window.onload = function () {
 	// Check what page we are currently displaying.
 	var params = get_params();
 	if(params.type == 'undelegated') {
 		add_nameserver();
-	} else if(tree_view != undefined && tree_view) {
+	} else if(tree_view) {
 		hide_results();
-	} 
+	}
 }
