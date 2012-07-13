@@ -87,4 +87,4 @@ if (my $e = DomainException->caught()) {
 
 # Feed result back to browser
 print $dnscheck->json_headers();
-print encode_json $href_results;
+print JSON::to_json($href_results);
