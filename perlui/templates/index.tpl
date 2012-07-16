@@ -24,8 +24,8 @@
   </script>
   <br />
   <script>
-  document.write('<input type="button" value="[% lng.add_name_server %]" onClick="add_nameserver()"/>');
-  document.write('<br /> <br />');
+   document.write('<input type="button" value="[% lng.add_name_server %]" onClick="add_nameserver()"/>');
+   document.write('<br /> <br />');
   </script>
  [% ELSE %]
   <p>[% lng.enter_your_domain_name %]</p>

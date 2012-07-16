@@ -60,7 +60,8 @@ eval {
 		finished => $result->{finished},
 		version => $result->{version},
 		history => $result->{history},
-		locale => $locale
+		locale => $locale,
+		server_name => $ENV{SERVER_NAME}
 	});
 };
 # Catch errors
