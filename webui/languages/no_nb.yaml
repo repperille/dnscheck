@@ -115,3 +115,5 @@ no_script_header: Til notering
 no_script_label: Du bruker en nettleser uten «javascript», eller har dette avslått. Etter at du har trykket «test nå» vil testen gå i bakgrunnen, og du vil bli sendt videre så snart den er ferdig.
 
 btn_save: Lagre
+
+developed_by_label: er utviklet av
