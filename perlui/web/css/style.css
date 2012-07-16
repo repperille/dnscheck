@@ -4,7 +4,7 @@ body, form {
 /* For the different classes in the checker */
 
 .ok {
-	color: #7CFC00;
+	color: #008000;
 }
 /* should be hid when loading with js */
 .skipped {
@@ -136,4 +136,10 @@ li.collapsibleListClosed{
 }
 
 .about {
+}
+
+#credits {
+	font-size: 12px;
+	text-align: center;
+
 }
