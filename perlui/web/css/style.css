@@ -2,17 +2,21 @@ body, form {
 	font-family: sans-serif;
 }
 /* For the different classes in the checker */
+
 .ok {
 	color: #7CFC00;
 }
 /* should be hid when loading with js */
+.skipped {
+	color: #222222;
+}
 .info {
 }
-/* should be hid when loading with js */
 .notice {
 	font-weight: bold;
 	font-style: italic;
 }
+/* Will always show */
 .warning {
 	color: #FF8C00;
 }

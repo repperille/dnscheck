@@ -14,7 +14,7 @@ debug: 1
 
 #
 # Below are two database specific configurations. The database schemas
-# differs somewhat between postgresql and mysql, therefor this is
+# differs somewhat between postgresql and mysql, therefore this is
 # necessary. These standard settings should in most cases not be
 # changed.
 #

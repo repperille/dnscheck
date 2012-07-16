@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" src="js/perlui.js"></script>
     <script type="text/javascript" src="js/collapseable.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
  <body>
