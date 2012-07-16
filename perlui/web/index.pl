@@ -15,7 +15,7 @@ my $locale = $cgi->param('locale');
 # Unless type was valid, assign standard
 unless (defined($type) && ($type eq 'standard' || $type eq 'undelegated')) {
 	$type = 'standard';
-} 
+}
 
 # Render result
 $dnscheck->render('index.tpl', {

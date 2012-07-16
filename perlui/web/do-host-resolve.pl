@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 #
-# This script should basically do the same things as getResult.php.
-# Poll for information from the database, and output that info as json
-# to the ajax call from the user.
+# This script should look up the A address for the given host and
+# return that as json to the browser.
 #
 use strict;
 use warnings;
