@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 #
-# This script is intendted for users who do not have javascript enabled.  # It
-# will first create or fetch a test id, and then loop to check if results are
-# ready
+# This script is intended for users who do not have javascript enabled.
+# It will first create or fetch a test id, and then loop to check if
+# results are ready.
 #
 use strict;
 use warnings;
@@ -17,10 +17,9 @@ use Data::Validate::Domain qw(is_domain);
 use Data::Dumper;
 
 use constant TEST_ERROR => "Error";
-use constant TIMER_MAX => 120; # Quit checking for results after 2 minutes
-use constant TIMER_INIT => 1; # Seconds to wait before trying to poll test_id
+use constant TIMER_MAX => 120; # Stop checking for results after 2 minutes
+use constant TIMER_INIT => 5; # Seconds to wait before trying to poll test_id
 
-# Instantiate main dnscheck object
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 my $dbo = $dnscheck->get_dbo();
@@ -36,15 +35,15 @@ if(defined($test_id) && $test_id > 0) {
 
 #
 # Start state
-# This state will fire of a new dns check test, and redirect browser to itself
+# This state will fire of a new DNS check test, and redirect browser to itself
 START:
 # Parameters
 my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 my $domain = $cgi->param("domain");
 
-# Given that any source data was provided
+# Concatenate source data if it was provided
 my $source_data;
-if($cgi->param("test") eq 'undelegated') {
+if($cgi->param("test") eq "undelegated") {
 	$source_data = concat_data($cgi);
 }
 
@@ -77,7 +76,7 @@ eval {
 		$running = $dbo->get_running_test_id($domain, $source, $source_data);
 		if(!defined($running)) {
 			# Highly experimental
-			sleep 5;
+			sleep TIMER_INIT;
 			$running = $dbo->get_last_test_id($domain, $source, $source_data);
 		}
 	}
@@ -110,7 +109,7 @@ exit;
 RUNNING:
 # Autoflush, not sure if..
 $| = 1;
-for (1 .. TIMER_MAX) {
+for (0 .. TIMER_MAX) {
 	my $running = $dbo->get_running_result_on_id($test_id);
 	if(defined($running)) {
 		if($running->{finished} eq 'YES') {
@@ -122,7 +121,6 @@ for (1 .. TIMER_MAX) {
 	}
 	sleep 2;
 }
-
 
 # Two simple helper routines for concatenating the parameters
 sub concat_data {

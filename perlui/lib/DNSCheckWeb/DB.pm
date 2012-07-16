@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+#
+# Module for all database interaction.
+#
 use warnings;
 use strict;
 
@@ -6,10 +9,6 @@ package DNSCheckWeb::DB;
 
 use Carp;
 use Data::Dumper;
-
-# Constants
-use constant TYPE_PG => "postgresql";
-use constant TYPE_MYSQL => "mysql";
 
 my $dbo;
 
@@ -54,7 +53,7 @@ sub new {
 sub start_check {
 	my ($self, $domain, $source, $source_data) = @_;
 
-	# Lets see if we have source id
+	# Check that source already exist
 	my $source_id = $self->get_source_id($source);
 
 	my $dbh = $self->{dbh};
@@ -62,8 +61,9 @@ sub start_check {
 		INSERT INTO
 		queue (domain, priority, source_id, source_data, fake_parent_glue)
 		VALUES (?, 10, ?, ?, ?)})
-		or die "Could not prepare statement";
-	$query->execute($domain, $source_id, $source_data, $source_data);
+		or die DBException->throw( error => $self->{dbh}->errstr);
+	$query->execute($domain, $source_id, $source_data, $source_data)
+	or die DBException->throw( error => $self->{dbh}->errstr);
 }
 
 # Returns id for the given source, or creates a new one.
@@ -118,9 +118,9 @@ sub get_running_result {
 			AND (tests.finished = null
 			OR (date_part('epoch', now()) - date_part('epoch',
 			tests.finished)) < 300))
-	}) 
+	})
 	or die DBException->throw( error => $self->{dbh}->errstr);
-	$query->execute($source, $domain, $source_data, $source, $domain, $source_data) 
+	$query->execute($source, $domain, $source_data, $source, $domain, $source_data)
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchall_arrayref;
@@ -140,14 +140,15 @@ sub get_running_test_id {
 			AND test.source_data = ?
 			AND test.finished IS NULL
 		LIMIT 1;
-	}) 
+	})
 	or die DBException->throw( error => $self->{dbh}->errstr);
-	$query->execute($domain, $source_data) 
+	$query->execute($domain, $source_data)
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchrow_hashref;
 }
 
+# Get last inserted test_id
 sub get_last_test_id {
 	my ($self, $domain, $source, $source_data) = @_;
 	my $query = $self->{dbh}->prepare(q{
@@ -169,12 +170,12 @@ sub get_last_test_id {
 # Call to check whether the results are ready, or still being processed
 sub get_running_result_on_id {
 	my ($self, $test_id) = @_;
-	
+
 	my $query = $self->{dbh}->prepare(q{
-		SELECT 
+		SELECT
 			CASE
-				WHEN finished IS NULL THEN 'NO' 
-				ELSE 'YES' 
+				WHEN finished IS NULL THEN 'NO'
+				ELSE 'YES'
 			END AS finished
 		FROM tests
 		WHERE id = ?;
@@ -201,9 +202,9 @@ sub get_test_results {
 		LEFT JOIN messages ON
 		tmp.message = messages.tag
 		AND messages.language = ?
-		ORDER BY tmp.id ASC}) 
+		ORDER BY tmp.id ASC})
 	or die DBException->throw( error => $self->{dbh}->errstr);
-	$query->execute($test_id, $locale) 
+	$query->execute($test_id, $locale)
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchall_arrayref;

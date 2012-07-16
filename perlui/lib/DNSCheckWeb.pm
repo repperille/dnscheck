@@ -4,6 +4,8 @@ use warnings;
 
 package DNSCheckWeb;
 
+our $VERSION = 0.1;
+
 # Standard modules
 use CGI;
 use CGI::Session;
@@ -31,7 +33,6 @@ use constant TYPES => {
 	standard => "webgui",
 	undelegated => "webgui-undelegated"
 };
-
 
 # Load config an create a "new" instance
 sub new {
@@ -114,7 +115,7 @@ sub get_dbo {
 	return $self->{dbo};
 }
 
-# Retuns the I18N object.
+# Returns the I18N object.
 sub get_lng {
 	my $self = shift;
 
@@ -172,6 +173,7 @@ sub plain_headers {
 # Build output tree.
 # This tree mixes HTML and raw output (data structure easier to
 # manipulate perl side, but clutters the program flow).
+# TODO: Should consider using hashref instead of arrayref
 sub build_tree {
 	my ($self, $result) = @_;
 
