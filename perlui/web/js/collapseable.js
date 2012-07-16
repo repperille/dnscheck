@@ -64,13 +64,13 @@ var CollapsibleLists =
           if (!doNotRecurse || node == lis[index].parentNode){
 
             // prevent text from being selected unintentionally
-            if (lis[index].addEventListener){
-              lis[index].addEventListener(
-                  'mousedown', function (e){ e.preventDefault(); }, false);
-            }else{
-              lis[index].attachEvent(
-                  'onselectstart', function(){ event.returnValue = false; });
-            }
+           // if (lis[index].addEventListener){
+           //   lis[index].addEventListener(
+           //       'mousedown', function (e){ e.preventDefault(); }, false);
+           // }else{
+           //   lis[index].attachEvent(
+           //       'onselectstart', function(){ event.returnValue = false; });
+           // }
 
             // add the click listener
             if (lis[index].addEventListener){

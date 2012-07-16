@@ -16,6 +16,9 @@ use Exception::Class (
 	DBException => {
 		description => 'A database error occurred.',
 	},
+	YAMLException => {
+		description => 'Could not read the specified YAML file.',
+	},
 );
 
 1;

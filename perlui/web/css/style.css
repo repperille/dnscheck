@@ -8,7 +8,7 @@ body, form {
 }
 /* should be hid when loading with js */
 .skipped {
-	color: #222222;
+	color: #C0C0C0;
 }
 .info {
 }
@@ -25,7 +25,6 @@ body, form {
 }
 .critical {
 	color: red;
-	font-weight: bold;
 }
 /* Some "general" styling  */
 #domain_info {
@@ -118,21 +117,17 @@ li {
 }
 .collapsibleList li{
   list-style-image:url('button.png');
-  cursor:auto;
 }
 
 li.collapsibleListOpen{
-	/*
-  list-style-image:url('button-open.png');
-  cursor:pointer;
-	*/
+  cursor: text;
+}
+li.collapsibleListOpen ul {
+  cursor: text;
 }
 
 li.collapsibleListClosed{
-	/*
-  list-style-image:url('button-closed.png');
-  cursor:pointer;
-	*/
+  cursor: pointer;
 }
 
 .noscript {

@@ -229,6 +229,11 @@ sub build_tree {
 				$child_module->{caption} = lc($test[0]);
 			}
 		}
+		# Very special case..
+		if($type eq 'DNSSEC:SKIPPED_NO_KEYS') {
+			$class = 'skipped';
+		}
+
 		# Cases for end tags
 		if($type =~ m/END$/) {
 			# Stepping out of module, pop
@@ -249,7 +254,9 @@ sub build_tree {
 			foreach my $parent_node (@ancestors) {
 				unless ($parent_node->{class} eq 'error') {
 					$parent_node->{class} = $class;
-					$result_class = $class;
+					unless($class eq 'skipped') {
+						$result_class = $class;
+					}
 				}
 			}
 		}
@@ -296,6 +303,7 @@ sub parse_yaml {
 		$path = get_dir() . $rel_dir . $file;
 	}
 	my $yaml = YAML::Tiny->new();
+	# TODO: Treat errors
 	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr . " $path";
 
 	return $yaml->[0];
