@@ -64,8 +64,12 @@ function pollResult() {
 			if(json) {
 				var json_status = json.status;
 				if(json_status == 'finished') {
+					// We are done. Clear loading and redirect browser
 					window.location = 'tree.pl?test_id=' + json.test_id
 					+ '&key=' + json.key;
+					clearInterval(interval);
+					clearTimeout(loading_bar);
+					return;
 				} else if(json_status == 'error') {
 					error_msg = json.error_msg;
 				} else {
