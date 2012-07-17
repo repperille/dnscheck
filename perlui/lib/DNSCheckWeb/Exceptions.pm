@@ -8,7 +8,7 @@ use Exception::Class (
 		description => 'Domain name was not valid.',
 	},
 	TestException => {
-		description => 'Test id was not valid.',
+		description => 'Test data was not valid.',
 	},
 	SourceException => {
 		description => 'Source was not valid.',
@@ -19,6 +19,7 @@ use Exception::Class (
 	YAMLException => {
 		description => 'Could not read the specified YAML file.',
 	},
+
 );
 
 1;

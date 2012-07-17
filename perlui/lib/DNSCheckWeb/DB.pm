@@ -42,7 +42,7 @@ sub new {
 	if(defined($dbh)) {
 		$self->{dbh} = $dbh;
 	} else {
-		DBException->throw( error => "Could  not connect to database");
+		DBException->throw( error => "Could not connect to database");
 	}
 
 	bless $self, $class;
@@ -213,23 +213,23 @@ sub get_test_results {
 # Returns the latest test history for the given test id
 sub get_history {
 	my ($self, $test_id) = @_;
-	# Could constraint join on source_data also.
+
 	my $dbh = $self->{dbh};
 	my $query = $dbh->prepare(q{
 		SELECT
-			test2.id,
+			test2.id AS id,
 			to_char(test2.started, 'YYYY-MM-DD  HH24:MI:SS') AS time,
 			CASE
 				WHEN test2.count_error > 0 THEN 'error'
 				WHEN test2.count_warning > 0 THEN 'warning'
 				ELSE 'ok'
-			END AS status
+			END AS class
 		FROM tests AS test1
 			INNER JOIN tests AS test2 ON test1.domain = test2.domain
 			AND test1.source_id = test2.source_id
 			AND test1.source_data = test2.source_data
 		WHERE test1.id = ?
-		ORDER BY test2.id DESC
+		ORDER BY id DESC
 		LIMIT 5;
 	})
 	or die DBException->throw( error => $self->{dbh}->errstr);
@@ -237,6 +237,29 @@ sub get_history {
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchall_arrayref;
+}
+
+sub get_test_data {
+	my ($self, $test_id) = @_;
+
+	my $dbh = $self->{dbh};
+	my $query = $dbh->prepare(q{
+		SELECT
+			to_char(started, 'YYYY-MM-DD  HH24:MI:SS') AS started,
+			to_char(finished, 'YYYY-MM-DD  HH24:MI:SS') AS finished,
+			count_critical AS critical,
+			count_error AS error,
+			count_warning AS warning,
+			count_notice AS notice,
+			count_info AS info
+		FROM tests
+		WHERE id = ?
+	})
+	or die DBException->throw( error => $self->{dbh}->errstr);
+	$query->execute($test_id)
+	or die DBException->throw( error => $self->{dbh}->errstr);
+
+	return $query->fetchrow_hashref;
 }
 
 # Returns the version of DNSChecker that we are running.
