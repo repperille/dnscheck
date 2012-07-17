@@ -64,7 +64,8 @@ function pollResult() {
 			if(json) {
 				var json_status = json.status;
 				if(json_status == 'finished') {
-					window.location = 'tree.pl?test_id=' + json.test_id;
+					window.location = 'tree.pl?test_id=' + json.test_id
+					+ '&key=' + json.key;
 				} else if(json_status == 'error') {
 					error_msg = json.error_msg;
 				} else {

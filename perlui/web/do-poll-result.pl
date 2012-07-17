@@ -17,7 +17,6 @@ use Data::Validate::Domain qw(is_domain);
 # Testing
 use Data::Dumper;
 
-
 # Constants for feedback
 use constant TEST_STARTED => "started";
 use constant TEST_RUNNING => "running";
@@ -69,7 +68,9 @@ eval {
 		$href_results->{status} = TEST_RUNNING;
 	} else {
 		# Finished test, set test_id
-		$href_results->{test_id} = $running->[0][0];
+		my $test_id = $running->[0][0];
+		$href_results->{test_id} = $test_id;
+		$href_results->{key} = $dnscheck->create_hash($domain.$test_id);
 		$href_results->{status} = TEST_FINISHED;
 	}
 };

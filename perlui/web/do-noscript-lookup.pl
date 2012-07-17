@@ -24,9 +24,11 @@ my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 my $dbo = $dnscheck->get_dbo();
 
-# If a test id was provided, continue to the polling state
+# If a test id and key was provided, continue to the polling state
 # Else, continue to the start state, and fire of new check.
 my $test_id = $cgi->param("test_id");
+my $key = $cgi->param("key");
+
 if(defined($test_id) && $test_id > 0) {
 	goto RUNNING;
 } else {
@@ -87,7 +89,8 @@ eval {
 		TestException->throw( error => "Failed on: $domain, source: $source, source_data: $source_data");
 	} else {
 		# Redirects to itself, with the test_id parameter
-		print "Location: do-noscript-lookup.pl?test_id=" . $generated_id . "\n\n";
+		$key = $dnscheck->create_hash($domain.$generated_id);
+		print "Location: do-noscript-lookup.pl?test_id=".$generated_id."&key=".$key."\n\n";
 	}
 };
 # Catch errors
@@ -109,11 +112,12 @@ exit;
 RUNNING:
 # Autoflush, not sure if..
 $| = 1;
+
 for (0 .. TIMER_MAX) {
 	my $running = $dbo->get_running_result_on_id($test_id);
 	if(defined($running)) {
 		if($running->{finished} eq 'YES') {
-			print "Location: tree.pl?test_id=" . $test_id . "\n\n";
+			print "Location: tree.pl?test_id=".$test_id."&key=".$key."\n\n";
 			exit;
 		}
 	} else {
