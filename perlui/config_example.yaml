@@ -12,6 +12,9 @@ dbi:
 # When debug is turned on, errors will be more verbose
 debug: 1
 
+# Salt (to prevent enumeration of test data)
+salt: somelongsaltystringhere
+
 #
 # Below are two database specific configurations. The database schemas
 # differs somewhat between postgresql and mysql, therefore this is
@@ -21,7 +24,6 @@ debug: 1
 # tbl_ are mappings to the actual database tables
 #
 mysql:
-    driver: DBI:mysql:database=%s;hostname=%s;port=%s
     tbl_begin: begin
     tbl_end: end
     tbl_level: level
