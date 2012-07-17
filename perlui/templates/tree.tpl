@@ -15,7 +15,7 @@
    Warning(s): [% stats.warning %] <br />
   </p>
   <div class="[% class %]">
-   <h3>
+   <h2>
    [% IF class == 'error' %]
     [% lng.error_header %]
    [% ELSIF class == 'warning' %]
@@ -23,18 +23,20 @@
    [% ELSE %]
     [% lng.all_tests_ok %]
    [% END %]
-   </h3>
+   </h2>
   </div>
  </div>
  <div id="domain_history">
-  <h3>[% lng.test_history %]</h3>
-  <ul>
-   [% FOREACH sample IN history %]
-    <li class="[% sample.class %]">
-     <a href="tree.pl?test_id=[% sample.id %]&amp;key=[% sample.key %]">[% sample.time %]</a>
-    </li>
-   [% END %]
-  </ul>
+  [% IF history.size > 0 %]
+   <h3>[% lng.test_history %]</h3>
+   <ul>
+    [% FOREACH sample IN history %]
+     <li class="[% sample.class %]">
+      <a href="tree.pl?test_id=[% sample.id %]&amp;key=[% sample.key %]">[% sample.time %]</a>
+     </li>
+    [% END %]
+   </ul>
+  [% END %]
   <h3>[% lng.explanation %]</h3>
   <ul>
    <li class="error">[% lng.test_contains_errors %]</li>

@@ -62,7 +62,7 @@ eval {
 
 	# Retrieve history, generate key and append
 	my @history = @{ $dbo->get_history($test_id) };
-	
+
 	# Need to iterate through once to generate hash structure output a
 	# bit as well.
 	for my $item (@history) {

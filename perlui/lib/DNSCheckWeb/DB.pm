@@ -228,6 +228,7 @@ sub get_history {
 			INNER JOIN tests AS test2 ON test1.domain = test2.domain
 			AND test1.source_id = test2.source_id
 			AND test1.source_data = test2.source_data
+			AND test1.id != test2.id
 		WHERE test1.id = ?
 		ORDER BY id DESC
 		LIMIT 5;
