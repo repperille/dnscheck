@@ -15,8 +15,8 @@
   <li><a href="index.pl?type=standard">[% lng.domain_test %]</a></li>
   <li><a href="index.pl?type=undelegated">[% lng.undelegated_domain_test %]</a></li>
   <li style="float: right;">
-   [% lng.language %]:
    <form>
+    [% lng.language %]:
     <select name="locale" id="locale_select" onChange="load_locale();">
      [% FOREACH key IN locales.keys %]
       <option value="[% key %]" [% 'selected="SELECTED"' IF key == locale %]>

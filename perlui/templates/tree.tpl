@@ -3,12 +3,16 @@
  var tree_view = true;
 </script>
 <div>
- <h2>[% lng.domain_test %]</h2>
  <div id="domain_info">
+ <h2>Summary</h2>
   <p>Domain: [% domain %]</p>
-   Test started: [% started %]<br />
-   Test finished: [% finished %] <br />
+   Test started: [% stats.started %]<br />
+   Test finished: [% stats.finished %] <br />
    [% lng.test_was_performed_with_version %] [% version %]
+  <p>
+   Error(s): [% stats.critical + stats.error %]<br />
+   Warning(s): [% stats.warning %] <br />
+  </p>
   <div class="[% class %]">
    <h3>
    [% IF class == 'error' %]
@@ -21,14 +25,21 @@
    </h3>
   </div>
  </div>
- <div id ="domain_history">
-  <h3 style="text-align: center;">[% lng.test_history %]</h3>
-  <ul style="padding: 10px;">
+ <div id="domain_history">
+  <h3>[% lng.test_history %]</h3>
+  <ul>
    [% FOREACH sample IN history %]
-    <li class="[% sample.2 %]">
-     <a href="tree.pl?test_id=[% sample.0 %]">[% sample.1 %]</a>
+    <li class="[% sample.class %]">
+     <a href="tree.pl?test_id=[% sample.id %]&key=[% sample.key %]">[% sample.time %]</a>
     </li>
    [% END %]
+  </ul>
+  <h3>[% lng.explanation %]</h3>
+  <ul>
+   <li class="error">[% lng.test_contains_errors %]</li>
+   <li class="warning">[% lng.test_contains_warnings %]</li>
+   <li class="ok">[% lng.test_was_ok %]</li>
+   <li class="skipped">[% lng.test_was_not_performed %]</li>
   </ul>
  </div>
  <div class="clear-both"></div>
@@ -70,7 +81,7 @@
  [% END %]
  </ul>
  <div style="text-align: center; font-size: 12px;">
-  [% lng.link_to_this_test %]: <a href="tree.pl?test_id=[% id %]">http://[%
-  server_name %]/tree.pl?test_id=[% id %]</a>
+  [% lng.link_to_this_test %]: <a href="tree.pl?test_id=[% id %]&key=[% key %]">
+  http://[% server_name %]/tree.pl?test_id=[% id %]&key=[% key %]</a>
  </div>
 [% INCLUDE footer.tpl %]
