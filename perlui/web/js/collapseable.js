@@ -63,14 +63,14 @@ var CollapsibleLists =
           // check whether this list item should be collapsible
           if (!doNotRecurse || node == lis[index].parentNode){
 
-            // prevent text from being selected unintentionally
-           // if (lis[index].addEventListener){
-           //   lis[index].addEventListener(
-           //       'mousedown', function (e){ e.preventDefault(); }, false);
-           // }else{
-           //   lis[index].attachEvent(
-           //       'onselectstart', function(){ event.returnValue = false; });
-           // }
+          //  // prevent text from being selected unintentionally
+          //  if (lis[index].addEventListener){
+          //    lis[index].addEventListener(
+          //        'mousedown', function (e){ e.preventDefault(); }, false);
+          //  }else{
+          //    lis[index].attachEvent(
+          //        'onselectstart', function(){ event.returnValue = false; });
+          //  }
 
             // add the click listener
             if (lis[index].addEventListener){
@@ -119,33 +119,45 @@ var CollapsibleLists =
        *
        * node - the node containing the unordered list elements
        */
-      function toggle(node){
+function toggle(node)	{
+	// determine whether to open or close the unordered lists
+	var open = node.className.match(/(^| )collapsibleListClosed( |$)/);
+	var toggeled = open;
 
-        // determine whether to open or close the unordered lists
-        var open = node.className.match(/(^| )collapsibleListClosed( |$)/);
+	if(node.className.match(/error|warning|critical/)) {
+		open = true;
+		toggleChildren(node.getElementsByTagName('li'), toggeled);
+	}
 
-        // loop over the unordered list elements with the node
-        var uls = node.getElementsByTagName('ul');
-        for (var index = 0; index < uls.length; index ++){
+	// loop over the unordered list elements with the node
+	var uls = node.getElementsByTagName('ul');
+	for (var index = 0; index < uls.length; index ++){
+		// find the parent list item of this unordered list
+  		var li = uls[index];
+  		while (li.nodeName != 'LI') li = li.parentNode;
+			// style the unordered list if it is directly within this node
+  		if (li == node) uls[index].style.display = (open ? 'block' : 'none');
+	}
 
-          // find the parent list item of this unordered list
-          var li = uls[index];
-          while (li.nodeName != 'LI') li = li.parentNode;
+	// remove the current class from the node
+	node.className = node.className.replace(
+        /(^| )collapsibleList(Open|Closed)( |$)/, '');
+	// if the node contains unordered lists, set its class
+	if (uls.length > 0){
+  		node.className += ' collapsibleList' + (toggeled ? 'Open' : 'Closed');
+	}
+}
 
-          // style the unordered list if it is directly within this node
-          if (li == node) uls[index].style.display = (open ? 'block' : 'none');
-
-        }
-
-        // remove the current class from the node
-        node.className =
-            node.className.replace(
-                /(^| )collapsibleList(Open|Closed)( |$)/, '');
-
-        // if the node contains unordered lists, set its class
-        if (uls.length > 0){
-          node.className += ' collapsibleList' + (open ? 'Open' : 'Closed');
-        }
-
-      }
-    }();
+	function toggleChildren(children, show) {
+		for (var i = 0, len = children.length; i < len; i++ ) {
+			var child_class = children[i].className;
+			if(child_class.match(/notice|info/)) {
+				if(!show) {
+					children[i].style.display = 'none';
+				} else {
+					children[i].style.display = 'block';
+				}
+			}
+		}
+	}
+}();

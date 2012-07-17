@@ -110,6 +110,12 @@ ul, ol {
 	border-radius: 3px;
 	list-style: none;
 }
+#result_list li:hover {
+	background: #e8e8e8;
+}
+#result_list li li:hover {
+	background: white;
+}
 
 #nameservers li {
 	list-style: none;
@@ -123,12 +129,9 @@ li {
 #domain_history li {
 	list-style-type: disc;
 }
-.collapsibleList li{
-  list-style-image:url('button.png');
-}
 
 li.collapsibleListOpen{
-  cursor: text;
+  cursor: pointer;
 }
 li.collapsibleListOpen ul {
   cursor: text;

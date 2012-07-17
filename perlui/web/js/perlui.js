@@ -180,7 +180,7 @@ function load_locale() {
 	var params = get_params();
 	// Check if we need to pass other parameters
 	if(params.test_id != undefined) {
-		window.location = '?test_id=' + params.test_id + '&locale=' + e.value;
+		window.location = '?test_id=' + params.test_id + '&locale=' + e.value + '&key=' + params.key;
 	} else {
 		window.location = '?locale=' + e.value;
 	}
@@ -194,44 +194,15 @@ function get_params() {
 	});
     return params;
 }
-// Triggered by viewing the 'advanced results'
-function show_results() {
-	var results = document.getElementById('result_list');
-	CollapsibleLists.applyTo(results, true);
-	var children = results.getElementsByTagName('li');
-	for (var i = 0, len = children.length; i < len; i++ ) {
-		var child_class = children[i].className;
-		if(child_class == 'info' || child_class == 'notice') {
-			children[i].style.display= 'block';
-		}
-	}
-	// Hack to actual display the lists
-	CollapsibleLists.applyTo(results, true);
-	// Update buttons
-	toggle_buttons(false);
-}
-// Triggered by viewing the 'basic results'
+// Collapses the initial results (except for important messages)
 function hide_results() {
 	var results = document.getElementById('result_list');
-	var children = results.getElementsByTagName('li');
-	for (var i = 0, len = children.length; i < len; i++ ) {
-		var child_class = children[i].className;
-		if(child_class == 'info' || child_class == 'notice') {
-			children[i].style.display = 'none';
-		}
-	}
+	CollapsibleLists.applyTo(results, true);
 	// Hide all descriptions?
 	var descriptions = results.getElementsByTagName('blockquote');
 	for (var i = 0, len = descriptions.length; i < len; i++ ) {
 			descriptions[i].style.display = 'none';
 	}
-
-	toggle_buttons(true);
-}
-// Toggles enable state of the buttons
-function toggle_buttons(basic) {
-	document.getElementById('btn_basic').disabled = basic;
-	document.getElementById('btn_advanced').disabled = !basic;
 }
 
 // Load some stuff when document finishes.
@@ -239,6 +210,7 @@ window.onload = function () {
 	// Check what page we are currently displaying.
 	var params = get_params();
 	if(params.type == 'undelegated') {
+		add_nameserver();
 		add_nameserver();
 	} else if(tree_view) {
 		hide_results();

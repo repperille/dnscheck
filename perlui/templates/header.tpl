@@ -14,6 +14,7 @@
  <ul class="menu">
   <li><a href="index.pl?type=standard">[% lng.domain_test %]</a></li>
   <li><a href="index.pl?type=undelegated">[% lng.undelegated_domain_test %]</a></li>
+  <li><a href="index.pl?type=undelegated">[% lng.moved_domain_test %]</a></li>
   <li style="float: right;">
    <form>
     [% lng.language %]:

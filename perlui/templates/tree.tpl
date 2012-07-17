@@ -1,6 +1,7 @@
 [% INCLUDE header.tpl %]
 <script type="text/javascript">
  var tree_view = true;
+ var extended_info = "[% lng.extended_info %]";
 </script>
 <div>
  <div id="domain_info">
@@ -30,7 +31,7 @@
   <ul>
    [% FOREACH sample IN history %]
     <li class="[% sample.class %]">
-     <a href="tree.pl?test_id=[% sample.id %]&key=[% sample.key %]">[% sample.time %]</a>
+     <a href="tree.pl?test_id=[% sample.id %]&amp;key=[% sample.key %]">[% sample.time %]</a>
     </li>
    [% END %]
   </ul>
@@ -43,11 +44,10 @@
   </ul>
  </div>
  <div class="clear-both"></div>
+  <script>
+   document.write('<p>' + extended_info + '</p>');
+  </script>
 </div>
- <script>
-  document.write('<input type="button" disabled="true" onClick="hide_results();" id="btn_basic" value="[% lng.basic_results %]">');
-  document.write('<input type="button" onClick="show_results();" id="btn_advanced" value="[% lng.advanced_results %]">');
- </script>
  <!-- Loop all the tests -->
  <ul id="result_list">
  [% FOREACH test IN tests %]
@@ -81,7 +81,9 @@
  [% END %]
  </ul>
  <div style="text-align: center; font-size: 12px;">
-  [% lng.link_to_this_test %]: <a href="tree.pl?test_id=[% id %]&key=[% key %]">
-  http://[% server_name %]/tree.pl?test_id=[% id %]&key=[% key %]</a>
+  [% lng.link_to_this_test %]: 
+  <a href="tree.pl?test_id=[% id %]&amp;key=[% key %]">
+   http://[% server_name %]/tree.pl?test_id=[% id %]&amp;key=[% key %]
+  </a>
  </div>
 [% INCLUDE footer.tpl %]
