@@ -127,3 +127,7 @@ started_label: Test started
 finished_label: Test finished
 
 summary_header: Summary
+
+warning_label: Warning(s)
+
+error_label: Error(s)

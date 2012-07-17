@@ -11,8 +11,8 @@
    [% lng.finished_label %]: [% stats.finished %] <br />
    [% lng.test_was_performed_with_version %] [% version %]
   <p>
-   Error(s): [% stats.critical + stats.error %]<br />
-   Warning(s): [% stats.warning %] <br />
+   [% lng.error_label %]: [% stats.critical + stats.error %]<br />
+   [% lng.warning_label %]: [% stats.warning %] <br />
   </p>
   <div class="[% class %]">
    <h2>

@@ -118,7 +118,7 @@ btn_save: Lagre
 
 developed_by_label: er utviklet av
 
-extended_info: Du kan trykke på overskriftene nedenfor for å se detaljer for hver test. Feil og advarsler blir automatisk vist.
+extended_info: Du kan få utvidet informasjon om hver test ved å trykke på titlene nedenfor. Feil og advarsler blir automatisk vist.
 
 moved_domain_test: Test flyttet domene
 
@@ -127,3 +127,7 @@ started_label: Testen starta
 finished_label: Test slutta
 
 summary_header: Oppsummering
+
+warning_label: Advarsler
+
+error_label: Feil
