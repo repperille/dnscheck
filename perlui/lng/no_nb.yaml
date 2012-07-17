@@ -64,7 +64,7 @@ consistency: Konsekvent oppsett
 
 soa: SOA
 
-connectivity: Konnektivitet
+connectivity: Tilkobling
 
 dnssec: DNSSEC
 
@@ -121,3 +121,9 @@ developed_by_label: er utviklet av
 extended_info: Du kan trykke på overskriftene nedenfor for å se detaljer for hver test. Feil og advarsler blir automatisk vist.
 
 moved_domain_test: Test flyttet domene
+
+started_label: Testen starta
+
+finished_label: Test slutta
+
+summary_header: Oppsummering

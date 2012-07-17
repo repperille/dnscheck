@@ -118,6 +118,12 @@ btn_save: Save
 
 developed_by_label: is developed by
 
-extended_info: Click the different categories to expand information about those tests. Note that errors and warnings always are expanded.
+extended_info: Click the different categories to expand information about those tests. Note that errors and warnings expand by default.
 
 moved_domain_test: Moved domain test
+
+started_label: Test started
+
+finished_label: Test finished
+
+summary_header: Summary

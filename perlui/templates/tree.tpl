@@ -5,10 +5,10 @@
 </script>
 <div>
  <div id="domain_info">
- <h2>Summary</h2>
-  <p>Domain: [% domain %]</p>
-   Test started: [% stats.started %]<br />
-   Test finished: [% stats.finished %] <br />
+ <h2>[% lng.summary_header %]</h2>
+  <p>[% lng.domain_name %]: [% domain %]</p>
+   [% lng.started_label %]: [% stats.started %]<br />
+   [% lng.finished_label %]: [% stats.finished %] <br />
    [% lng.test_was_performed_with_version %] [% version %]
   <p>
    Error(s): [% stats.critical + stats.error %]<br />
