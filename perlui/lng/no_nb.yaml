@@ -8,9 +8,9 @@ faq: Vanlige spørsmål
 
 a_service_from_se: En tjeneste fra .SE
 
-test_and_find_errors: Test dine DNS-tenere for feil
+test_and_find_errors: Test dine navnetjenere for feil
 
-enter_your_domain_name: Angi ditt domenenavn ovenfor for å teste dine DNS-servere.
+enter_your_domain_name: Angi ditt domenenavn ovenfor for å teste dine navnetjenere.
 
 test_now: Test nå
 
@@ -58,7 +58,7 @@ test_was_not_performed: Testen ble ikke utført
 
 delegation: Delegering
 
-nameserver: DNS-server
+nameserver: Navnetjener
 
 consistency: Konsekvent oppsett
 
@@ -76,7 +76,7 @@ undelegated_domain_test: Udelegert domenetest
 
 domain_name: Domenenavn
 
-name_servers: Navnetenere
+name_servers: Navnetjenere
 
 add_one_more_nameserver: Legg til ny navnetjener
 

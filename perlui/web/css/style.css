@@ -70,9 +70,6 @@ ul, ol {
 	margin-left:1.5em; 
 	padding-left:0px;
 }
-#result_list {
-	color: white;
-}
 
 #result_list li {
 	background: #8e9acc;
@@ -122,8 +119,8 @@ ul, ol {
 }
 
 li {
-	margin-top: 0.25em
-	margin-bottom:0.25em; 
+	margin-top: 0.25em;
+	margin-bottom:0.25em;
 }
 
 #domain_history li {
