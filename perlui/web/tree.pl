@@ -34,7 +34,7 @@ eval {
 		TestException->throw( error => "ID is not valid (\'$test_id\')");
 	}
 	if(!defined($key)) {
-		TestException->throw( error => "Key was not defined ($key)");
+		TestException->throw( error => "Key was not defined");
 	}
 
 	# Fetch results for the given test_id
