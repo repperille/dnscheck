@@ -7,9 +7,8 @@ package DNSCheckWeb::I18N;
 use Encode;
 use Data::Dumper;
 
-# Current language dir, should be changed, and specified through config
-# file
-my $dir = '../../webui/languages/';
+# Language directory relative to lib
+my $dir = '../lng/';
 
 sub new {
 	my ($class) = @_;
