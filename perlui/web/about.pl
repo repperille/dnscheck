@@ -14,7 +14,12 @@ my $locale = $cgi->param('locale');
 my $lng = $dnscheck->get_lng($locale);
 $locale = $lng->{locale};
 
+# Have to get the current path from our object
+# We need to be sure that $locale has been properly tainted, since it is
+# part of the built relative path.
+my $path = $dnscheck->get_dir() . "../lng/" . $locale . "_about.html";
+
 # Render result
 $dnscheck->render('about.tpl', {
-	about_path => "../lng/".$locale."_about.html"
+	about_path => $path
 });
