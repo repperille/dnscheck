@@ -50,25 +50,24 @@ sub render {
 	my ($self, $file, $vars) = @_;
 
 	# Setup template and prepare browser
-	my $template = Template->new({INCLUDE_PATH => [get_dir() . '../templates']});
+	my $template = Template->new({
+		INCLUDE_PATH => [get_dir() . '../templates'],
+		RELATIVE => 1,
+	});
 
-	# Initialize I18N module
+	# Initialize I18N module, and verify/set locale.
 	if(!defined($self->{lng})) {
-		$self->{lng} = get_lng();
+		$self->{lng} = $self->get_lng($vars->{locale});
 	}
 
-	# Given that locale is defined, and exists in language map store in
-	# persistent storage.
-	$vars->{locale}= $self->{lng}->get_stored_locale($vars->{locale},
-	$self->{session});
-
-	# Load the language strings
-	if(!defined($self->{lng}->{keys})) {
-		$self->{lng}->load_language($vars->{locale});
-	}
-	# Assign language to the template
+	# Assign values to the template variables
 	$vars->{lng} = $self->{lng}->{keys};
 	$vars->{locales} = $self->{lng}->{languages};
+	$vars->{locale} = $self->{lng}->{locale};
+
+	#print json_headers();
+	#print Dumper($vars);
+	#exit;
 
 	# Set cookie and print headers
 	print html_headers($self->{cookie});
@@ -122,12 +121,15 @@ sub get_dbo {
 	return $self->{dbo};
 }
 
-# Returns the I18N object.
+# Load and set the I18N module. Will load the given locale, or English
+# (as standard).
 sub get_lng {
-	my $self = shift;
+	my ($self, $locale) = @_;
 
 	unless (defined($self->{lng})) {
 		$self->{lng} = DNSCheckWeb::I18N->new(get_dir());
+		$self->{lng}->update_locale($locale, $self->{session});
+		$self->{lng}->load_language();
 	}
 
 	return $self->{lng};

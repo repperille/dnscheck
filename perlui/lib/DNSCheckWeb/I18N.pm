@@ -42,32 +42,34 @@ sub new {
 
 # Loads the given local from language files
 sub load_language {
-	my ($self, $locale, $type) = @_;
+	my ($self, $type) = @_;
 
 	if(!defined($type)) {
 		$type = ".yaml";
 	}
-	$self->{keys} = DNSCheckWeb::parse_yaml($dir . $locale . $type);
+	$self->{keys} = DNSCheckWeb::parse_yaml($dir . $self->{locale} . $type);
 
 	return $self;
 }
 
-# If no locale is provided, check the current session and try to load
-sub get_stored_locale {
+# If no locale is provided, load from the provided session, else
+# fallback to English.
+sub update_locale {
 	my ($self, $locale, $session) = @_;
 
+	# Check that locale is defined and that it exists in the language map
 	if(defined($locale) && exists($self->{languages}->{$locale})) {
 		$session->param("locale", $locale);
 	} else {
 		# Try to load locale
 		$locale = $session->param("locale");
 
-		# Set default if not loaded from session
-		if(!defined($locale)) {
+		# User could forge cookie, validate
+		if(!defined($locale) || !exists($self->{languages}->{$locale})) {
 			$locale = "en";
 		}
 	}
-	return $locale;
+	$self->{locale} = $locale;
 }
 
 1;
