@@ -23,10 +23,8 @@ my $locale = $cgi->param('locale');
 my $result = { };
 
 # Have to load locale beforehand
-if(!defined($locale)) {
-	my $lng = $dnscheck->get_lng();
-	$locale = $lng->get_stored_locale($locale, $dnscheck->{session});
-}
+my $lng = $dnscheck->get_lng($locale);
+$locale = $lng->{locale};
 
 # Get results for the given test, or throw exception
 eval {
@@ -77,6 +75,7 @@ eval {
 	$result = build_tree($result);
 
 	# Extract keys from the tree result to avoid too much HTML clutter
+
 	$dnscheck->render('tree.tpl', {
 		id => $test_id,
 		domain => $result->{domain},

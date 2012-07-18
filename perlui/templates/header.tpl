@@ -20,16 +20,17 @@
    <form>
     [% lng.language %]:
     <select name="locale" id="locale_select" onChange="load_locale();">
-     [% FOREACH key IN locales.keys %]
-      <option value="[% key %]" [% 'selected="SELECTED"' IF key == locale %]>
-       [% locales.$key %]
+     [% FOREACH locale_key IN locales.keys %]
+      <option value="[% locale_key %]" [% 'selected="SELECTED"' IF locale_key == locale %]>
+       [% locales.$locale_key %]
       </option>
      [% END %]
     </select>
     <noscript>
-     [% IF id %]
+     [% IF id && key %]
       <!-- Carry through to get back to the test result -->
       <input type="hidden" name="test_id" value="[% id %]" />
+      <input type="hidden" name="key" value="[% key %]" />
      [% END %]
      <input type="submit" value="[% lng.btn_save %]">
     </noscript>
