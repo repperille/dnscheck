@@ -16,7 +16,7 @@
   </p>
   <div class="[% class %]">
    <h2>
-   [% IF class == 'error' %]
+   [% IF class == 'error' || class == 'critical' %]
     [% lng.error_header %]
    [% ELSIF class == 'warning' %]
     [% lng.warning_header %]
