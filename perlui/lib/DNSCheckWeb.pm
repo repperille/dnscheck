@@ -25,7 +25,6 @@ use Data::Dumper;
 # When running mod_perl DIR needs to be pointed to the directory
 # containing this library.
 use constant DIR => undef;
-
 # Example:
 #use constant DIR => "/var/www/dnscheck/lib/";
 
@@ -35,7 +34,7 @@ use constant TYPES => {
 	undelegated => "webgui-undelegated"
 };
 
-# Load config an create a "new" instance
+# Load config and create a "new" instance
 sub new {
 	my $class = shift;
 	my $self = {};
@@ -45,14 +44,23 @@ sub new {
 	bless $self, $class;
 }
 
-# Print headers and process the template.
+# Set locale, load language, print headers and processes the specified
+# template
 sub render {
 	my ($self, $file, $vars) = @_;
+
+	# Check whether we are running mod_perl or not.
+	# Mod perl requires absolute paths while standard requires relative.
+	my $abs = 1;
+	if(defined(DIR)) {
+		$abs = 0;
+	}
 
 	# Setup template and prepare browser
 	my $template = Template->new({
 		INCLUDE_PATH => [get_dir() . '../templates'],
-		RELATIVE => 1,
+		RELATIVE => $abs,
+		ABSOLUTE => !$abs,
 	});
 
 	# Initialize I18N module, and verify/set locale.
@@ -64,10 +72,6 @@ sub render {
 	$vars->{lng} = $self->{lng}->{keys};
 	$vars->{locales} = $self->{lng}->{languages};
 	$vars->{locale} = $self->{lng}->{locale};
-
-	#print json_headers();
-	#print Dumper($vars);
-	#exit;
 
 	# Set cookie and print headers
 	print html_headers($self->{cookie});
@@ -122,7 +126,6 @@ sub get_dbo {
 }
 
 # Load and set the I18N module. Will load the given locale, or English
-# (as standard).
 sub get_lng {
 	my ($self, $locale) = @_;
 
@@ -227,6 +230,7 @@ sub get_dir {
 	}
 }
 
+# Creates a sha256 hash of the salt and key
 sub create_hash {
 	my ($self, $key) = @_;
 	return sha256_hex($self->{config}->{salt} . $key);
