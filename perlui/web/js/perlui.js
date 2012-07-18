@@ -93,9 +93,9 @@ function pollResult() {
 	// Pass parameters given type of test
 	if(type == 'standard') {
 		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type, true);
-	} else {
-		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type
-		+"&parameters="+source_params(), true);
+	} else if(type != undefined && type.match(/undelegated|moved/)) {
+		xmlhttp.open("GET","do-poll-result.pl?domain="+domain +
+		"&test=undelegated" + "&parameters="+source_params(), true);
 	}
 	xmlhttp.send();
 }
@@ -167,7 +167,7 @@ function print_resolvers(json) {
 function add_nameserver() {
 	var ul = document.getElementById("nameservers");
 	var new_li = document.createElement('li');
-	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/>" + lbl_ip + ": <input type=\"text\" class=\"IP\" /></li>";
+	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/> " + lbl_ip + ": <input type=\"text\" class=\"IP\" /></li>";
 	ul.appendChild(new_li);
 }
 // Displays or hides the specified element
@@ -199,7 +199,7 @@ function get_params() {
     return params;
 }
 // Collapses the initial results (except for important messages)
-function hide_results() {
+function initialize_tree() {
 	var results = document.getElementById('result_list');
 	CollapsibleLists.applyTo(results, true);
 	// Hide all descriptions?
@@ -213,10 +213,13 @@ function hide_results() {
 window.onload = function () {
 	// Check what page we are currently displaying.
 	var params = get_params();
-	if(params.type == 'undelegated') {
+	// Add a couple of name server fields by default
+	if(params.type != undefined && params.type.match(/undelegated|moved/)) {
 		add_nameserver();
 		add_nameserver();
-	} else if(tree_view) {
-		hide_results();
+	} 
+	// initialize the result tree	
+	else if(tree_view) {
+		initialize_tree();
 	}
 }

@@ -13,7 +13,7 @@ my $type = $cgi->param('type');
 my $locale = $cgi->param('locale');
 
 # Unless type was valid, assign standard
-unless (defined($type) && ($type =~ m/standard|undelegated/)) {
+unless (defined($type) && ($type =~ m/standard|undelegated|moved/)) {
 	$type = 'standard';
 }
 

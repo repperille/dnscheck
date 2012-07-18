@@ -14,8 +14,14 @@
 <form action="do-noscript-lookup.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />
  [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> <span id="test" style="color: green;"></span><br />
- [% IF type == "undelegated" %]
-  <p>[% lng.enter_your_undelegated_domain_name %]</p>
+  [% IF type == "undelegated" || type == "moved" %]
+   <p>
+   [% IF type == "undelegated" %]
+    [% lng.enter_your_undelegated_domain_name %]
+   [% ELSE %]
+    [% lng.moved_domain_label %]
+   [% END %]
+   </p>
   [% lng.name_servers %]:
   <noscript>
    <ul id="nameservers">
@@ -35,7 +41,7 @@
  [% ELSE %]
   <p>[% lng.enter_your_domain_name %]</p>
  [% END %]
- <!-- Action based on whether we got javascript -->
+ <!-- Action based on whether we have javascript -->
  <script>
   document.write('<input type="submit" value="[% lng.test_now %]" onClick="return run_dnscheck();" />');
  </script>
@@ -43,7 +49,7 @@
   <input type="submit" value="[% lng.test_now %]" /><br /><br />
   <fieldset class="noscript">
    <legend>[% lng.no_script_header%]</legend>
-    [% lng.no_script_label %]
+   [% lng.no_script_label %]
   </fieldset>
  </noscript>
 </form>
