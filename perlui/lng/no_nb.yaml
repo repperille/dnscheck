@@ -118,16 +118,20 @@ btn_save: Lagre
 
 developed_by_label: er utviklet av
 
-extended_info: Du kan få utvidet informasjon om hver test ved å trykke på titlene nedenfor. Feil og advarsler blir automatisk vist.
+extended_info: Du kan få utvidet informasjon for hver test ved å trykke på titlene nedenfor. Feil og advarsler blir automatisk vist.
 
-moved_domain_test: Test flyttet domene
+moved_domain_test: Flytting av domene
+
+moved_domain_label: Gitt at du skal flytte et domene fra et sett med navnetjenere til noen andre, kan du her sjekke om de du skal flytte til har blitt satt opp for å håndtere din sone.
 
 started_label: Testen starta
 
-finished_label: Test slutta
+finished_label: Testen slutta
 
 summary_header: Oppsummering
 
 warning_label: Advarsler
 
 error_label: Feil
+
+error_source_label: Kildetypen var ukjent

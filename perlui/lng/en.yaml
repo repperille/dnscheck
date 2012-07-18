@@ -120,7 +120,9 @@ developed_by_label: is developed by
 
 extended_info: Click the different categories to expand information about those tests. Note that errors and warnings expand by default.
 
-moved_domain_test: Moved domain test
+moved_domain_test: Moving domain test
+
+moved_domain_label: If you are in the process of moving your zone from a set of name servers to another set, you can issue this test to check whether the new name servers are properly configured before moving the domain.
 
 started_label: Test started
 
@@ -131,3 +133,5 @@ summary_header: Summary
 warning_label: Warning(s)
 
 error_label: Error(s)
+
+error_source_label: An error occurred, please try again later
