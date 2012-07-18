@@ -15,6 +15,7 @@
   <li><a href="index.pl?type=standard">[% lng.domain_test %]</a></li>
   <li><a href="index.pl?type=undelegated">[% lng.undelegated_domain_test %]</a></li>
   <li><a href="index.pl?type=moved">[% lng.moved_domain_test %]</a></li>
+  <li><a href="about.pl">[% lng.about_label %]</a></li>
   <li style="float: right;">
    <form>
     [% lng.language %]:
