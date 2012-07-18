@@ -71,7 +71,7 @@ function pollResult() {
 					clearTimeout(loading_bar);
 					return;
 				} else if(json_status == 'error') {
-					error_msg = json.error_msg;
+					error_msg = errors[json.error_key];
 				} else {
 					// Let polling continue
 					return;

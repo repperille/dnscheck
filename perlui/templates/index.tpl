@@ -5,6 +5,11 @@
   var lbl_ip = "[% lng.ip %]";
   var lbl_domain_syntax = "[% lng.domain_syntax_label %]";
   var lbl_loading = "[% lng.loading_header %]";
+  // Array containing the possible error states returned by ajax calls
+  var errors = new Array(
+  	"[% lng.domain_doesnt_exist_header %]",
+	"[% lng.error_source_label %]",
+	"[% lng.load_error_label %]");
 </script>
 <form action="do-noscript-lookup.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />

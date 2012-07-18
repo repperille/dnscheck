@@ -92,7 +92,6 @@ sub render_error {
 	}
 	# A description is the "high level" description for the user
 	my $result = {
-		title => 'Error',
 		description => $e->description(),
 		trace => $trace,
 		error => $error,
@@ -102,14 +101,21 @@ sub render_error {
 
 # Returns the database object.
 sub get_dbo {
-	my $self = shift;
+	my ($self, $json) = @_;
 
 	unless (defined($self->{dbo})) {
 		eval {
 			$self->{dbo} = DNSCheckWeb::DB->new($self->{config});
 		};
 		if(my $e = DBException->caught()) {
-			$self->render_error($e);
+			if(defined($json) && $json) {
+				# If json is passed to routine, we are handling the
+				# exception in the outer context.
+				DBException->throw();
+			} else {
+				# Display error page
+				$self->render_error($e);
+			}
 		}
 	}
 

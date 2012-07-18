@@ -52,9 +52,9 @@ eval {
 	#
 	# Set and check domain
 	$result->{domain} = $result->{tests}->[0]->[8];
-	my $result_hash = $dnscheck->create_hash($result->{domain}.$test_id);
+	my $result_hash = $dnscheck->create_hash($test_id);
 	if($key ne $result_hash) {
-		TestException->throw( error => "Hash mismatch:\nkey: $key \nfetched: $result_hash");
+		TestException->throw( error => "Hash mismatch:\nkey: $key \ngenerated: $result_hash");
 	}
 
 	# Get statistics
@@ -70,7 +70,7 @@ eval {
 			id => $item->[0],
 			time => $item->[1], 
 			class => $item->[2],
-			key => $dnscheck->create_hash($result->{domain}.$item->[0])};
+			key => $dnscheck->create_hash($item->[0])};
 	}
 
 	# This routine builds the output tree

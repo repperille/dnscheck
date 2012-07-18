@@ -7,10 +7,9 @@
   An error occurred.
  [% END %]
 </p>
-[% IF error %]
+[% IF error || trace %]
+ <h2>Debug output</h2>
  <p>Error message: [% error %]</p>
-[% END %]
-[% IF trace %]
  <p>Stack trace: [% trace %]</p>
 [% END %]
 [% INCLUDE footer.tpl %]

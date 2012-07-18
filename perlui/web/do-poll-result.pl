@@ -26,7 +26,6 @@ use constant TEST_ERROR => "error";
 # Some important objects
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
-my $dbo = $dnscheck->get_dbo();
 
 # Fetch parameters
 my $domain = $cgi->param("domain");
@@ -43,6 +42,8 @@ my $href_results = {
 eval {
 	# Will do these tests for each poll.
 
+	# Try to create databaseobject
+	my $dbo = $dnscheck->get_dbo(1);
 	# Check if domain is valid
 	if(!defined($domain) || !is_domain($domain)) {
 		DomainException->throw();
@@ -70,20 +71,22 @@ eval {
 		# Finished test, set test_id
 		my $test_id = $running->[0][0];
 		$href_results->{test_id} = $test_id;
-		$href_results->{key} = $dnscheck->create_hash($domain.$test_id);
+		$href_results->{key} = $dnscheck->create_hash($test_id);
 		$href_results->{status} = TEST_FINISHED;
 	}
 };
 # Catch errors
+# The error_keys are mapping for a javascript array client side. For the
+# specified key, an appopriate error message exist.
 if (my $e = DomainException->caught()) {
 	$href_results->{status} = TEST_ERROR;
-	$href_results->{error_msg} = 'Error: ' . $e->description();
+	$href_results->{error_key} = 0;
 } elsif ($e = SourceException->caught()) {
 	$href_results->{status} = TEST_ERROR;
-	$href_results->{error_msg} = 'Error: ' . $e->description();
+	$href_results->{error_key} = 1;
 } elsif ($e = DBException->caught()) {
 	$href_results->{status} = TEST_ERROR;
-	$href_results->{error_msg} = 'Error: ' . $e->description();
+	$href_results->{error_key} = 2;
 }
 
 # Feed result back to browser

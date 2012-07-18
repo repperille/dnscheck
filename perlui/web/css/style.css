@@ -108,7 +108,7 @@ ul, ol {
 	list-style: none;
 }
 #result_list li:hover {
-	background: #e8e8e8;
+	background: #8e9fff;
 }
 #result_list li li:hover {
 	background: white;

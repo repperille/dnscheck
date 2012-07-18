@@ -29,7 +29,9 @@ my $dbo = $dnscheck->get_dbo();
 my $test_id = $cgi->param("test_id");
 my $key = $cgi->param("key");
 
-if(defined($test_id) && $test_id > 0) {
+# Check whether this is a started test, or a new one
+if(defined($test_id) && $test_id > 0 && defined($key) &&
+	$dnscheck->create_hash($test_id) eq $key) {
 	goto RUNNING;
 } else {
 	goto START;
@@ -88,8 +90,9 @@ eval {
 		# No way to continue, get out
 		TestException->throw( error => "Failed on: $domain, source: $source, source_data: $source_data");
 	} else {
-		# Redirects to itself, with the test_id parameter
-		$key = $dnscheck->create_hash($domain.$generated_id);
+		# Redirects to itself, with the test_id parameter and the
+		# generated key.
+		$key = $dnscheck->create_hash($generated_id);
 		print "Location: do-noscript-lookup.pl?test_id=".$generated_id."&key=".$key."\n\n";
 	}
 };
