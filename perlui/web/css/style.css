@@ -58,8 +58,34 @@ body, form {
 	color: black;
 }
 
+.menu {
+	background: #8e9acc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.menu a {
+	text-decoration: none;
+}
+
+.menu a:visited {
+	color: white;
+	text-decoration: none;
+}
+.menu a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
 .menu li {
-	display: inline;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: 5px;
+	color: white;
 }
 a {
 	font-weight: normal;
