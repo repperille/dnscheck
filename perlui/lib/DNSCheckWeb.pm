@@ -12,6 +12,7 @@ use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
+use File::Slurp;
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -215,11 +216,20 @@ sub parse_yaml {
 	} else {
 		$path = get_dir() . $rel_dir . $file;
 	}
+
+	# Read UTF-8 properly
+	my $content = read_utf8($path);
+
 	my $yaml = YAML::Tiny->new();
-	# TODO: Treat errors
-	$yaml = YAML::Tiny->read($path) or die YAML::Tiny->errstr . " $path";
+	$yaml = YAML::Tiny->read_string($content) or die YAML::Tiny->errstr . " $path";
 
 	return $yaml->[0];
+}
+
+# Simple helper routine for properly slurping UTF-8 files
+sub read_utf8 {
+	my ($path) = @_;
+	return read_file($path, binmode => ':utf8');
 }
 
 # This routine should return the path to this package. If we are running

@@ -23,7 +23,7 @@ my $path = $dnscheck->get_dir() . "../lng/" . $locale . "_about.html";
 
 # Read file in using slurp instead of including directly in template
 # toolkit. The latter does not encode properly.
-my $content = read_file( $path, binmode => ':utf8') ;
+my $content = DNSCheckWeb::read_utf8($path);
 
 
 # Render result
