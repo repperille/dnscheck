@@ -72,6 +72,7 @@ sub render {
 	$vars->{lng} = $self->{lng}->{keys};
 	$vars->{locales} = $self->{lng}->{languages};
 	$vars->{locale} = $self->{lng}->{locale};
+	$vars->{last} = $self->last_result();
 
 	# Specify encoding for reading files
 	binmode( STDOUT, ":utf8" );
@@ -163,6 +164,7 @@ sub load_session {
 	} else {
 		$session = new CGI::Session("driver:File", $cgi, {Directory=>'/tmp'});
 	}
+	# Assign session
 	$self->{session} = $session;
 	$self->{cookie} = $cgi->cookie(CGISESSID => $session->id);
 
@@ -203,6 +205,33 @@ sub resolve {
 			$result->{addr} = $rr->address;
     	}
 	}
+	return $result;
+}
+
+# Will store last visited/result in session, and retrieve
+sub last_result {
+	my ($self, $test_id, $key) = @_;
+
+	my $session = $self->{session};
+
+	# Given that we have something to store
+	if(defined($test_id) && defined($key)) {
+		$session->param("test_id", $test_id);
+		$session->param("key", $key);
+		# Set some expiration
+		$session->expires("test_id" => '+30m');
+		$session->expires("key" => '+30m');
+	} else {
+		$test_id = $session->param("test_id");
+		$key = $session->param("key");
+	}
+
+	# Return the result
+	my $result = {
+		test_id => $test_id,
+		key => $key
+	};
+
 	return $result;
 }
 

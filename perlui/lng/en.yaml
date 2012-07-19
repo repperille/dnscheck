@@ -137,3 +137,5 @@ error_label: Error(s)
 error_source_label: An error occurred, please try again later
 
 about_label: About
+
+last_result_header: Last test result

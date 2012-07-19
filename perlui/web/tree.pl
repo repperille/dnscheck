@@ -74,8 +74,11 @@ eval {
 	# This routine builds the output tree
 	$result = build_tree($result);
 
-	# Extract keys from the tree result to avoid too much HTML clutter
+	# At this point we are fairly certain that there exists a tree,
+	# cache result in session
+	$dnscheck->last_result($test_id, $key);
 
+	# Extract keys from the tree result to avoid too much HTML clutter
 	$dnscheck->render('tree.tpl', {
 		id => $test_id,
 		domain => $result->{domain},

@@ -137,3 +137,5 @@ error_label: Feil
 error_source_label: Kildetypen var ukjent
 
 about_label: Om testen
+
+last_result_header: Siste testresultat

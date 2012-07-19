@@ -37,3 +37,10 @@
    </form>
   </li>
  </ul>
+ [% IF last.test_id && last.key && !key %]
+  <div id="last_result">
+   <a href="tree.pl?test_id=[% last.test_id %]&amp;key=[% last.key%]">
+    [% lng.last_result_header %]
+   </a>
+  </div>
+ [% END %]

@@ -57,7 +57,6 @@ body, form {
 	font-style: italic;
 	color: black;
 }
-
 .menu {
 	background: #8e9acc;
 	-moz-border-radius: 5px;
@@ -66,11 +65,9 @@ body, form {
 	border-radius: 5px;
 	padding: 5px;
 }
-
 .menu a {
 	text-decoration: none;
 }
-
 .menu a:visited {
 	color: white;
 	text-decoration: none;
@@ -79,7 +76,6 @@ body, form {
 	color: white;
 	text-decoration: underline;
 }
-
 .menu li {
 	display: inline-block;
 	text-align: center;
@@ -87,15 +83,14 @@ body, form {
 	margin-left: 5px;
 	color: white;
 }
-a {
-	font-weight: normal;
+
+#last_result {
+	float: right;
+	padding: 5px;
+	color: #8e9acc;
+	border: 1px dotted;
 }
 
-
-ul, ol {
-	margin-left:1.5em; 
-	padding-left:0px;
-}
 
 #result_list li {
 	background: #8e9acc;
@@ -176,4 +171,11 @@ li.collapsibleListClosed{
 	font-size: 12px;
 	text-align: center;
 
+}
+a {
+	font-weight: normal;
+}
+ul, ol {
+	margin-left:1.5em; 
+	padding-left:0px;
 }
