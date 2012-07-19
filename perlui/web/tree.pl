@@ -52,7 +52,8 @@ eval {
 	$result->{domain} = $result->{tests}->[0]->[8];
 	my $result_hash = $dnscheck->create_hash($test_id);
 	if($key ne $result_hash) {
-		TestException->throw( error => "Hash mismatch:\nkey: $key \ngenerated: $result_hash");
+		TestException->throw( error => "Hash mismatch:\ngot: $key
+		\nexpected: $result_hash");
 	}
 
 	# Get statistics
@@ -61,8 +62,8 @@ eval {
 	# Retrieve history, generate key and append
 	my @history = @{ $dbo->get_history($test_id) };
 
-	# Need to iterate through once to generate hash structure output a
-	# bit as well.
+	# Need to iterate through once to generate hash structure output
+	# (is not that bad considering there are at most 5 items)
 	for my $item (@history) {
 		$item = {
 			id => $item->[0],

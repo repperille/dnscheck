@@ -42,13 +42,16 @@ if(defined($test_id) && $test_id > 0 && defined($key) &&
 # This state will fire of a new DNS check test, and redirect browser to itself
 START:
 # Parameters
-my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 my $domain = $cgi->param("domain");
 
 # Concatenate source data if it was provided
 my $source_data;
-if($cgi->param("test") eq "undelegated") {
+my $source;
+if($cgi->param("test") =~ m/undelegated|moved/) {
 	$source_data = concat_data($cgi);
+	$source = DNSCheckWeb::TYPES->{'undelegated'};;
+} else {
+	$source = DNSCheckWeb::TYPES->{'standard'};
 }
 
 my $generated_id;
@@ -70,7 +73,7 @@ eval {
 	# TODO: Not sure if all cases are covered
 
 	# Check if dispatcher is already testing this specific case
-	# TODO: Use get_running_result instead
+	# TODO: Use get_running_result instead, would avoid redirect
 	$running = $dbo->get_running_test_id($domain, $source, $source_data);
 
 	# No tests running, fire of new test.
@@ -94,6 +97,7 @@ eval {
 		# generated key.
 		$key = $dnscheck->create_hash($generated_id);
 		print "Location: do-noscript-lookup.pl?test_id=".$generated_id."&key=".$key."\n\n";
+		exit;
 	}
 };
 # Catch errors
@@ -106,8 +110,6 @@ if (my $e = DomainException->caught()) {
 } elsif($e = DBException->caught()) {
 	$dnscheck->render_error($e);
 }
-# Script should not "naturally" progress to this section.
-exit;
 
 #
 # Running state

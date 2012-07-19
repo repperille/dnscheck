@@ -4,7 +4,7 @@
  var extended_info = "[% lng.extended_info %]";
 </script>
 <div>
- <div id="domain_info" style="width: 75%;">
+ <div id="domain_info">
  <h2>[% lng.summary_header %]</h2>
   <p>[% lng.domain_name %]: [% domain %]</p>
    [% lng.started_label %]: [% stats.started %]<br />
@@ -25,9 +25,6 @@
    [% END %]
    </h2>
   </div>
-  <script>
-   document.write('<p>' + extended_info + '</p>');
-  </script>
  </div>
  <div id="domain_history">
   [% IF history.size > 0 %]
@@ -49,6 +46,9 @@
   </ul>
  </div>
  <div class="clear-both"></div>
+ <script>
+  document.write('<p>' + extended_info + '</p>');
+ </script>
 </div>
  <!-- Loop all the tests -->
  <ul id="result_list">
@@ -73,8 +73,8 @@
    </script>
    </a>
    <blockquote id="info_[% test.id %]" class="description">
-    <noscript> 
-	 [% lng.note %]: 
+    <noscript>
+	 [% lng.note %]:
 	</noscript>
 	[% test.description %]
    </blockquote>
