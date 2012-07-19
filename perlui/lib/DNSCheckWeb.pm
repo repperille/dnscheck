@@ -12,7 +12,6 @@ use CGI::Session;
 use DBI;
 use Template;
 use YAML::Tiny;
-use encoding 'UTF-8';
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -73,6 +72,8 @@ sub render {
 	$vars->{locales} = $self->{lng}->{languages};
 	$vars->{locale} = $self->{lng}->{locale};
 
+	# Specify encoding for reading files
+	binmode( STDOUT, ":utf8" );
 	# Set cookie and print headers
 	print html_headers($self->{cookie});
 	$template->process($file, $vars) or die "Template rendering failed",
@@ -143,6 +144,7 @@ sub get_cgi {
 	my $self = shift;
 	unless(defined($self->{cgi})) {
 		$self->{cgi} = CGI->new();
+
 		load_session($self);
 	}
 	return $self->{cgi};

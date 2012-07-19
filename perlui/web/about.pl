@@ -6,6 +6,8 @@ use warnings;
 use DNSCheckWeb;
 use Data::Dumper;
 
+use File::Slurp;
+
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 my $locale = $cgi->param('locale');
@@ -19,7 +21,12 @@ $locale = $lng->{locale};
 # part of the built relative path.
 my $path = $dnscheck->get_dir() . "../lng/" . $locale . "_about.html";
 
+# Read file in using slurp instead of including directly in template
+# toolkit. The latter does not encode properly.
+my $content = read_file( $path, binmode => ':utf8') ;
+
+
 # Render result
 $dnscheck->render('about.tpl', {
-	about_path => $path
+	content => $content
 });

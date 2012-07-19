@@ -1,4 +1,4 @@
-[% INCLUDE header.tpl %]
+﻿[% INCLUDE header.tpl %]
 <script type="text/javascript">
   // Define some strings in javascript context
   var lbl_host = "[% lng.host %]";
