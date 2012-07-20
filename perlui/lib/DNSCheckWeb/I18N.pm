@@ -40,7 +40,7 @@ sub new {
 	return $self;
 }
 
-# Loads the given local from language files
+# Load the given locale from language files
 sub load_language {
 	my ($self, $type) = @_;
 
@@ -64,7 +64,7 @@ sub update_locale {
 		# Try to load locale
 		$locale = $session->param("locale");
 
-		# User could forge cookie, validate
+		# User could forge cookie, validate again
 		if(!defined($locale) || !exists($self->{languages}->{$locale})) {
 			$locale = "en";
 		}

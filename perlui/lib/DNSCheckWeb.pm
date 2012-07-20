@@ -13,11 +13,11 @@ use DBI;
 use Template;
 use YAML::Tiny;
 use File::Slurp;
+use Digest::SHA qw(sha256_hex);
 
 # Custom modules
 use DNSCheckWeb::DB;
 use DNSCheckWeb::I18N;
-use Digest::SHA qw(sha256_hex);
 
 # Testing
 use Data::Dumper;
@@ -144,11 +144,13 @@ sub get_lng {
 # Returns the request interface
 sub get_cgi {
 	my $self = shift;
+
 	unless(defined($self->{cgi})) {
 		$self->{cgi} = CGI->new();
 
 		load_session($self);
 	}
+
 	return $self->{cgi};
 }
 # Load session for the provided cookie
@@ -191,11 +193,9 @@ sub plain_headers {
 sub resolve {
 	my ($self, $ns) = @_;
 
-	# Results
 	my $result = {
 		hostname => $ns
 	};
-
 	my $res = Net::DNS::Resolver->new();
 	my $query = $res->search($ns);
 
@@ -205,6 +205,7 @@ sub resolve {
 			$result->{addr} = $rr->address;
     	}
 	}
+
 	return $result;
 }
 
@@ -249,6 +250,7 @@ sub parse_yaml {
 	# Read UTF-8 properly
 	my $content = read_utf8($path);
 
+	# TODO: Some error detection here, whether the file was found etc.
 	my $yaml = YAML::Tiny->new();
 	$yaml = YAML::Tiny->read_string($content) or die YAML::Tiny->errstr . " $path";
 

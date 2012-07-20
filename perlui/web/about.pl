@@ -15,8 +15,8 @@ my $lng = $dnscheck->get_lng($locale);
 $locale = $lng->{locale};
 
 # Have to get the current path from our object
-# We need to be sure that $locale has been properly tainted, since it is
-# part of the built relative path.
+# We need to be sure that $locale has been validated before using it,
+# otherwise it could lead to some path traversal.
 my $path = $dnscheck->get_dir() . "../lng/" . $locale . "_about.html";
 
 # Read file in using slurp instead of including directly in template
