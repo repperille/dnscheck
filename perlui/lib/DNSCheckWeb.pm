@@ -218,7 +218,7 @@ sub last_result {
 	if(defined($test_id) && defined($key)) {
 		$session->param("test_id", $test_id);
 		$session->param("key", $key);
-		# Set some expiration
+		# Set expiration
 		$session->expires("test_id" => '+30m');
 		$session->expires("key" => '+30m');
 	} else {
@@ -271,10 +271,10 @@ sub get_dir {
 	}
 }
 
-# Creates a sha256 hash of the salt and key
+# Creates a hash of the value salted with salt from config
 sub create_hash {
-	my ($self, $key) = @_;
-	return sha256_hex($self->{config}->{salt} . $key);
+	my ($self, $value) = @_;
+	return sha256_hex($self->{config}->{salt} . $value);
 }
 
 1;

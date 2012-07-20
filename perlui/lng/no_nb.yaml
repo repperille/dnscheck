@@ -134,6 +134,8 @@ warning_label: Advarsler
 
 error_label: Feil
 
+engine_error_label: Sjekken kunne ikke starte
+
 error_source_label: Kildetypen var ukjent
 
 about_label: Om testen

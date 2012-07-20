@@ -27,8 +27,6 @@ use constant TEST_ERROR => "error";
 use constant MAX_RETRIES => 5;
 my $retries = 0;
 
-
-# Some important objects
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
@@ -38,6 +36,7 @@ my $source_data = $cgi->param("parameters");
 my $js = $cgi->param("js");
 
 # Check whether this is an ajax call or not
+# Will dictate how the rest of the check carries out
 unless(defined($js) && ($js == 0 || $js == 1)) {
 	$js = 1;
 }
@@ -120,7 +119,7 @@ eval {
 		}
 	}
 	# Not running and not finished. Will let browser know the result.
-	# Browser may retry after this result.
+	# Browser may retry after this.
 	# No-script will try again for a little while
 	else {
 		if(!$js) {
