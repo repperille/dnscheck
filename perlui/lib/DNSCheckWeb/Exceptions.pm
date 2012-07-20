@@ -19,6 +19,9 @@ use Exception::Class (
 	YAMLException => {
 		description => 'Could not read the specified YAML file.',
 	},
+	EngineException => {
+		description => 'DNSCheck is not running, please contact support.',
+	},
 
 );
 

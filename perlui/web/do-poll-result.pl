@@ -31,12 +31,18 @@ my $cgi = $dnscheck->get_cgi();
 my $domain = $cgi->param("domain");
 my $source = DNSCheckWeb::TYPES->{$cgi->param("test")};
 my $source_data = $cgi->param("parameters");
+my $js = $cgi->param("js");
 
 # Final JSON-string containing status and results
 my $href_results = {
 	domain => $domain,
 	source => $source
 };
+
+# Check whether this is an ajax call or not
+unless(defined($js) && ($js == 0 || $js == 1)) {
+	$js = 1;
+}
 
 # Received domain name, check for running tests
 eval {
@@ -60,19 +66,29 @@ eval {
 	# Check if dispatcher is already testing this specific case
 	my $running = $dbo->get_running_result($domain, $source, $source_data);
 
-	if(@$running eq 0) {
-		# No tests running, fire of new test.
+	# There is no record in the database, start new test
+	if(!defined($running)) {
 		$dbo->start_check($domain, $source, $source_data);
 		$href_results->{status} = TEST_STARTED;
-	} elsif($running->[0][2] eq 'NO') {
+	} 
+	# A test exists in the database, and it is still in progress
+	elsif($running->{finished} eq 'NO' && defined($running->{started})) {
 		# Test for domain is running, but not finished
+		$href_results->{started} = $running->{started};
 		$href_results->{status} = TEST_RUNNING;
-	} else {
+	} 
+	# Test has finished, return results	
+	elsif($running->{finished} eq 'YES') {
 		# Finished test, set test_id
-		my $test_id = $running->[0][0];
+		my $test_id = $running->{id};
 		$href_results->{test_id} = $test_id;
 		$href_results->{key} = $dnscheck->create_hash($test_id);
 		$href_results->{status} = TEST_FINISHED;
+	} 
+	# Not running and not finished. Will let browser know the result.
+	# Browser may retry after this result.
+	else {
+		EngineException->throw();
 	}
 };
 # Catch errors
@@ -87,6 +103,9 @@ if (my $e = DomainException->caught()) {
 } elsif ($e = DBException->caught()) {
 	$href_results->{status} = TEST_ERROR;
 	$href_results->{error_key} = 2;
+} elsif ($e = EngineException->caught()) {
+	$href_results->{status} = TEST_ERROR;
+	$href_results->{error_key} = 3;
 }
 
 # Feed result back to browser

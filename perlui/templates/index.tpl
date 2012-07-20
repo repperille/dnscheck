@@ -9,7 +9,8 @@
   var errors = new Array(
   	"[% lng.domain_doesnt_exist_header %]",
 	"[% lng.error_source_label %]",
-	"[% lng.load_error_label %]");
+	"[% lng.load_error_label %]",
+	"[% lng.engine_error_label %]");
 </script>
 <form action="do-noscript-lookup.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />

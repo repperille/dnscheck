@@ -81,7 +81,7 @@ sub get_source_id {
 	if(!defined($result)) {
 		$query = $dbh->prepare(q{ INSERT INTO source (name) VALUES (?) })
 		or die DBException->throw( error => $self->{dbh}->errstr);
-		$query->execute($source) 
+		$query->execute($source)
 		or die DBException->throw( error => $self->{dbh}->errstr);
 
 		return $dbh->last_insert_id(undef, undef, qw(source id));
@@ -98,7 +98,8 @@ sub get_running_result {
 	my $query = $self->{dbh}->prepare(q{
 		(SELECT
 			NULL AS id, NULL AS time, 'NO' AS finished,
-			source_data AS source_data
+			source_data AS source_data,
+			inprogress AS started
 		FROM queue
 			INNER JOIN
 				source ON source.id = queue.source_id
@@ -109,21 +110,23 @@ sub get_running_result {
 		(SELECT
 			tests.id AS id, date_part('epoch', tests.started) AS TIME,
 			CASE tests.finished WHEN NULL THEN 'NO' ELSE 'YES' END AS finished,
-			source_data AS source_data
+			source_data AS source_data,
+			NULL AS started
 		FROM tests
 			INNER JOIN
 				source ON source.id = tests.source_id AND source.name = ?
 		WHERE
 			tests.domain = ? and tests.source_data = ?
-			AND (tests.finished = null
+			AND (tests.finished = NULL
 			OR (date_part('epoch', now()) - date_part('epoch',
-			tests.finished)) < 300))
+			tests.finished)) < 300)
+		LIMIT 1)
 	})
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($source, $domain, $source_data, $source, $domain, $source_data)
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
-	return $query->fetchall_arrayref;
+	return $query->fetchrow_hashref;
 }
 # Fetch the test_id for a running case
 sub get_running_test_id {

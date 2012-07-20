@@ -5,6 +5,11 @@ var interval;
 var loading_bar;
 var tree_view;
 
+// Some variables to hold the state of the polling.
+var retries = 0;
+var max_retries = 5; // Retry if test has not started
+var retry_interval = 1000; // How often to poll
+
 // Loading indicator
 function load() {
 	var v = document.getElementById('test');
@@ -39,7 +44,7 @@ function initAjax() {
 }
 // This will fire off polling
 function run_dnscheck() {
-	interval = setInterval(pollResult, 2000);
+	interval = setInterval(pollResult, retry_interval);
 
 	load();
 	// Telling form to not submit?
@@ -71,6 +76,11 @@ function pollResult() {
 					clearTimeout(loading_bar);
 					return;
 				} else if(json_status == 'error') {
+					// We are not sure that our test have started
+					if(json.error_key == 3 && retries < max_retries) {
+						retries++;
+						return;
+					}
 					error_msg = errors[json.error_key];
 				} else {
 					// Let polling continue
