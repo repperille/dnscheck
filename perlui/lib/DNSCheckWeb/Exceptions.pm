@@ -20,7 +20,7 @@ use Exception::Class (
 		description => 'Could not read the specified YAML file.',
 	},
 	EngineException => {
-		description => 'DNSCheck is not running, please contact support.',
+		description => 'Dispatcher is not running, could not carry out check.',
 	},
 
 );

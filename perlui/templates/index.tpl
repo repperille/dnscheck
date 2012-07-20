@@ -12,8 +12,9 @@
 	"[% lng.load_error_label %]",
 	"[% lng.engine_error_label %]");
 </script>
-<form action="do-noscript-lookup.pl">
+<form action="do-poll-result.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />
+ <input type="hidden" name="js" value="0" />
  [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> <span id="test" style="color: green;"></span><br />
   [% IF type == "undelegated" || type == "moved" %]
    <p>
