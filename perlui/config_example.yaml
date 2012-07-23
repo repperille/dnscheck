@@ -12,24 +12,33 @@ dbi:
 # When debug is turned on, errors will be more verbose
 debug: 1
 
-# Salt (to prevent enumeration of test data)
+# To prevent enumeration of all test data, the test id gets hashed along
+# with this salt. Should be a long string.
 salt: somelongsaltystringhere
 
 #
-# Below are two database specific configurations. The database schemas
-# differs somewhat between postgresql and mysql, therefore this is
-# necessary. These standard settings should in most cases not be
-# changed.
+# Below are two database specific configurations. This is necessary
+# because the database schemas differs slightly between the different
+# systems, and the built in functions differs a bit also. This
+# configuration should be left untouched in most use cases.
 #
-# tbl_ are mappings to the actual database tables
+# tbl_ are mappings to the database tables
+# fun_ are various database engine specific built in functions
 #
 mysql:
+    driver: DBI:mysql:database=%s;hostname=%s;port=%s
     tbl_begin: begin
     tbl_end: end
     tbl_level: level
+    fun_time: UNIX_TIMESTAMP(%s)
+    fun_now: UNIX_TIMESTAMP()
+    fun_time_format: '%s'
 
 postgresql:
     driver: DBI:Pg:database=%s;host=%s;port=%s
     tbl_begin: started
     tbl_end: finished
     tbl_level: class
+    fun_time: date_part('epoch', %s)
+    fun_now: date_part('epoch', now())
+    fun_time_format: to_char(%s, 'YYYY-MM-DD  HH24:MI:SS')

@@ -7,7 +7,6 @@ use strict;
 
 package DNSCheckWeb::DB;
 
-use Carp;
 use Data::Dumper;
 
 my $dbo;
@@ -42,8 +41,18 @@ sub new {
 	if(defined($dbh)) {
 		$self->{dbh} = $dbh;
 	} else {
-		DBException->throw( error => "Could not connect to database");
+		DBException->throw( error => "Could not connect to the database");
 	}
+
+	# Assign meta information
+	# Tables
+	$self->{begin} = $db_meta->{tbl_begin};
+	$self->{end} = $db_meta->{tbl_end};
+	$self->{level} = $db_meta->{tbl_level};
+	# Functions
+	$self->{time} = $db_meta->{fun_time};
+	$self->{now} = $db_meta->{fun_now};
+	$self->{format} = $db_meta->{fun_time_format};
 
 	bless $self, $class;
 	return $self;
@@ -95,7 +104,7 @@ sub get_source_id {
 sub get_running_result {
 	my ($self, $domain, $source, $source_data) = @_;
 
-	my $query = $self->{dbh}->prepare(q{
+	my $query = $self->{dbh}->prepare("
 		(SELECT
 			NULL AS id, NULL AS time, 'NO' AS finished,
 			source_data AS source_data,
@@ -108,8 +117,12 @@ sub get_running_result {
 			queue.domain = ? AND queue.source_data = ?)
 		UNION
 		(SELECT
-			tests.id AS id, date_part('epoch', tests.started) AS TIME,
-			CASE tests.finished WHEN NULL THEN 'NO' ELSE 'YES' END AS finished,
+			tests.id AS id,
+			".$self->time("tests.$self->{end}")." AS TIME,
+			CASE tests.$self->{end}
+				WHEN NULL THEN 'NO'
+				ELSE 'YES'
+				END AS finished,
 			source_data AS source_data,
 			NULL AS started
 		FROM tests
@@ -117,11 +130,11 @@ sub get_running_result {
 				source ON source.id = tests.source_id AND source.name = ?
 		WHERE
 			tests.domain = ? and tests.source_data = ?
-			AND (tests.finished = NULL
-			OR (date_part('epoch', now()) - date_part('epoch',
-			tests.finished)) < 300)
-		LIMIT 1)
-	})
+			AND (
+				tests.$self->{end} = NULL
+				OR
+				(".$self->time()." - ".$self->time("tests.$self->{end}")." < 300))
+		LIMIT 1)")
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($source, $domain, $source_data, $source, $domain, $source_data)
 	or die DBException->throw( error => $self->{dbh}->errstr);
@@ -134,17 +147,17 @@ sub get_running_result {
 sub get_test_results {
 	my ($self, $test_id, $locale) = @_;
 
-	my $query = $self->{dbh}->prepare(q{
+	my $query = $self->{dbh}->prepare("
 		SELECT *
 		FROM (
 			SELECT *
 			FROM results
-			WHERE results.test_id = ? AND results.class != 'DEBUG'
+			WHERE results.test_id = ? AND results.$self->{level} != 'DEBUG'
 		) AS tmp
 		LEFT JOIN messages ON
 		tmp.message = messages.tag
 		AND messages.language = ?
-		ORDER BY tmp.id ASC})
+		ORDER BY tmp.id ASC")
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($test_id, $locale)
 	or die DBException->throw( error => $self->{dbh}->errstr);
@@ -157,10 +170,10 @@ sub get_history {
 	my ($self, $test_id) = @_;
 
 	my $dbh = $self->{dbh};
-	my $query = $dbh->prepare(q{
+	my $query = $dbh->prepare("
 		SELECT
 			test2.id AS id,
-			to_char(test2.started, 'YYYY-MM-DD  HH24:MI:SS') AS time,
+			" . $self->time_present("test2.$self->{begin}") ." AS TIME,
 			CASE
 				WHEN test2.count_error > 0 THEN 'error'
 				WHEN test2.count_warning > 0 THEN 'warning'
@@ -174,7 +187,7 @@ sub get_history {
 		WHERE test1.id = ?
 		ORDER BY id DESC
 		LIMIT 5;
-	})
+	")
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($test_id)
 	or die DBException->throw( error => $self->{dbh}->errstr);
@@ -186,10 +199,10 @@ sub get_test_data {
 	my ($self, $test_id) = @_;
 
 	my $dbh = $self->{dbh};
-	my $query = $dbh->prepare(q{
+	my $query = $dbh->prepare("
 		SELECT
-			to_char(started, 'YYYY-MM-DD  HH24:MI:SS') AS started,
-			to_char(finished, 'YYYY-MM-DD  HH24:MI:SS') AS finished,
+			".$self->time_present($self->{begin})." AS started,
+			".$self->time_present($self->{end})." AS finished,
 			count_critical AS critical,
 			count_error AS error,
 			count_warning AS warning,
@@ -197,7 +210,7 @@ sub get_test_data {
 			count_info AS info
 		FROM tests
 		WHERE id = ?
-	})
+	")
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($test_id)
 	or die DBException->throw( error => $self->{dbh}->errstr);
@@ -220,6 +233,24 @@ sub get_version {
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchrow_hashref;
+}
+
+# Routines for cross database compability
+
+# Returns the timestamp for the specified table in relative to epoch, or
+# now() relative to epoch.
+sub time {
+	my ($self, $field) = @_;
+	if(defined($field)) {
+		return sprintf($self->{time}, $field);
+	}
+	return $self->{now};
+}
+
+# Formats the date to be human readable.
+sub time_present {
+	my ($self, $field) = @_;
+	sprintf($self->{format}, $field);
 }
 
 1;
