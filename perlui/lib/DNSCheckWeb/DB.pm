@@ -33,7 +33,7 @@ sub new {
 	my $dsn  = sprintf($db_meta->{driver}, $dbi->{database}, $dbi->{host}, $dbi->{port});
 	# Do connection
 	my $dbh = DBI->connect($dsn, $dbi->{user}, $dbi->{password}, {
-		RaiseError => 0, AutoCommit => 1, PrintError => 0, pg_enable_utf8 => 1
+		RaiseError => 0, AutoCommit => 1, PrintError => 1, pg_enable_utf8 => 1
 	})
 	or die DBException->throw( error=> $DBI::errstr);
 

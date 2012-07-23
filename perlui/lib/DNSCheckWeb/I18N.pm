@@ -4,7 +4,6 @@ use strict;
 
 package DNSCheckWeb::I18N;
 
-use Encode;
 use Data::Dumper;
 
 # Language directory relative to lib
@@ -69,6 +68,7 @@ sub update_locale {
 			$locale = "en";
 		}
 	}
+
 	$self->{locale} = $locale;
 }
 
