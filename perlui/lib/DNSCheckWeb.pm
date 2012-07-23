@@ -19,9 +19,6 @@ use Digest::SHA qw(sha256_hex);
 use DNSCheckWeb::DB;
 use DNSCheckWeb::I18N;
 
-# Testing
-use Data::Dumper;
-
 # When running mod_perl DIR needs to be pointed to the directory
 # containing this library.
 use constant DIR => undef;

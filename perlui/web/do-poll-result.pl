@@ -14,9 +14,6 @@ use CGI;
 use JSON;
 use Data::Validate::Domain qw(is_domain);
 
-# Testing
-use Data::Dumper;
-
 # Constants for feedback
 use constant TEST_STARTED => "started";
 use constant TEST_RUNNING => "running";
