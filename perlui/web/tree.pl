@@ -156,6 +156,16 @@ sub build_tree {
 				$child_module->{class} = 'ok';
 				my @test = split(':', $node->[7]);
 				$child_module->{caption} = lc($test[0]);
+
+				# For nameservers we also want to display the hostname.
+				# Builds a hash instead, and handles this in the
+				# template
+				if($test[0] =~ m/NAMESERVER/) {
+					$child_module->{caption} = {
+						type => lc($test[0]),
+						ns => $node->[8]
+					};
+				}
 			}
 		}
 		# Very special case..
@@ -165,7 +175,7 @@ sub build_tree {
 
 		# Cases for end tags
 		if($type =~ m/END$/) {
-			# Stepping out of module, pop
+			# Stepping out of module
 			pop(@ancestors);
 			# End this list tag
 			$child_module->{tag_start} = '</ul>';
@@ -173,7 +183,7 @@ sub build_tree {
 			if(@ancestors == 1) {
 				$child_module->{caption} = undef;
 			}
-			# Skip to next module (there should not be one)
+			# Skip to next module (there should be none)
 			elsif(@ancestors == 0) {
 				next;
 			}

@@ -59,9 +59,12 @@
    <li class="[% test.class %]">
   [% END %]
   <!-- Caption -->
-  [% custom = test.caption %]
-  [% IF lng.$custom %]
-   [% lng.$custom %]
+  [% caption = test.caption %]
+  [% type = test.caption.type %]
+  [% IF lng.$type %]
+   [% lng.$type %] ([% test.caption.ns %])
+  [% ELSIF lng.$caption %]
+   [% lng.$caption %]
   [% ELSE %]
    [% test.caption %]
   [% END %]

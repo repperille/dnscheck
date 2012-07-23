@@ -68,6 +68,7 @@ sub update_locale {
 		# User could forge cookie, validate again. If no cookie got
 		# loaded, set from browser language (given that language is
 		# available).
+
 		if(!defined($locale) || !exists($self->{languages}->{$locale})) {
 	 		my @user_wants = I18N::LangTags::Detect::detect();
 			foreach my $lang (@user_wants) {
