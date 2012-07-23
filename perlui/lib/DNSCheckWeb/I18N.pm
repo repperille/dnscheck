@@ -4,6 +4,8 @@ use strict;
 
 package DNSCheckWeb::I18N;
 
+use I18N::LangTags::Detect;
+
 use Data::Dumper;
 
 # Language directory relative to lib
@@ -13,7 +15,7 @@ sub new {
 	my $class = shift;
 	my $self = {};
 
-	# Check available languages. Uses the absoulte path given from main
+	# Check available languages. Uses the absolute path given from main
 	# module.
 	opendir(D, DNSCheckWeb::get_dir().$dir) || die "Can't opedir $dir: $!\n";
 	my @list = readdir(D);
@@ -63,9 +65,20 @@ sub update_locale {
 		# Try to load locale
 		$locale = $session->param("locale");
 
-		# User could forge cookie, validate again
+		# User could forge cookie, validate again. If no cookie got
+		# loaded, set from browser language (given that language is
+		# available).
 		if(!defined($locale) || !exists($self->{languages}->{$locale})) {
-			$locale = "en";
+	 		my @user_wants = I18N::LangTags::Detect::detect();
+			foreach my $lang (@user_wants) {
+				if(exists($self->{languages}->{$lang})) {
+					$locale = $lang; last;
+				}
+			}
+			# No suitable languages found, fallback to english
+			if(!defined($locale)) {
+				$locale = 'en';
+			}
 		}
 	}
 
