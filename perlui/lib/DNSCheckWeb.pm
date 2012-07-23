@@ -133,8 +133,11 @@ sub get_lng {
 	my ($self, $locale) = @_;
 
 	unless (defined($self->{lng})) {
-		$self->{lng} = DNSCheckWeb::I18N->new(get_dir());
+		# Loads in available languages
+		$self->{lng} = DNSCheckWeb::I18N->new();
+		# Updates the chosen locale
 		$self->{lng}->update_locale($locale, $self->{session});
+		# Loads the actualy literals from the language files
 		$self->{lng}->load_language();
 	}
 

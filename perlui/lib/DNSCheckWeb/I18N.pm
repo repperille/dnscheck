@@ -11,7 +11,7 @@ use Data::Dumper;
 my $dir = '../lng/';
 
 sub new {
-	my ($class) = @_;
+	my $class = shift;
 	my $self = {};
 
 	# Check available languages. Uses the absoulte path given from main
