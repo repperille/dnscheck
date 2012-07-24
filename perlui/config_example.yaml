@@ -1,6 +1,10 @@
 #
 # Edit this file to reflect your setup, then save as 'config.yaml'
 #
+
+
+# Database settings should be pretty self explanatory. Specify type
+# according to the available types in the end of this file.
 dbi:
     type: postgresql
     host: localhost
@@ -18,9 +22,10 @@ debug: 0
 # with this salt. Should be a long string.
 salt: somelongsaltystringhere
 
-# This settinsg lets you specify custom about pages.
+# This setting lets you specify custom about pages.
 # The suffix: '_my' will look for a file called
-# 'locale_my_about.html' in the language folder
+# 'locale_my_about.html' in the language folder. The specified file will
+# then override the regular about-page for that locale.
 suffix_about: _my
 
 #

@@ -13,6 +13,7 @@ use DNSCheckWeb::Exceptions;
 use CGI;
 use JSON;
 use Data::Validate::Domain qw(is_domain);
+use Data::Dumper;
 
 # Constants for feedback
 use constant TEST_STARTED => "started";
@@ -21,7 +22,11 @@ use constant TEST_FINISHED => "finished";
 use constant TEST_ERROR => "error";
 
 # Some scalars for the state of the no-script check
+# If the dispatcher is not running, the script will at most run for
+# INITIAL + MAX_RETRIES * SLEEP_TIME seconds
+use constant INITIAL => 5;
 use constant MAX_RETRIES => 5;
+use constant SLEEP_TIME => 2;
 my $retries = 0;
 
 my $dnscheck = DNSCheckWeb->new();
@@ -31,6 +36,7 @@ my $cgi = $dnscheck->get_cgi();
 my $domain = $cgi->param("domain");
 my $source_data = $cgi->param("parameters");
 my $js = $cgi->param("js");
+my $private = $cgi->param("private");
 
 # Check whether this is an ajax call or not
 # Will dictate how the rest of the check carries out
@@ -55,6 +61,21 @@ my $href_results = {
 	source => $source
 };
 
+my $private_tld;
+if(defined($private) && $private eq 'true') {
+	# Split and use the provided TLD
+	my @parts = split('\.', $domain);
+	$private_tld = {
+		@parts["@parts"-1] => 1
+	};
+}
+
+# Options to be provided the initial domain validation
+my %domain_options = (
+	domain_allow_single_label => 1,
+	domain_private_tld => $private_tld
+);
+
 DO_CHECK:
 
 # Received domain name, check for running tests
@@ -64,7 +85,7 @@ eval {
 	# Try to create databaseobject
 	my $dbo = $dnscheck->get_dbo($js);
 	# Check if domain is valid
-	if(!defined($domain) || !is_domain($domain)) {
+	if(!defined($domain) || !is_domain($domain, \%domain_options)) {
 		DomainException->throw();
 	}
 	if(!defined($source)) {
@@ -86,7 +107,7 @@ eval {
 
 		# Initial rescheduling
 		if(!$js) {
-			sleep 5;
+			sleep INITIAL;
 			goto DO_CHECK;
 		}
 	}
@@ -98,7 +119,7 @@ eval {
 
 		# Try again
 		if(!$js) {
-			sleep 2;
+			sleep SLEEP_TIME;
 			goto DO_CHECK;
 		}
 	}

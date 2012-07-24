@@ -15,8 +15,11 @@
 <form action="do-poll-result.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />
  <input type="hidden" name="js" value="0" />
- [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> <span id="test" style="color: green;"></span><br />
+ [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> 
   [% IF type == "undelegated" || type == "moved" %]
+   [% lng.private %] <input type="checkbox" id="private" name="private" />
+   <span id="test" style="color: green;"></span>
+   <br />
    <p>
    [% IF type == "undelegated" %]
     [% lng.enter_your_undelegated_domain_name %]
@@ -41,6 +44,8 @@
    document.write('<br /> <br />');
   </script>
  [% ELSE %]
+  <span id="test" style="color: green;"></span>
+  <br />
   <p>[% lng.enter_your_domain_name %]</p>
  [% END %]
  <!-- Action based on whether we have javascript -->

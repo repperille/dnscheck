@@ -141,3 +141,5 @@ engine_error_label: The check could not start
 about_label: About
 
 last_result_header: Your last test result
+
+private: Private

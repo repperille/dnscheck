@@ -8,7 +8,7 @@ var tree_view;
 // Some variables to hold the state of the polling.
 var retries = 0;
 var max_retries = 5; // Retry if test has not started
-var retry_interval = 1000; // How often to poll
+var retry_interval = 2000; // How often to poll
 
 // Loading indicator
 function load() {
@@ -95,7 +95,7 @@ function pollResult() {
 
 		}
   	}
-	// What domain to check
+	// Set some parameters from the DOM
 	var domain = document.getElementById('domain').value;
 	var type = document.getElementById('type').value;
 
@@ -103,8 +103,10 @@ function pollResult() {
 	if(type == 'standard') {
 		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type, true);
 	} else if(type != undefined && type.match(/undelegated|moved/)) {
+		var private_tld = document.getElementById('private').checked;
 		xmlhttp.open("GET","do-poll-result.pl?domain="+domain +
-		"&test=undelegated" + "&parameters="+source_params(), true);
+		"&test=undelegated" + "&parameters="+source_params() +
+		"&private="+private_tld, true);
 	}
 	xmlhttp.send();
 }
