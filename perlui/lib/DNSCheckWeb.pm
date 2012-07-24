@@ -260,7 +260,12 @@ sub parse_yaml {
 # Simple helper routine for properly slurping UTF-8 files
 sub read_utf8 {
 	my ($path) = @_;
-	return read_file($path, binmode => ':utf8');
+	my $file; 
+	$file = read_file($path, binmode => ':utf8', err_mode => 'carp');
+	unless($file) {
+		die IOException->throw( error=>"File: $path not found");
+	}
+	return $file;
 }
 
 # This routine should return the path to this package. If we are running

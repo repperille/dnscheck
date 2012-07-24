@@ -22,6 +22,9 @@ use Exception::Class (
 	EngineException => {
 		description => 'Dispatcher is not running, could not carry out check.',
 	},
+	IOException => {
+		description => 'File not readable or found.',
+	},
 
 );
 
