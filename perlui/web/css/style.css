@@ -8,7 +8,7 @@ body, form {
 }
 /* should be hid when loading with js */
 .skipped {
-	color: #C0C0C0;
+	color: #505050;
 }
 .info {
 }
@@ -94,7 +94,7 @@ body, form {
 
 
 #result_list li {
-	background: #8e9acc;
+	background: #E5E5E5;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
@@ -103,6 +103,7 @@ body, form {
 	margin-bottom: 1px;
 	list-style: disc;
 	font-size: 20px;
+	border: 1px solid;
 }
 /* Could re-use the above? */
 #nameservers {
@@ -128,9 +129,10 @@ body, form {
 	-khtml-border-radius: 3px;
 	border-radius: 3px;
 	list-style: none;
+	border: none;
 }
 #result_list li:hover {
-	background: #8e9fff;
+	background: #D0D0D0;
 }
 #result_list li li:hover {
 	background: white;
