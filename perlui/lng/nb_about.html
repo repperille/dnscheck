@@ -1,43 +1,23 @@
-<h5>Føringene for denne testen</h5>
-<p>Denne testen bruker de <a href="http://www.norid.no/regelverk/vedlegg-f.html">
-tekniske kravene</a> Norid har lagt til grunn for
-navnetjenere og DNS-registrering. Dette betyr at testen vil resultere i
-en <span class="error">feil</span> dersom en eller flere av kravene 
-ikke blir oppfylt. Testen kan også resultere i advarsler. En <span
-class="warning">advarsel</span> betyr at domenet er konfigurert
-forskjellig i forhold til de anbefalelsene Norid har.</p>
-Nedenfor er de viktigste kravene oppsummert:
-<ol>
- <li>Minst to separate navnetjenere</li>
- <li>Konsistens mellom data i navnesøknad og svar fra navnetjenere</li>
- <li>Autoritative navnetjenere</li>
- <li>Nåbare navnetjenere</li>
- <li>Korrekt e-postinformasjon i SOA post</li>
- <li>Konsistent serienummer i SOA post</li>
- <li>Kanonisk navn på høyre siden i NS og MX poster</li>
- <li>Kun domenenavn med standardtegn i hostadressen</li>
-</ol>
-
 <h5>Denne testen bruker DNSCheck</h5>
 <p>
 DNSCheck er et program som var designet for å bistå folk i å teste, måle
 og forhåpentligvis forstå hvordan domenenavnsystem (DNS), henger sammen.
 DNSCheck ble opprinnelig laget for .SE (The Internet Infrastructure
 Foundation), og kildekoden til programmet er tilgjengelig <a
-href="https://github.com/dotse/dnscheck/">på «Github»</a>.</p>
-
+href="https://github.com/dotse/dnscheck/">på «Github»</a>.
+</p>
 Når et domene (eller sone) blir gitt til DNSCheck vil programmet
 undersøke domenets generelle helse ved å traversere DNS fra rot (.) til
-TLD (toppnivådomenet, som f.eks. .NO) til eventuelt navnetjenerene som
-holder informasjonen om det spesifikke domenet (som norid.no). DNSCheck
+TLD (toppnivådomenet, som f.eks. .SE) til eventuelt navnetjenerene som
+holder informasjonen om det spesifikke domenet (som iis.se). DNSCheck
 utfører i tillegg en del andre tester, som for eksempel kontrollering av
 DNSSEC-signaturer og sjekking av at de oppgitte IP-adressene er gyldige.</p>
 <h5>Om domain name system, DNS</h5>
 <p>Domain name system (heretter DNS) kan kalles Internettets telefonbok.
 Systemet gjør det mulig å oversette lesbare navn på websider (som
-www.norid.no) til de mer uforståelige IP-adressene som datamaskinene
+www.iis.se) til de mer uforståelige IP-adressene som datamaskinene
 trenger for å kommunisere med hverandre (i dette tilfellet
-158.38.130.37).</p><p>I tillegg til å la deg surfe på Internett uten å
+212.247.7.229).</p><p>I tillegg til å la deg surfe på Internett uten å
 måtte huske på IP-adresser sørger også DNS for at e-posten din kommer
 frem. Med andre ord, et stabilt DNS er nødvendig for at de fleste
 bedrifter skal kunne fungere, og arbeide effektivt.

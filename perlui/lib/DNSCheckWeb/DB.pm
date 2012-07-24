@@ -195,6 +195,7 @@ sub get_history {
 	return $query->fetchall_arrayref;
 }
 
+# A tiny bit of statistics for the showing result
 sub get_test_data {
 	my ($self, $test_id) = @_;
 
@@ -237,7 +238,7 @@ sub get_version {
 
 # Routines for cross database compability
 
-# Returns the timestamp for the specified table in relative to epoch, or
+# Returns the timestamp for the specified table relative to epoch, or
 # now() relative to epoch.
 sub time {
 	my ($self, $field) = @_;

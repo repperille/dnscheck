@@ -9,12 +9,19 @@ dbi:
     user: someuser
     password: somepassword
 
-# When debug is turned on, errors will be more verbose
-debug: 1
+# When debug is turned on, errors will be more verbose (outputted
+# directly in the web view). The about-page will also die if the
+# specified customized about page is not found.
+debug: 0
 
 # To prevent enumeration of all test data, the test id gets hashed along
 # with this salt. Should be a long string.
 salt: somelongsaltystringhere
+
+# This settinsg lets you specify custom about pages.
+# The suffix: '_my' will look for a file called
+# 'locale_my_about.html' in the language folder
+suffix_about: _my
 
 #
 # Below are two database specific configurations. This is necessary
