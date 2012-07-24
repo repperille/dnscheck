@@ -17,7 +17,10 @@
  <input type="hidden" name="js" value="0" />
  [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> 
   [% IF type == "undelegated" || type == "moved" %]
-   [% lng.private %] <input type="checkbox" id="private" name="private" />
+   <span title="[% lng.label_private %]">
+    <a href="#"class="desc_hover">[% lng.private %]</a>
+   </span>
+   <input type="checkbox" id="private" name="private"/>
    <span id="test" style="color: green;"></span>
    <br />
    <p>

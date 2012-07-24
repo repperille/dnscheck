@@ -52,6 +52,14 @@ body, form {
 	clear: both;
 }
 
+.desc_hover {
+	cursor: help;
+	color: black;;
+}
+.desc_hover a:visited {
+	color: black;
+}
+
 .description {
 	display: block;
 	font-style: italic;

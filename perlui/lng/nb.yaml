@@ -140,6 +140,8 @@ error_source_label: Kildetypen var ukjent
 
 about_label: Om testen
 
-last_result_header: Ditt siste testresultat
+last_result_header: Sist utførte test
 
 private: Privat
+
+label_private: Huk av dersom denne testen utføres på et privat toppnivådomene

@@ -140,6 +140,8 @@ engine_error_label: The check could not start
 
 about_label: About
 
-last_result_header: Your last test result
+last_result_header: Last test result
 
 private: Private
+
+label_private: Check this box if the test is on a private top level domain
