@@ -144,22 +144,26 @@ sub get_running_result {
 
 # Returns all test results for a given test id. Joins on messages for those
 # results (using the locale).
+# TODO: Optimize, add custom fall back language?
 sub get_test_results {
 	my ($self, $test_id, $locale) = @_;
 
 	my $query = $self->{dbh}->prepare("
 		SELECT *
-		FROM (
-			SELECT *
-			FROM results
-			WHERE results.test_id = ? AND results.$self->{level} != 'DEBUG'
-		) AS tmp
-		LEFT JOIN messages ON
-		tmp.message = messages.tag
-		AND messages.language = ?
-		ORDER BY tmp.id ASC")
+		FROM results LEFT JOIN messages
+		ON results.message = messages.tag
+		AND messages.language IN (
+			SELECT COALESCE(o.language, e.language)
+			FROM messages e LEFT OUTER JOIN Messages o
+			ON o.tag = e.tag AND o.language = ?
+			WHERE e.language = 'en'
+			AND e.tag = messages.tag
+		)
+		WHERE
+		results.test_id = ?
+		AND results.$self->{level} != 'DEBUG';")
 	or die DBException->throw( error => $self->{dbh}->errstr);
-	$query->execute($test_id, $locale)
+	$query->execute($locale, $test_id)
 	or die DBException->throw( error => $self->{dbh}->errstr);
 
 	return $query->fetchall_arrayref;
