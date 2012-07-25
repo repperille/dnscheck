@@ -22,11 +22,10 @@ debug: 0
 # with this salt. Should be a long string.
 salt: somelongsaltystringhere
 
-# This setting lets you specify custom about pages.
-# The suffix: '_my' will look for a file called
-# 'locale_my_about.html' in the language folder. The specified file will
-# then override the regular about-page for that locale.
-suffix_about: _my
+# A custom identifier, for custom about pages.  If the value '_norid' is
+# specified, perl will look for a file called 'locale_norid_about.html' in
+# the language folder (locale being the chosen locale).
+custom_about: _norid
 
 #
 # Below are two database specific configurations. This is necessary

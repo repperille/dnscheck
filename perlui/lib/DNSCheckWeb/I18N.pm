@@ -9,7 +9,7 @@ use I18N::LangTags::Detect;
 use Data::Dumper;
 
 # Language directory relative to lib
-my $dir = '../lng/';
+my $dir = '../language/';
 
 sub new {
 	my $class = shift;
@@ -35,7 +35,10 @@ sub new {
 			$languages{$read_file->{languageId}} = $read_file->{languageName};
 		}
 	}
+	# Assign the available languages (for language selection)
 	$self->{languages} = \%languages;
+	# Assign the relative path
+	$self->{path} = $dir;
 
 	bless $self, $class;
 	return $self;
