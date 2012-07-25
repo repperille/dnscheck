@@ -38,6 +38,11 @@ eval {
 if(my $e = IOException->caught()) {
 	# Die if debug is turned on
 	if($dnscheck->{config}->{debug}) {
+		my $message = $e->{message};
+		$e->{message} = "Debug is turned on, to ignore this page
+		turn debug off in config.yaml, and the site will fallback to the
+		standard about page. To fix this error provide the correct
+		language as specified in the config ($message)";
 		$dnscheck->render_error($e);
 	}
 	# Fall back to standard file. Some would only customize their locale.
