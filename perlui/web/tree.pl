@@ -190,13 +190,15 @@ sub build_tree {
 		}
 		# Propagate 'important' flags to ancestor modules
 		unless($class eq 'ok' || $class eq 'info' || $class eq 'notice') {
+			# Update parents
 			foreach my $parent_node (@ancestors) {
-				unless ($parent_node->{class} eq 'error') {
+				unless ($parent_node->{class} =~ m/error|critical/) {
 					$parent_node->{class} = $class;
-					unless($class eq 'skipped') {
-						$result_class = $class;
-					}
 				}
+			}
+			# Update the main result
+			unless($class eq 'skipped' || $result_class =~ m/error|critical/) {
+				$result_class = $class;
 			}
 		}
 		# Remember "last" parent
