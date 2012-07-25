@@ -17,8 +17,8 @@
  <input type="hidden" name="js" value="0" />
  [% lng.domain_name %]: <input id="domain" type="text" name="domain" value="[% host %]"/> 
   [% IF type == "undelegated" || type == "moved" %]
-   <span title="[% lng.label_private %]">
-    <a href="#"class="desc_hover">[% lng.private %]</a>
+   <span title="[% lng.label_private %]" class="desc_hover">
+    [% lng.private %]
    </span>
    <input type="checkbox" id="private" name="private"/>
    <span id="test" style="color: green;"></span>
@@ -33,7 +33,7 @@
   [% lng.name_servers %]:
   <noscript>
    <ul id="nameservers">
-    <!-- Add some slots -->
+    <!-- Add some default slots -->
     <li>[% lng.host %]: <input type="text" class="host" name="host0"/> IP: <input type="text" class="IP" name="ip0"/></li>
     <li>[% lng.host %]: <input type="text" class="host" name="host1"/> IP: <input type="text" class="IP" name="ip1"/></li>
    </ul>

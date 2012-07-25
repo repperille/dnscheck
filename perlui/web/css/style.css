@@ -55,9 +55,7 @@ body, form {
 .desc_hover {
 	cursor: help;
 	color: black;;
-}
-.desc_hover a:visited {
-	color: black;
+	text-decoration: underline;
 }
 
 .description {
