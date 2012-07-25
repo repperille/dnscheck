@@ -61,14 +61,10 @@ my $href_results = {
 	source => $source
 };
 
-my $private_tld;
-if(defined($private) && $private eq 'true') {
-	# Split and use the provided TLD
-	my @parts = split('\.', $domain);
-	$private_tld = {
-		@parts["@parts"-1] => 1
-	};
-}
+my @parts = split('\.', $domain);
+my $private_tld = {
+	@parts["@parts"-1] => 1
+};
 
 # Options to be provided the initial domain validation
 my %domain_options = (

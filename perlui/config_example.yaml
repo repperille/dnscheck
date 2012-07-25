@@ -25,7 +25,7 @@ salt: somelongsaltystringhere
 # A custom identifier, for custom about pages.  If the value '_norid' is
 # specified, perl will look for a file called 'locale_norid_about.html' in
 # the language folder (locale being the chosen locale).
-custom_about: _norid
+custom_about:
 
 #
 # Below are two database specific configurations. This is necessary
