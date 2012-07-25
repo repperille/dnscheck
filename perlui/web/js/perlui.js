@@ -104,10 +104,8 @@ function pollResult() {
 	if(type == 'standard') {
 		xmlhttp.open("GET","do-poll-result.pl?domain="+domain + "&test=" + type, true);
 	} else if(type != undefined && type.match(/undelegated|moved/)) {
-		var private_tld = document.getElementById('private').checked;
 		xmlhttp.open("GET","do-poll-result.pl?domain="+domain +
-		"&test=undelegated" + "&parameters="+source_params() +
-		"&private="+private_tld, true);
+		"&test=undelegated" + "&parameters="+source_params(), true);
 	}
 	xmlhttp.send();
 }
