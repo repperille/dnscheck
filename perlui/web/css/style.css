@@ -136,6 +136,7 @@ body, form {
 	border-radius: 3px;
 	list-style: none;
 	border: none;
+	cursor: text;
 }
 #result_list li:hover {
 	background: #D0D0D0;
