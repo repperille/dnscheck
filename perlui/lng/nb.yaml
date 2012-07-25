@@ -138,6 +138,8 @@ engine_error_label: Sjekken kunne ikke starte
 
 error_source_label: Kildetypen var ukjent
 
+json_error_label: Kunne ikke tolke svaret fra tjeneren, prøv igjen
+
 about_label: Om testen
 
 last_result_header: Sist utførte test

@@ -10,7 +10,8 @@
   	"[% lng.domain_doesnt_exist_header %]",
 	"[% lng.error_source_label %]",
 	"[% lng.load_error_label %]",
-	"[% lng.engine_error_label %]");
+	"[% lng.engine_error_label %]",
+	"[% lng.json_error_label %]");
 </script>
 <form action="do-poll-result.pl">
  <input type="hidden" name="test" id="type" value="[% type %]" />

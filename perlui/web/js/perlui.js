@@ -86,7 +86,8 @@ function pollResult() {
 					return;
 				}
 			} else {
-				error_msg = 'Malformed response returned from server.';
+				// Print a json-error
+				error_msg = errors[4];
 			}
 			// Down  here we know that some error occurred
 			clearInterval(interval);

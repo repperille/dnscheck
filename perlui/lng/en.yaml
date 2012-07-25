@@ -138,6 +138,8 @@ error_source_label: An error occurred, please try again later
 
 engine_error_label: The check could not start
 
+json_error_label: Malformed response returned from the server
+
 about_label: About
 
 last_result_header: Last test result
