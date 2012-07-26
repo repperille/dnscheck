@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+
+	DocumentRoot /var/www/perlui/web/
+
+	# Comment out if running mod_perl
+	<IfModule env_module>
+    		SetEnv PERL5LIB "/var/www/perlui/lib"
+	</IfModule>
+
+	# Uncomment if mod_perl:
+	# PerlRequire /var/www/perlui/startup.pl
+
+	<Files *.pl>
+		# Uncomment if mod_perl:
+		#SetHandler perl-script
+        #PerlResponseHandler ModPerl::Registry
+		AddHandler cgi-script .pl
+		PerlOptions +ParseHeaders
+		PerlSendHeader On
+		Options +ExecCGI
+	</Files>
+
+	<Directory />
+		Options Indexes FollowSymLinks MultiViews +ExecCGI
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>

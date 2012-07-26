@@ -30,7 +30,7 @@ The database should be up and running, and you should have a dedicated
 * SELECT, INSERT, UPDATE ON source
 * SELECT, INSERT, UPDATE DELETE ON queue
 
-The language files from the 'engine/locale' should have been inserted
+The language files from the 'engine/locale/' should have been inserted
 into the messages (use 'engine/util/load_locales.pl').
 
 Installation
@@ -40,7 +40,8 @@ Installation instructions
 
 0. Copy or symlink the perlui directory to the root of your web server.
 1. Update your webserver to enable the new site. The directory
-   perlui/web is the document root.
+   perlui/web is the document root. Take a look at the file
+   'perlui/vhost_example'.
 2. Copy or move 'config_example.yaml' to 'config.yaml', and edit that file
    to reflect your own setup.
 
