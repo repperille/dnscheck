@@ -58,6 +58,57 @@ messages:
   CONNECTIVITY:ASN_LIST:
     args: 1
     format: 'Sona annonsert av IPv4 ASN: %s'
+  CONNECTIVITY:BEGIN:
+    args: 1
+    format: Starter testing av tilkobling for %s.
+  CONNECTIVITY:END:
+    args: 1
+    format: Ferdig med testing av tilkobling for %s.
+  CONNECTIVITY:MULTIPLE_ASN:
+    args: 1
+    descr: Navnetjeneren er annonsert av flere enn ett autonomt system (AS).
+    format: Navnetjeneren %s er annonsert av flere AS.
+  CONNECTIVITY:NOT_ANNOUNCED:
+    args: 1
+    descr: IP-adressa er ikke annonsert av noen autonome system, og er mest sannsynlig ikke nåbar på Internett.
+    format: Navnetjeneren %s er ikke annonsert av noen AS.
+  CONNECTIVITY:TOO_FEW_ASN:
+    args: 1
+    descr: "Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system."
+    format: Sona er annonsert av færre enn to IPv4 ASN (%s).
+  CONNECTIVITY:V6_ANNOUNCED_BY_ASN:
+    args: 2
+    descr: IP-adressa er annonsert av et autonomt system (AS).
+    format: 'Navnetjeneren %s er annonsert over IPv6 av: %s'
+  CONNECTIVITY:V6_ASN_COUNT_OK:
+    args: 1
+    descr: Sonas navnetjenere er lokalisert innenfor flere enn ett autonomt system.
+    format: Sona er annonsert av flere enn ett IPv6 ASN (%s).
+  CONNECTIVITY:V6_ASN_LIST:
+    args: 1
+    format: 'Sona er annonsert av IPv6 ASN: %s'
+  CONNECTIVITY:V6_MULTIPLE_ASN:
+    args: 1
+    descr: Navnetjeneren er annonsert av flere enn ett IPv6 autonomt system (AS).
+    format: Navnetjeneren %s er annonsert av flere IPv6 AS.
+  CONNECTIVITY:V6_NOT_ANNOUNCED:
+    args: 1
+    descr: IP-adressa er ikke annonsert av noen autonomo system og er mest sannsynlig ikke nåbar over Internett.
+    format: Navnetjeneren %s er ikke annonsert av noen IPv6 AS.
+  CONNECTIVITY:V6_TOO_FEW_ASN:
+    args: 1
+    descr: "Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system."
+    format: Sona er annonsert av færre enn to IPv6 ASN (%s).
+  CONSISTENCY:BEGIN:
+    args: 1
+    format: Starter testing av sonekonsistens for %s.
+  CONSISTENCY:END:
+    args: 1
+    format: Ferdig med testing av sonekonsistens for %s.
+  CONSISTENCY:SOA_DIGEST_AT_ADDRESS:
+    args: 2
+    format: SOA på adresse %s har sammendrag %s.
+
   HOST:BEGIN:
     args: 1
     format: Starter testing av tjener %s.
