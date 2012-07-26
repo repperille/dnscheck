@@ -154,7 +154,7 @@ sub get_test_results {
 		ON results.message = messages.tag
 		AND messages.language IN (
 			SELECT COALESCE(o.language, e.language)
-			FROM messages e LEFT OUTER JOIN Messages o
+			FROM messages e LEFT OUTER JOIN messages o
 			ON o.tag = e.tag AND o.language = ?
 			WHERE e.language = 'en'
 			AND e.tag = messages.tag
