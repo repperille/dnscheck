@@ -61,9 +61,10 @@ my $href_results = {
 	source => $source
 };
 
+# Try to set the private TLD, if its private at all.
 my @parts = split('\.', $domain);
 my $private_tld = {
-	@parts["@parts"-1] => 1
+	@parts[@parts-1] => 1
 };
 
 # Options to be provided the initial domain validation
