@@ -11,7 +11,7 @@ messages:
   ADDRESS:INVALID:
     args: 1
     descr: ~
-    format: Adress %s is invalid or incorrect.
+    format: Address %s is invalid or incorrect.
   ADDRESS:PRIVATE_IPV4:
     args: 1
     descr: "A private IP address should normally not be exposed in the public DNS, since it's not reachable from the Internet."
