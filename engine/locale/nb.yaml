@@ -53,7 +53,7 @@ messages:
     format: 'Navnetjeneren %s annonsert av: %s'
   CONNECTIVITY:ASN_COUNT_OK:
     args: 1
-    descr: Sonas navnetjenere er lokalisert innenfor flere en ett autonomt system.
+    descr: Sonas navnetjenere er lokalisert innenfor flere enn ett autonomt system.
     format: Sona er annonsert av flere enn ett ASN (%s).
   CONNECTIVITY:ASN_LIST:
     args: 1
@@ -108,6 +108,47 @@ messages:
   CONSISTENCY:SOA_DIGEST_AT_ADDRESS:
     args: 2
     format: SOA på adresse %s har sammendrag %s.
+  CONSISTENCY:SOA_DIGEST_CONSISTENT:
+    args: 0
+    format: Alle andre felter i SOA-innslaget er konsistente over alle navnetjenerene.
+  CONSISTENCY:SOA_DIGEST_DIFFERENT:
+    args: 1
+    descr: De andre felta i SOA-innslaget er ikke konsistente over alle navnetjenerene. Dette kommer oftest av feilkonfigurering.
+    format: '%s forskjellige SOA-innslag funnet.'
+  CONSISTENCY:SOA_SERIAL_AT_ADDRESS:
+    args: 2
+    format: SOA på adresse %s har seriellnummeret %s.
+  CONSISTENCY:SOA_SERIAL_CONSISTENT:
+    args: 0
+    format: Alle SOA-innslag har konsistente seriellnumre.
+  CONSISTENCY:SOA_SERIAL_DIFFERENT:
+    args: 1
+    descr: 'SOA seriellnummeret er ikke det samme på alle tjenerene. Dette kommer vanligst av feilkonfigurasjon, men kan noen ganger skyldes treg soneprogagering til sekundær-navnetjenere.'
+    format: '%s ulike seriellnumre funnet.'
+  DELEGATION:BEGIN:
+    args: 1
+    format: Starter testing av delegering for %s.
+  DELEGATION:BROKEN_BUT_FUNCTIONAL:
+    args: 1
+    format: 'Ikke nok navnetjenerinformasjon var funnet for å kunne teste sona %s, men IP-adressa kunne likevel slås opp.'
+  DELEGATION:BROKEN_UNDELEGATED:
+    args: 1
+    format: 'Testen for sona %s var markert som udelegert, men ingen «fake glue» var gitt.'
+  DELEGATION:END:
+    args: 1
+    format: Ferdig med testing av delegering for %s.
+  DELEGATION:EXTRA_NS_CHILD:
+    args: 1
+    descr: 'En navnetjener listet hos barnet, men ikke forelderen, var funnet. Dette er mest sannsynlig en feilkonfigurasjon, men det er i noen tilfeller hensiktsmessig å sette opp en sone slik.'
+    format: 'Tilleggsnavnetjenere listet hos barnet: %s'
+  DELEGATION:EXTRA_NS_PARENT:
+    args: 1
+    descr: 'En navnetjener listet hos forelderen, men ikke hos barnet, var funnet. Dette er mest sannsynlig på grunn av ein administrasjonsfeil. Du burde oppdatere forelderen til å stemme med navnetjenerene hos barnet så fort som mulig.'
+    format: 'Overflødig navnetjener listet hos forelderen: %s'
+  DELEGATION:GLUE_FOUND_AT_CHILD:
+    args: 3
+    descr: IP-adressa til navnetjeneren var funnet hos barnet.
+    format: 'Limpost for barnet %s ble funnet: %s (%s)'
 
   HOST:BEGIN:
     args: 1

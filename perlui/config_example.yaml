@@ -2,7 +2,6 @@
 # Edit this file to reflect your setup, then save as 'config.yaml'
 #
 
-
 # Database settings should be pretty self explanatory. Specify type
 # according to the available types in the end of this file.
 dbi:
