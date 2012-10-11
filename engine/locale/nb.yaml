@@ -14,7 +14,7 @@ messages:
     format: Adressa %s er ugyldig eller feil.
   ADDRESS:PRIVATE_IPV4:
     args: 1
-    descr: "En privat IP-adresse burde ikke vanligvis være eksponert i DNS, siden den ikke er tilgjengelig over Internett."
+    descr: 'En privat IP-adresse burde ikke vanligvis være eksponert i DNS, siden den ikke er tilgjengelig over Internett.'
     format: '%s er en privat IP-adresse.'
   ADDRESS:PTR_HOSTNAME_NOT_FOUND:
     args: 2
@@ -70,11 +70,11 @@ messages:
     format: Navnetjeneren %s er annonsert av flere AS.
   CONNECTIVITY:NOT_ANNOUNCED:
     args: 1
-    descr: IP-adressa er ikke annonsert av noen autonome system, og er mest sannsynlig ikke nåbar på Internett.
+    descr: 'IP-adressa er ikke annonsert av noen autonome system, og er mest sannsynlig ikke nåbar på Internett.'
     format: Navnetjeneren %s er ikke annonsert av noen AS.
   CONNECTIVITY:TOO_FEW_ASN:
     args: 1
-    descr: "Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system."
+    descr: 'Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system.'
     format: Sona er annonsert av færre enn to IPv4 ASN (%s).
   CONNECTIVITY:V6_ANNOUNCED_BY_ASN:
     args: 2
@@ -97,7 +97,7 @@ messages:
     format: Navnetjeneren %s er ikke annonsert av noen IPv6 AS.
   CONNECTIVITY:V6_TOO_FEW_ASN:
     args: 1
-    descr: "Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system."
+    descr: 'Sonas navnetjenere er alle lokalisert innenfor det samme, (eller ingen), autonome system.'
     format: Sona er annonsert av færre enn to IPv6 ASN (%s).
   CONSISTENCY:BEGIN:
     args: 1
@@ -149,7 +149,26 @@ messages:
     args: 3
     descr: IP-adressa til navnetjeneren var funnet hos barnet.
     format: 'Limpost for barnet %s ble funnet: %s (%s)'
-
+  DELEGATION:GLUE_MISSING_AT_CHILD:
+    args: 1
+    descr: IP-adressa til navnetjeneren var ikke funnet hos barnet. Dette er en konfigurasjonsfeil og burde bli fikset så fort som mulig.
+    format: 'Det mangler limpost hos barnet: %s'
+  DELEGATION:INZONE_NS_WITHOUT_GLUE:
+    args: 2
+    format: Navnetjeneren %s er lista for sone %s uten adresseinformasjon.
+  DNS:FIND_PARENT_TRY:
+    args: 1
+    format: Sjekker %s som foreldredomene.
+  DNS:NO_ANSWER:
+    args: 4
+    descr: ~
+    format: Ingen svar mottatt fra %s når det ble spurt etter %s/%s/%s.
+  DNS:SOA_SERVFAIL:
+    args: 1
+    format: DNS SERVFAIL da det ble spurt etter %s for SOA
+  DNSSEC:END:
+    args: 1
+    format: Ferdig med å teste DNSSEC for %s.
   HOST:BEGIN:
     args: 1
     format: Starter testing av tjener %s.
@@ -160,4 +179,26 @@ messages:
   HOST:END:
     args: 1
     format: Ferdig med testing av tjener %s.
-
+  NAMESERVER:BEGIN:
+    args: 1
+    format: Starter testing av navnetjener %s.
+  NAMESERVER:CHECKING_RECURSION:
+    args: 2
+    format: Sjekker for rekursjon for %s på adresse %.
+  NAMESERVER:RECURSIVE:
+    args: 2
+    descr: 'Navnetjeneren svarer rekursivt på forespørsler fra tredjeparter (som f.eks. DNSCheck). Ved å be om en rekursiv spørring mot en navnetjener som er rekursiv, kan en angriper få en navnetjener til å slå opp og mellomlagre informasjon fra soner som er under angriperens kontroll. Dette kan føre til at offeret sin navnetjener mellomlagrer og leverer data som er hentet fra en skadelig navnetjener.'
+    format: Navnetjeneren %s (%s) er rekursiv.
+  NAMESERVER:TESTING_UDP:
+    args: 2
+    format: Tester UDP-spørringer mot navnetjener %s på adresse %s.
+  SOA:MNAME_IS_CNAME:
+    args: 2
+    format: SOA MNAME %s peker på et CNAME (%s).
+  SOA:MNAME_PUBLIC:
+    args: 2
+    descr: Navnetjeneren listet som SOA NMAME er listet som en navnetjener.
+    format: SOA MNAME for %s (%s) er listet som NS.
+  SOA:SKIPPED_IPV6:
+    args: 1
+    format: 'IPv6 er avslått - vil ikke spørre etter SOA MNAME på %s'
