@@ -162,7 +162,7 @@ sub get_test_results {
 		WHERE
 		results.test_id = ?
 		AND results.$self->{level} != 'DEBUG'
-		ORDER BY id;")
+		ORDER BY results.id;")
 	or die DBException->throw( error => $self->{dbh}->errstr);
 	$query->execute($locale, $test_id)
 	or die DBException->throw( error => $self->{dbh}->errstr);
