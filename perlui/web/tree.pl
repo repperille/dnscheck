@@ -10,8 +10,6 @@ use DNSCheckWeb;
 use DNSCheckWeb::Exceptions;
 use Scalar::Util qw(looks_like_number);
 
-use Data::Dumper;
-
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 my $dbo = $dnscheck->get_dbo();
@@ -67,7 +65,7 @@ eval {
 	for my $item (@history) {
 		$item = {
 			id => $item->[0],
-			time => $item->[1], 
+			time => $item->[1],
 			class => $item->[2],
 			key => $dnscheck->create_hash($item->[0])};
 	}
@@ -82,7 +80,7 @@ eval {
 	# Extract keys from the tree result to avoid too much HTML clutter
 	$dnscheck->render('tree.tpl', {
 		id => $test_id,
-		domain => $result->{domain},
+		domain => $dnscheck->idna_transform($result->{domain}, 0),
 		class => $result->{class},
 		tests => $result->{tests},
 		version => $result->{version},
@@ -126,8 +124,11 @@ sub build_tree {
 
 		# Construct caption given the arguments
 		if(defined($caption)) {
-			$caption = sprintf($caption, $node->[8], $node->[9],
-			$node->[10], $node->[11], $node->[12], $node->[13], $node->[14],
+			$caption = sprintf($caption,
+			$dnscheck->idna_transform($node->[8], 0),
+			$node->[9],
+			$dnscheck->idna_transform($node->[10], 0),
+			$node->[11], $node->[12], $node->[13], $node->[14],
 			$node->[15], $node->[16], $node->[18]);
 		}
 

@@ -12,8 +12,8 @@ use DNSCheckWeb;
 use DNSCheckWeb::Exceptions;
 use CGI;
 use JSON;
-use Data::Validate::Domain qw(is_domain);
-use Data::Dumper;
+use IDNA::Punycode;
+use Encode;
 
 # Constants for feedback
 use constant TEST_STARTED => "started";
@@ -34,6 +34,7 @@ my $cgi = $dnscheck->get_cgi();
 
 # Fetch parameters
 my $domain = $cgi->param("domain");
+
 my $source_data = $cgi->param("parameters");
 my $js = $cgi->param("js");
 my $private = $cgi->param("private");
@@ -67,22 +68,20 @@ my $private_tld = {
 	@parts[@parts-1] => 1
 };
 
-# Options to be provided the initial domain validation
-my %domain_options = (
-	domain_allow_single_label => 1,
-	domain_private_tld => $private_tld
-);
-
 DO_CHECK:
 
 # Received domain name, check for running tests
 eval {
 	# Will do these tests for each poll.
 
-	# Try to create databaseobject
+	# Create database object
 	my $dbo = $dnscheck->get_dbo($js);
+
+	# Encode parameter to IDNA
+	$domain = $dnscheck->idna_transform($domain, 1);
+
 	# Check if domain is valid
-	if(!defined($domain) || !is_domain($domain, \%domain_options)) {
+	if(!defined($domain)) {
 		DomainException->throw();
 	}
 	if(!defined($source)) {

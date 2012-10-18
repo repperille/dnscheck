@@ -14,6 +14,8 @@ use Template;
 use YAML::Tiny;
 use File::Slurp;
 use Digest::SHA qw(sha256_hex);
+use IDNA::Punycode;
+use Encode;
 
 # Custom modules
 use DNSCheckWeb::DB;
@@ -282,6 +284,48 @@ sub get_dir {
 sub create_hash {
 	my ($self, $value) = @_;
 	return sha256_hex($self->{config}->{salt} . $value);
+}
+
+# Encode or decodes a literal from or to an IDNA.
+sub	idna_transform  {
+	my ($self, $domain, $encode) = @_;
+
+	# When we encode the literal, we must first properly decode from
+	# UTF8.
+	if($encode) {
+		$domain = decode utf8=>$domain;
+	}
+
+	my @fqdm = split(/\./, $domain);
+	my $encoded;
+
+	# Probably not a domain, return the literal.
+	if(@fqdm <= 1) {
+		return $domain;
+	}
+
+	# Pop the TLD for this FQDM
+	my $tld = pop(@fqdm);
+
+	# Encode or decode each part of the sub domain(s).
+	foreach my $item(@fqdm) {
+		my $next;
+
+		if($encode) {
+			$next = encode_punycode($item);
+		} else {
+			$next = decode_punycode($item);
+		}
+
+		if(defined($encoded)) {
+			$encoded = "$encoded.$next";
+		} else {
+			$encoded = $next;
+		}
+	}
+
+	# Return the domain concatenated with the TLD.
+	return "$encoded.$tld";
 }
 
 1;
