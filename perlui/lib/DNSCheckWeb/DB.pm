@@ -7,8 +7,6 @@ use strict;
 
 package DNSCheckWeb::DB;
 
-use Data::Dumper;
-
 my $dbo;
 
 sub new {

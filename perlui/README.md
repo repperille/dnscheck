@@ -18,7 +18,8 @@ The front end depends of a small set of modules:
 * Digest::SHA
 * Net::DNS
 * JSON
-* Data::Validate::Domain
+* IDNA::Punycode
+* Exception::Class
 
 Prerequisites
 -------------
