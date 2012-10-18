@@ -166,6 +166,10 @@ messages:
   DNS:SOA_SERVFAIL:
     args: 1
     format: DNS SERVFAIL da det ble spurt etter %s for SOA
+  DNSSEC:DS_KEYREF_INVALID:
+    args: 2
+    descr: 'DS RRset må referere til en gyldig DNSKEY hos barnet, ellers vil tillitskjeden mellom forelder og barn bli brutt, og den validerende resolveren vil ikke klare å validere svar fra barnet.'
+    format: 'Forelderen %s refererer til en ugyldig nøkkel hos barnet: %s.'
   DNSSEC:END:
     args: 1
     format: Ferdig med å teste DNSSEC for %s.
@@ -185,6 +189,9 @@ messages:
   NAMESERVER:CHECKING_RECURSION:
     args: 2
     format: Sjekker for rekursjon for %s på adresse %.
+  NAMESERVER:NSID_SKIP:
+    args: 2
+    format: Navnetjeneren %s (%s) ble ikke sjekket for navnetjener-ID.
   NAMESERVER:RECURSIVE:
     args: 2
     descr: 'Navnetjeneren svarer rekursivt på forespørsler fra tredjeparter (som f.eks. DNSCheck). Ved å be om en rekursiv spørring mot en navnetjener som er rekursiv, kan en angriper få en navnetjener til å slå opp og mellomlagre informasjon fra soner som er under angriperens kontroll. Dette kan føre til at offeret sin navnetjener mellomlagrer og leverer data som er hentet fra en skadelig navnetjener.'
@@ -192,6 +199,17 @@ messages:
   NAMESERVER:TESTING_UDP:
     args: 2
     format: Tester UDP-spørringer mot navnetjener %s på adresse %s.
+  SMTP:CONNECT_FAILED:
+    args: 2
+    descr: 'DNSCheck klarte ikke å koble til eport-tjeneren. Tjeneren kan ikke nåes fordi den er nede, eller har feiloppsatt ruting og/eller filtrering.'
+    format: Klarte ikke å koble til %s (%s).
+  SMTP:MAIL_FROM:
+    args: 1
+    format: Bruker %s som SMTP fra (MAIL_FROM).
+  SOA:EXPIRE_SMALL:
+    args: 3
+    descr: Verdien for når SOA utløper definerer hvor lenge en sekundær navnetjener vil vente før den antar at data for en sone er ugyldig (gitt at den ikke når den primære navnetjeneren).
+    format: 'Tiden SOA utløper for %s er for kort (%s) - anbefalt >= %s.'
   SOA:MNAME_IS_CNAME:
     args: 2
     format: SOA MNAME %s peker på et CNAME (%s).
