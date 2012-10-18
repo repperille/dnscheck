@@ -290,11 +290,16 @@ sub create_hash {
 sub	idna_transform  {
 	my ($self, $domain, $encode) = @_;
 
+	if(!defined($domain)) {
+		return;
+	}
+
 	# When we encode the literal, we must first properly decode from
 	# UTF8.
 	if($encode) {
 		$domain = decode utf8=>$domain;
 	}
+
 
 	my @fqdm = split(/\./, $domain);
 	my $encoded;
