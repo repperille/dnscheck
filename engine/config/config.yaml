@@ -2,7 +2,7 @@
 
 dns:
   class: IN
-  debug: 0
+  debug: 1
   ipv4: 1
   ipv6: 1
   retrans: 2
@@ -21,7 +21,7 @@ smtp:
 
 net:
     ipv4: 1
-    ipv6: 0
+    ipv6: 1
     smtp: 1
     # The following two records should be lists of DNS suffixes pointing to
     # cymru-style servers for looking up AS numbers for IP addresses. 
@@ -35,8 +35,8 @@ syslog:
     facility: local2
 
 daemon:
-    pidfile: /var/run/dnscheck_dispatcher.pid
-    errorlog: /var/log/dnscheck_errors.log
+    pidfile: /scratch/file.pid
+    errorlog: /scratch/error.log
     maxchild: 10
     savelevel: INFO
     # The following two setting are used and required when the dispatcher is started as root
@@ -48,13 +48,13 @@ daemon:
 # for the various programs about which keys they use, and what they
 # mean. Some info is in DNSCheck::Overview.
 #
-#dbi:
-#    type: postgresql	# Map to database type further down
-#    host: 127.0.0.1
-#    port: 13317
-#    database: dnscheckng
-#    user: dnscheckng
-#    password: not_given_here
+dbi:
+    type: postgresql
+    host: flyktig3.lab.norid.no
+    port: 5432
+    database: dnscheckng
+    user: dnscheckng
+    password: gjesttest
 #
 #reggie:
 #    host: 127.0.0.1
@@ -108,4 +108,4 @@ postgresql:
     driver: DBI:Pg:database=%s;host=%s;port=%s
     tbl_begin: started
     tbl_end: finished
-    tbl_level: degree
+    tbl_level: class

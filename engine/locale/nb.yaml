@@ -149,6 +149,10 @@ messages:
     args: 3
     descr: IP-adressa til navnetjeneren var funnet hos barnet.
     format: 'Limpost for barnet %s ble funnet: %s (%s)'
+  DELEGATION:GLUE_FOUND_AT_PARENT:
+    args: 3
+    descr: IP-adressa til navnetjeneren ble funnet hos forelderen.
+    format: 'Limpost for %s funnet: %s (%s)'
   DELEGATION:GLUE_MISSING_AT_CHILD:
     args: 1
     descr: IP-adressa til navnetjeneren var ikke funnet hos barnet. Dette er en konfigurasjonsfeil og burde bli fikset så fort som mulig.
@@ -172,9 +176,32 @@ messages:
   DELEGATION:MATCHING_GLUE:
     args: 2
     format: Sjekker limpost for %s (%s).
+  DELEGATION:NOT_FOUND_AT_CHILD:
+    args: 0
+    descr: Ingen navnetjenere ble funnet hos barnet. Dette betyr vanligvis at barnet ikke er konfigurert til å svare på oppslag for sonen.
+    format: Ingen navnetjenere funnet hos barnet.
+  DELEGATION:NOT_FOUND_AT_PARENT:
+    args: 0
+    descr: Ingen delegering funnet hos forelderen. Dette gjør at sonen ikke er nåbar fra Internett.
+    format: Delegering ikke funnet hos forelderen.
+  DELEGATION:NO_COMMON_NS_NAMES:
+    args: 2
+    descr: Forelderen lister navnetjenere som barnet ikke er kjent med; se detaljer under avansert. Dette er en ugunstig konfigurasjon.
+    format: Limpost for forelder/barn samsvarer ikke.
+  DELEGATION:NO_NS_IPV4:
+    args: 0
+    format: Ingen navnetjenere på IPv4 funnet.
   DELEGATION:NO_NS_IPV6:
     args: 0
     format: Ingen IPv6 navnetjenere funnet.
+  DELEGATION:NS_AT_CHILD:
+    args: 1
+    descr: Dette er navnetjenerene som er listet hos barnet. Denne lista må inkludere alle navnetjenere listet hos forelderen.
+    format: 'Navnetjenere listet hos barnet: %s'
+  DELEGATION:NS_AT_PARENT:
+    args: 1
+    descr: Dette er navnetjenere listet hos forelderen. Denne lista skal inkludere alle navnetjenere listet hos barnet.
+    format: 'Navnetjenere listet hos forelderen: %s'
   DELEGATION:NS_HISTORY:
     args: 2
     format: 'Tidligere brukte navnetjenere for %s: %s'
@@ -185,10 +212,24 @@ messages:
     args: 3
     descr: En tidligere brukt navnetjener svarer fremdeles autorativt for sonen. Dette kommer mest sannsynlig av foreldet sonedata som fremdeles blir levert av en tjener som ikke er i bruk. Kontakt administratoren for navnetjeneren og be dem fjerne sona fra deres konfigurasjon.
     format: Tidligere brukte navnetjenere for %s (%s) er fremdeles autorative for %s.
+  DELEGATION:TOO_FEW_NS:
+    args: 1
+    descr: Bare én navnetjener ble funnet for sonen. Du burde alltid ha minst to navnetjenere for en sone for å kunne håndtere vilkårlige tilkoblingsproblem.
+    format: For få navnetjenere (%s).
   DELEGATION:TOO_FEW_NS_IPV4:
     args: 1
     descr: Bare én IPv4-navnetjener var funnet for sonen. Du burde alltid ha minst to IPv4-navnetjenere for en gitt sone for å kunne håndtere midlertidige tilkoblingsproblemer.
     format: For få IPv4 navnetjenere (%s).
+  DELEGATION:TOO_FEW_NS_IPV6:
+    args: 1
+    descr: Bare én IPv6-navnetjener ble funnet for sonen. Du burde alltid ha minst to IPv6-navnetjenere for en sone for å kunne håndtere vilkårlige tilkoblingsproblem.
+    format: For få IPv6 navnetjenere (%s).
+  DNS:ADDRESS_BLACKLISTED:
+    args: 4
+    format: Navnetjener %s er svartlistet.
+  DNS:ADDRESS_BLACKLIST_ADD:
+    args: 4
+    format: Svartlister navnetjener %s.
   DNS:ANSWER_DUMP:
     args: 1
     format: 'DNS-forespørsel returnerte: %s'
@@ -198,21 +239,51 @@ messages:
   DNS:DNSSEC_DESIRED:
     args: 0
     format: DNS-resolver DNSSEC er ønsket.
+  DNS:DNSSEC_DISABLED:
+    args: 0
+    format: DNS-oppslag DNSSEC er slått av.
+  DNS:EXPLICIT_RESPONSE:
+    args: 1
+    format: 'Respons fra navnetjener: %s.'
   DNS:FAKE_PACKET:
     args: 3
     format: Lager falsk responspakke i sone %s for %s/%s.
   DNS:FIND_ADDRESSES:
     args: 2
     format: Fant adresser av %s/%s.
+  DNS:FIND_ADDRESSES_RESULT:
+    args: 3
+    format: 'Adresser for %s/%s: %s'
   DNS:FIND_MX_BEGIN:
     args: 1
     format: Slår opp mailutveksler for %s
+  DNS:FIND_MX_RESULT:
+    args: 2
+    format: 'Fant mailutveksler for %s: %s'
+  DNS:FIND_PARENT:
+    args: 2
+    format: Finn forelder av %s/%s.
+  DNS:FIND_PARENT_BEGIN:
+    args: 2
+    format: Prøver å finne forelder til %s/%s
   DNS:FIND_PARENT_DOMAIN:
     args: 1
     format: Bruker %s som en start for å spore foreldre.
+  DNS:FIND_PARENT_RESULT:
+    args: 3
+    format: Slo opp %s som forelder av %s/%s.
   DNS:FIND_PARENT_TRY:
     args: 1
     format: Sjekker %s som foreldredomene.
+  DNS:FIND_PARENT_UPPER:
+    args: 1
+    format: Forelder kan være %s.
+  DNS:GET_NS_AT_CHILD:
+    args: 2
+    format: DNS-oppslag av NS for %s/%s hos barnet.
+  DNS:GET_NS_AT_PARENT:
+    args: 2
+    format: DNS-forespørsel for NS av %s/%s hos forelderen.
   DNS:INITIALIZING_NAMESERVERS:
     args: 2
     format: Initialiserer navnetjenerene for %s/%s.
@@ -226,6 +297,9 @@ messages:
   DNS:NAMESERVER_FOUND:
     args: 4
     format: 'Fant navnetjener for %s/%s: %s (%s)'
+  DNS:NOT_AUTH:
+    args: 4
+    format: Navnetjeneren %s er ikke autorativ for %s/%s/%s.
   DNS:NO_ANSWER:
     args: 4
     descr: ~
@@ -242,30 +316,111 @@ messages:
     args: 2
     descr: DNSCheck klarte ikke å finne forelderen til sonen.
     format: Klarte ikke å finne foreldre av %s/%s.
+  DNS:NO_PARENT_NS:
+    args: 3
+    descr: ~
+    format: Klarte ikke å finne navnetjenere for %s (forelder til %s/%s)
+  DNS:NXDOMAIN:
+    args: 2
+    descr: ~
+    format: Domenet %s/%s eksisterer ikke.
+  DNS:PARENT_OF:
+    args: 3
+    format: Fant %s som forelder av %s/%s.
+  DNS:PARENT_RESPONSE:
+    args: 1
+    format: 'DNS-respons fra forelder: %s'
+  DNS:QUERY_CHILD:
+    args: 4
+    format: Sender forespørsel til hver navnetjener %s for %s/%s/%s.
+  DNS:QUERY_CHILD_NOCACHE:
+    args: 4
+    format: Slå opp navnetjenere (uten cache) for %s om %s/%s/%s.
+  DNS:QUERY_EXPLICIT:
+    args: 4
+    descr: ~
+    format: Spør %s for %s/%s/%s.
+  DNS:QUERY_PARENT:
+    args: 4
+    format: Slår opp forelder til %s for %s/%s/%s
+  DNS:QUERY_PARENT_NOCACHE:
+    args: 4
+    format: Spør forelder (uten cache) av %s for %s/%s/%s.
+  DNS:QUERY_RESOLVER:
+    args: 3
+    format: DNS-oppslag for %s/%s/%s.
+  DNS:QUERY_TIMEOUT:
+    args: 4
+    descr: ~
+    format: Navnetjeneren %s brukte for lang tid på å svare på forespørselen for %s/%s/%s.
   DNS:RECURSION_DESIRED:
     args: 0
     format: DNS-resolver rekursjon er ønsket.
   DNS:RECURSION_DISABLED:
     args: 0
     format: DNS-resolver rekursjon er slått av.
+  DNS:RESOLVER_QUERY_TIMEOUT:
+    args: 3
+    descr: ~
+    format: DNS-resolveren tok for lang tid under forespørsel for %s/%s/%s.
   DNS:RESOLVER_RESPONSE:
     args: 1
     format: 'DNS respons fra resolveren: %s'
+  DNS:SETUP_RESOLVER:
+    args: 0
+    format: DNS-resolver ble satt opp.
+  DNS:SET_BUFSIZE:
+    args: 1
+    format: EDNS-bufferstørrelsen satt til %s.
   DNS:SOA_SERVFAIL:
     args: 1
     format: DNS SERVFAIL da det ble spurt etter %s for SOA
+  DNS:TRANSPORT_TCP:
+    args: 0
+    format: Transport for DNS-resolver satt til TCP.
   DNS:TRANSPORT_UDP:
     args: 0
     format: Transport for DNS-resolver satt til UDP.
+  DNS:UNQUERIBLE_ADDRESS:
+    args: 1
+    format: Klarer ikke å sende forespørsler til %s.
+  DNSSEC:ADDITIONAL_PROCESSING_BROKEN:
+    args: 2
+    descr: Ingen DNSSEC-signaturer var inkludert i svarene fra navnetjeneren. Dette skyldes feilkonfigurering hos navnetjeneren.
+    format: 'DNSSEC for tilleggsprosessering er ødelagt for %s (tjener: %s).'
+  DNSSEC:ALGORITHM_OK:
+    args: 1
+    format: Algoritmenummer %s er OK.
   DNSSEC:ALGORITHM_PRIVATE:
     args: 1
     format: Algoritme nummer %s er privat.
+  DNSSEC:ALGORITHM_RESERVED:
+    args: 1
+    format: Algoritme-nummer %s er reservert.
+  DNSSEC:ALGORITHM_UNASSIGNED:
+    args: 1
+    format: Algoritme nummer %s er ikke tilordnet.
+  DNSSEC:BEGIN:
+    args: 1
+    format: Starter testing av DNSSEC for %s.
   DNSSEC:CHECKING_CHILD:
     args: 1
     format: Sjekker DNSSEC hos barnet (%s).
   DNSSEC:CHECKING_DNSKEY_AT_CHILD:
     args: 1
     format: Sjekker DNSKEY-innslag for %s hos barnet.
+  DNSSEC:CHECKING_DS_AT_PARENT:
+    args: 1
+    format: Sjekker DS-innslag for %s hos forelder.
+  DNSSEC:CHECKING_PARENT:
+    args: 1
+    format: Sjekker DNSSEC hos forelderen til %s.
+  DNSSEC:CHILD_CHECKED:
+    args: 1
+    format: Sjekking av DNSSEC hos barnet %s er ferdig.
+  DNSSEC:CHILD_CHECK_ABORTED:
+    args: 1
+    format: Avbrøt sjekker for DNSSEC hos barnet for %s.
   DNSSEC:CONSISTENT_EXTRA_PROCESSING:
     args: 1
     format: Tjenere for %s har konsistent extra prosesseringsstatus.
@@ -278,13 +433,33 @@ messages:
   DNSSEC:DNSKEY_ALGORITHM:
     args: 4
     format: '%s sin nøkkel med tag %s bruker algoritme nummer %s (%s).'
+  DNSSEC:DNSKEY_ALGORITHM_NOT_RECOMMENDED:
+    args: 3
+    descr: 'Det ble funnet en DNSKEY som bruker en algoritme som ikke er anbefalt - uanbefalte algoritmer bør ikke brukes med mindre det finnes en veldig god grunn for å bruke dem.'
+    format: 'DNSKEY %s (tag %s) bruker en algoritme som ikke er anbefalt: %s'
+  DNSSEC:DNSKEY_FOUND:
+    args: 1
+    descr: 'Et DNSKEY RRset ble funnet hos barnet, noe som indikerer at barnet bruker DNSSEC.'
+    format: Fant DNSKEY-oppslag for %s hos barnet.
   DNSSEC:DNSKEY_MANDATORY_FOUND:
     args: 1
     format: Minst én obligatorisk algoritme funnet for DNSKEY %s.
+  DNSSEC:DNSKEY_MANDATORY_NOT_FOUND:
+    args: 1
+    descr: Minst en DNSKEY må være av type RSA/SHA1.
+    format: Ingen obligatorisk algoritme funnet for DNSKEY %s.
   DNSSEC:DNSKEY_NOT_FOUND:
     args: 1
     descr: 'Et DNSKET RRset ble ikke funnet hos barnet, noe som indikerer at barnet mest sannsynlig ikke bruker DNSSEC.'
     format: Fant ikke DNSKEY-innslag for %s hos barnet.
+  DNSSEC:DNSKEY_NO_VALID_SIGNATURES:
+    args: 1
+    descr: 'Det ble ikke funnet noen gyldige signaturer for DNSKEY RRset for sonen - sjekk at sonen er signert med en gyldig og publisert nøkkel.'
+    format: For få gyldige signaturer funnet for %s.
+  DNSSEC:DNSKEY_SEP:
+    args: 2
+    descr: Et sikkert inngagspunkt (SEP) blir brukt som en del av tillitskjeden fra forelderen til barnet.
+    format: DNSKEY %s (tag %s) er markert som et sikkert inngangspunkt (SEP).
   DNSSEC:DNSKEY_SIGNATURE_OK:
     args: 2
     format: Fant RRSIG(DNSKEY %s) opprettet av publisert nøkkel (tag %s).
@@ -292,12 +467,24 @@ messages:
     args: 2
     descr: DNSSEC-signatuerer laget av upubliserte nøkler kan ikke bli validert av validerende resolvere. Alle nøklene brukt til signering av data må være publisert.
     format: Fant RRSIG(DNSKEY %s) laget av en upublisert nøkkel (tag %s).
+  DNSSEC:DNSKEY_SKIP_PROTOCOL:
+    args: 3
+    descr: DNSKEY må ha en protokollverdi på DNSSEC (3).
+    format: DNSKEY %s (tag %s) er ikke en DNSSEC-nøkkel (protokoll=%s).
+  DNSSEC:DNSKEY_SKIP_TYPE:
+    args: 2
+    descr: DNSKEY må være en sonenøkkel.
+    format: DNSKEY %s (tag %s) er ikke en sonenøkkel.
   DNSSEC:DNSKEY_VALID_SIGNATURES:
     args: 1
     format: Nok gyldige signaturer funnet for %s.
   DNSSEC:DS_ALGORITHM:
     args: 4
     format: "%s's nøkkel med tag %s bruker algoritme nummer %s (%s)."
+  DNSSEC:DS_FOUND:
+    args: 1
+    descr: 'Et SD (delegation signer) RRset ble funnet hos forelderen. Dette indikerer en sikker delegering, altså må barnet bli signert.'
+    format: Fant DS-innslag for %s hos forelderen.
   DNSSEC:DS_KEYREF_INVALID:
     args: 2
     descr: 'DS RRset må referere til en gyldig DNSKEY hos barnet, ellers vil tillitskjeden mellom forelder og barn bli brutt, og den validerende resolveren vil ikke klare å validere svar fra barnet.'
@@ -316,24 +503,76 @@ messages:
     args: 2
     descr: 'DS RRset refererer til en nøkkel (DNSKEY) hos barnet, men nøkkelen er ikke merket som et sikkert inngangspunkt.'
     format: 'Foreldre DS(%s) refererer ikke til et sikkert inngangspunkt (SEP) hos barnet: %s'
+  DNSSEC:DS_TO_SEP:
+    args: 2
+    format: 'Forelder DS(%s) refererer til et sikkert innfallspunkt (SEP) hos barnet: %s'
   DNSSEC:END:
     args: 1
     format: Ferdig med å teste DNSSEC for %s.
+  DNSSEC:EXTRA_PROCESSING:
+    args: 1
+    format: Navnetjeneren %s gjør DNSSEC med tilleggsprosessering.
+  DNSSEC:INCONSISTENT_EXTRA_PROCESSING:
+    args: 1
+    format: Tjenerene for %s er ikke enige om ekstra handtering for DNSSEC.
+  DNSSEC:INCONSISTENT_SECURITY:
+    args: 1
+    descr: 'Forelderen har en sikker delegering til barnet (indikert av DS RRset hos forelderen), men barnet har ingen DNSKEY-innslag. Dette kan komme av en tidligere signert sone, som ble usignert uten å be forelderen fjerne den sikre delegeringa.'
+    format: 'Inkonsistent sikkerhet for %s - DS funnet hos forelder, men ingen DNSKEY funnet hos barnet.'
+  DNSSEC:MISSING_DS:
+    args: 1
+    descr: 'Det ser ut til at barnet bruker DNSSEC, men forelderen har ingen sikker delegering. Tillitskjeden mellom forelder og barn er brutt, og validerende oppslag vil ikke klare å validere svar fra barnet.'
+    format: 'Brutt tillitskjede for %s - DNSKEY funnet hos barn, men ingen DS ble funnet hos forelder.'
   DNSSEC:NO_DS_FOUND:
     args: 1
     descr: 'En DS (delegation signer) RRSet ble ikke funnet hos forelderen. Dette indikerer en usikker delegering, som kan medføre at barnet ikke trenger å bli signert.'
     format: Fant ikke DS-innslag for %s hos forelderen.
+  DNSSEC:NO_EXTRA_PROCESSING:
+    args: 1
+    format: Navnetjeneren %s gjør ikke ekstra håndtering for DNSSEC.
   DNSSEC:NO_SIGNATURES:
     args: 1
     descr: Under forespørsel til sonen ble det ikke funnet noen DNSSEC-signaturer. Kanskje sonen ikke er signert?
     format: Ingen signaturer funnet for %s.
+  DNSSEC:NO_VALID_DS:
+    args: 1
+    format: 'Sonen %s har publisert DS-innslag, men ingen av de fungerer.'
+  DNSSEC:PARENT_CHECKED:
+    args: 1
+    format: Sjekking av DNSSEC has forelderen %s er ferdig.
+  DNSSEC:PARENT_DS:
+    args: 2
+    format: 'Fant DS(%s) hos forelderen: %s'
+  DNSSEC:RRSIG_EXPIRED:
+    args: 1
+    descr: Utgåtte signaturer blir ignorerte av validerende resolvere.
+    format: 'DNSSEC-signatur er utgått: %s'
   DNSSEC:RRSIG_EXPIRES_AT:
     args: 1
     format: 'DNSSEC-signatur utgår på: %s'
+  DNSSEC:RRSIG_FAILS_VERIFY:
+    args: 2
+    format: 'DNSSEC-signatur %s klarte ikke å validere RR-settet: %s'
   DNSSEC:RRSIG_NOT_YET_VALID:
     args: 1
     descr: Signaturer med en startdato satt fram i tid vil bli ignorert av validerende resolvere.
     format: 'DNSSEC-signatur er ikke gyldig ennå: %s'
+  DNSSEC:RRSIG_VALID:
+    args: 1
+    format: 'DNSSEC-signaturen er gyldig: %s'
+  DNSSEC:RRSIG_VERIFIES:
+    args: 1
+    format: DNSSEC-signaturen %s stemmer med innholdet.
+  DNSSEC:SKIPPED_NO_KEYS:
+    args: 1
+    format: 'Ingen DNSKEY ble funnet hos barnet, resten av testene ble hoppet over.'
+  DNSSEC:SOA_NO_VALID_SIGNATURES:
+    args: 1
+    descr: 'Det ble ikke funnet noen gyldige signaturer for SOA RRSet for sonen - sjekk at sonen er signert med en gyldig og publisert nøkkel.'
+    format: Ikke nok gyldige signaturer over SOA RRset funnet for %s.
+  DNSSEC:SOA_SIGNATURE_OK:
+    args: 2
+    format: RRSIG(SOA %s) laget av DNSKEY (tag %s) OK.
   DNSSEC:SOA_SIGNER_UNPUBLISHED:
     args: 2
     descr: DNSSEC-signaturen laget av upubliserte nøkler kan ikke bli validerte av validerende resolvere. Alle nøkler brukt til signering av data må være publiserte.
@@ -341,9 +580,15 @@ messages:
   DNSSEC:SOA_VALID_SIGNATURES:
     args: 1
     format: Nok gyldige signaturer over SOA RRset funnet for %s.
+  ENGINE:CRASH:
+    args: 0
+    format: DNSCheck-nissen kræsjet.
   FAKEGLUE:BROKEN_INFO:
     args: 2
     format: IP-adressa %s (gitt for navnetjener %s) er ikke gyldig.
+  FAKEGLUE:MALFORMED_DS:
+    args: 1
+    format: 'DS-innslaget kunne ikke bli parset: %s'
   FAKEGLUE:NO_ADDRESS:
     args: 1
     format: Navnetjeneren %s har ingen A eller AAAA-adresseinnslag.
@@ -357,16 +602,46 @@ messages:
   HOST:END:
     args: 1
     format: Ferdig med testing av tjener %s.
+  HOST:ILLEGAL_NAME:
+    args: 2
+    descr: 'Vertsnavnet er ikke syntaktisk korrekt ifølge RFC 952. En vanlig feil er å starte vertsnavnet med noe annet enn bokstaver (a-z), eller ved bruk av ugyldige bokstaver (bare a-z, 0-9 og - er gyldig).'
+    format: Vertsnavn %s er ugyldig (syntaksfeil på %)
+  HOST:NOT_FOUND:
+    args: 1
+    descr: Ingen IPv4 eller IPv6-adresser ble funnet for vertsnavnet.
+    format: Ingen adresser funnet for %s.
+  MAIL:ADDRESS_SYNTAX:
+    args: 1
+    format: '%s er ikke en gyldig epostadresse.'
+  MAIL:ALL_MX_IN_ZONE:
+    args: 2
+    format: Alle eposttjenerene for %s er i sonen %s.
+  MAIL:BEGIN:
+    args: 1
+    format: Starter testing av email-adresse %s.
   MAIL:DELIVERY_IPV4_NOT_OK:
     args: 1
     format: Levering over IPv4 til %s kunne ikke gjennomføres.
+  MAIL:DELIVERY_IPV4_OK:
+    args: 1
+    format: Levering over IPv4 til %s OK.
   MAIL:DELIVERY_IPV6_NOT_OK:
     args: 1
     format: Kunne ikke levere over IPv& til %s.
+  MAIL:DELIVERY_IPV6_OK:
+    args: 1
+    format: Levering over IPv6 til %s OK.
   MAIL:DOMAIN_NOT_FOUND:
     args: 1
     descr: Ingen mailutveksler ble funnet for domenet. Dette gjør det umulig å levere email til mottakere innenfor domenet.
     format: Ingen mailutveksler funnet for domene %s.
+  MAIL:END:
+    args: 1
+    format: Ferdig med å teste epostadresse %s.
+  MAIL:HOST_ERROR:
+    args: 1
+    descr: Vertsnavnet for epostutveksleren er ugyldig. En vanlig feil er å peke mailutveksleren på et alias (CNAME) eller direkte på en IP-adresse.
+    format: Ugyldig vertsnavn for mailutveksler %s.
   MAIL:IPV6_ONLY:
     args: 1
     descr: 'Mailutvekslingstjenesten er kun nåbar på IPv6, noe som gjør det umulig for mange verter på Internett å levere mail til den. Om flere MX-innslag eksisterer og minst en av de er nåbar på IPv4 kan denne meldingen ignoreres.'
@@ -394,6 +669,9 @@ messages:
   NAMESERVER:CHECKING_AUTH:
     args: 2
     format: Sjekker autoritet for %s (%s).
+  NAMESERVER:CHECKING_LEGACY_ID:
+    args: 2
+    format: Sjekker for legacy navnetjener-ID av %s (%s).
   NAMESERVER:CHECKING_NSID:
     args: 2
     format: Sjekker for navnetjenerid av %s (%s).
@@ -407,10 +685,27 @@ messages:
     args: 1
     descr: 'Det spesifiserte tjenernavnet er ikke gyldig, eller navnet peker på en ugyldig IP-adresse, f.eks. en privat eller reservert IP-adresse.'
     format: Tjenernavn eller adresse-feil for %s.
+  NAMESERVER:LEGACY_ID:
+    args: 4
+    format: 'Legacy navnetjener-ID for %s (%s): %s = %s'
+  NAMESERVER:LEGACY_ID_SKIP:
+    args: 2
+    format: Legacy NSID ikke sjekket på navnetjeneren %s (%s).
+  NAMESERVER:NOT_AUTH:
+    args: 3
+    descr: Navnetjeneren svarer ikke autorativt på forespørsler for det aktuelle domenet. Dette skyldes nok feilkonfigurering hvor navnetjeneren ikke er satt opp til å svare for domenet.
+    format: Navnetjeneren %s (%s) er ikke autorativ for %s.
+  NAMESERVER:NOT_RECURSIVE:
+    args: 2
+    format: Navnetjeneren %s (%s) er ikke rekursiv.
   NAMESERVER:NO_TCP:
     args: 3
     descr: 'Navnetjeneren feilet på å svare på oppslag sendt over TCP. Dette kommer nok av at navnetjeneren ikke er satt opp korrekt, eller for streng regelsett i brannmuren tjeneren står bak. Det er en utbredt misforståelse at DNS ikke trenger TCP med mindre de tilbyr soneoverførsler - kanskje navnetjeneradministratoren ikke er oppmerksom på at TCP vanligvis er et krav.'
     format: Navnetjeneren %s (%s) svarer ikke på oppslag over TCP.
+  NAMESERVER:NO_UDP:
+    args: 3
+    descr: 'Navnetjeneren klarte ikke å svare på oppslag sendt over UDP. Dette skyldes nok at navnetjeneren ikke er korrekt satt opp, eller at brannmuren filtrerer vekk trafikken.'
+    format: Navntjeneren %s (%s) svarer ikke på oppslag over UDP.
   NAMESERVER:NSID:
     args: 3
     format: 'Navnetjener-ID for %s (%s): %s'
@@ -424,18 +719,30 @@ messages:
   NAMESERVER:SKIPPED_IPV4:
     args: 1
     format: 'IPv4 er slått av - tester ikke navnetjener hos %s'
+  NAMESERVER:SKIPPED_IPV6:
+    args: 1
+    format: 'IPv6 er slått av - vil ikke teste navnetjener på %s'
   NAMESERVER:TCP_OK:
     args: 3
     format: Navnetjeneren %s (%s) svarer på TCP.
   NAMESERVER:TESTING_AXFR:
     args: 2
     format: Tester soneoverførsel for navnetjener %s (%s).
+  NAMESERVER:TESTING_TCP:
+    args: 2
+    format: Tester TCP-forespørsler mot navnetjener %s på adresse %.
   NAMESERVER:TESTING_UDP:
     args: 2
     format: Tester UDP-spørringer mot navnetjener %s på adresse %s.
+  NAMESERVER:UDP_OK:
+    args: 3
+    format: Navnetjener %s (%s) svarer på oppslag over UDP.
   NSTIME:AVERAGE:
     args: 6
     format: 'Sonen %s, tjener %s: %s kall, %sms snitt, %sms min, %sms max, %sms stddev.'
+  SMTP:BANNER:
+    args: 2
+    format: 'SMTP-banner: %s'
   SMTP:BEGIN:
     args: 3
     format: Starter testing av mailtjener hos %s (%s) med %s.
@@ -453,6 +760,10 @@ messages:
   SMTP:MAIL_FROM:
     args: 1
     format: Bruker %s som SMTP fra (MAIL_FROM).
+  SMTP:MAIL_FROM_REJECTED:
+    args: 1
+    descr: Eposttjeneren aksepterte ikke avsenderadressa vår. DNSCheck bruker en standard null-sender-adresse som må bli akseptert av mailtjenere.
+    format: Verten aksepterte ikke %s som SMTP-mål.
   SMTP:OK:
     args: 3
     format: SMTP-testing av %s (%s) med %s ble fullført uten feil.
@@ -465,6 +776,16 @@ messages:
   SMTP:RCPT_TO:
     args: 1
     format: Bruker %s som SMTP-mottaker (RCPT_TO).
+  SMTP:RECIPIENT_REJECTED:
+    args: 1
+    descr: Mailtjeneren aksepterte ikke epost til mottaker-adressa. Dette skyldes nok en ukjent adresse.
+    format: Tjeneren aksepterte ikke %s som en STMP-mottaker.
+  SMTP:RSET:
+    args: 0
+    format: Sending av SMTP ble resatt (RSET).
+  SMTP:TIMEOUT:
+    args: 0
+    format: Eposttjeneren ble tidsavbrytt i SMTP-dialog.
   SOA:BEGIN:
     args: 1
     format: Starter testing av SOA-parametre for %s.
@@ -478,10 +799,31 @@ messages:
     args: 3
     descr: Verdien for når SOA utløper definerer hvor lenge en sekundær navnetjener vil vente før den antar at data for en sone er ugyldig (gitt at den ikke når den primære navnetjeneren).
     format: 'Tiden SOA utløper for %s er for kort (%s) - anbefalt >= %s.'
+  SOA:EXPIRE_VS_REFRESH:
+    args: 1
+    descr: Verdien for SOA expire burde være minst 7 ganger verdien for SOA refresh. Dette for å gi sekundære navnetjenere en sjanse til å oppdatere sine kopier av sonen før data blir sett på som utdatert.
+    format: SOA expire for %s er lavere enn refresh.
+  SOA:FOUND:
+    args: 1
+    format: Fant SOA-innslag for %s.
+  SOA:MINIMUM_LARGE:
+    args: 3
+    descr: SOA minimum dikterer hvor lenge resolvere skal cache negative svar. Om verdien er for høg vil negativ caching være for agressiv.
+    format: 'SOA minimum for %s for høg (%s) - anbefalt <= %s.'
+  SOA:MINIMUM_OK:
+    args: 4
+    format: 'SOA minimum for %s OK (%s) - anbefalt mellom %s og %s.'
   SOA:MINIMUM_SMALL:
     args: 3
     descr: 'SOA minimum forteller resolvere hvor lenge de kan cache negative svar. Om verdien er for lav vil ikke negativ caching fungere, og resolverene vil jevnlig sende forespørsler.'
     format: 'SOA minimum for %s er for lav (%s) - anbefalt >= %s.'
+  SOA:MNAME_ERROR:
+    args: 2
+    descr: SOA NMAME er ikke et gyldig vertsnavn.
+    format: Feil ved sjekking av SOA NMAME for %s (%s).
+  SOA:MNAME_IS_AUTH:
+    args: 2
+    format: SOA MNAME for %s (%s) er autorativ.
   SOA:MNAME_IS_CNAME:
     args: 2
     format: SOA MNAME %s peker på et CNAME (%s).
@@ -493,6 +835,10 @@ messages:
     args: 2
     descr: Navnetjeneren listet som SOA NMAME er listet som en navnetjener.
     format: SOA MNAME for %s (%s) er listet som NS.
+  SOA:MNAME_STEALTH:
+    args: 2
+    descr: Navnetjeneren listet som SOA MNAME er ikke listet som navnetjener.
+    format: SOA NMAME for %s (%s) ikke listet som NS.
   SOA:MNAME_VALID:
     args: 2
     format: SOA MNAME for %s er gyldig (%s).
@@ -500,20 +846,43 @@ messages:
     args: 1
     descr: 'Flere SOA-innslag ble funnet under en forespørsel til navnetjenerene. Dette er en alvorlig feil, og kommer av feilkonfigurasjon.'
     format: Opptil flere SOA-innslag funnet for %s.
+  SOA:NOT_FOUND:
+    args: 1
+    descr: 'Ingen SOA-innslag ble funnet under forespørsel til navnetjener. Dette skyldes nok feilkonfigurering hos navnetjeneren - en sone må ha et SOA-innslag.'
+    format: Ingen SOA-innslag funnet for %s.
+  SOA:NS_NOT_FOUND:
+    args: 1
+    descr: 'Ingen navnetjenerinnslag ble funnet for sonen. Dette er en alvorlig feil, og skyldes feilkonfigurasjon.'
+    format: Ingen NS-innslag funndet for %s.
   SOA:REFRESH_OK:
     args: 3
     format: 'SOA oppdateringsintervall for %s OK (%s) - anbefalt >= %s.'
+  SOA:REFRESH_SMALL:
+    args: 3
+    descr: SOA refresh dikterer hvor ofte en sekundær navnetjener skal sjekke den primære navnetjeneren for soneoppdateringer.
+    format: 'SOA refresh for %s er for lavt (%s) - anbefalt >= %s.'
   SOA:RETRY_OK:
     args: 3
     format: 'SOA omprøvingsintervallet for %s OK (%s) - anbefalt >= %s.'
+  SOA:RETRY_SMALL:
+    args: 3
+    descr: Verdien for retry er tiden en sekunder navnetjener vil vente før den kontakter en primær navnetjener igjen (gitt at forrige forsøk feilet). Om verdien er for lav vil sekundærnavnetjeneren prøve for ofte.
+    format: 'SOA retry for %s er for lav (%s) - anbefalt >= %s.'
   SOA:RETRY_VS_REFRESH:
     args: 3
     descr: Oppdateringsintervallet er tida en sekundær navnetjener venter før den kontakter den primære navnetjeneren på nytt (gitt at forrige forsøk feilet). Om oppdateringsintervallet er lavere enn omprøvingsintervallet er den nyttesløs.
     format: SOA oppdateringsintervallet for %s er lavere enn omprøvingsintervallet (%s vs %s).
+  SOA:RNAME_DELIVERABLE:
+    args: 3
+    format: Klarte å levere epost for SOA RNAME av %s (%s) ved bruk av %s.
   SOA:RNAME_SYNTAX:
     args: 2
     descr: 'Mailadressa spesifisert i SOA RNAME er ugyldig. En vanlig feil er å bruke @ i adressefeltet - en adresse som hostmaster@example.com må bli spesifisert som hostmaster.example.com.'
     format: 'Ugyldig SOA RNAME-syntaks for %s: %s'
+  SOA:RNAME_UNDELIVERABLE:
+    args: 3
+    descr: DNSCheck klarte ikke å levere mail til epost-adressa listen som ansvarlig for sonen.
+    format: Kunne ikke levere mail for SOA RNAME av %s (%s) ved bruk av %s.
   SOA:SERIAL_IS_ZERO:
     args: 1
     format: Serienummeret i SOA-innslaget for sonen %s bør ikke være null.
@@ -523,13 +892,27 @@ messages:
   SOA:SKIPPED_IPV6:
     args: 1
     format: 'IPv6 er slått av - vil ikke spørre etter SOA MNAME på %s'
+  SOA:TTL_OK:
+    args: 3
+    format: 'SOA TTL for %s OK (%s) - anbefalt >= %s.'
   SOA:TTL_SMALL:
     args: 3
     descr: 'Dess kortere verdien for SOA TTL er satt, dess oftere vil resolvere spørre etter SOA-innslaget.'
     format: 'SOA TTL for %s er for kort (%s) - anbefalt >= %s.'
+  ZONE:BEGIN:
+    args: 2
+    format: Starter testing av sone %s med versjon %s.
   ZONE:END:
     args: 1
     format: 'Testen ble fullført for sone: %s.'
+  ZONE:FATAL_DELEGATION:
+    args: 1
+    descr: Ingen navntjenere funnet hos forelderen eller barnet. Testingen kan ikke fortsette.
+    format: Fatal feil i delegering for sone %s.
+  ZONE:FATAL_NO_CHILD_NS:
+    args: 1
+    descr: Ingen navnetjenere på nivået til barnet funnet. Testing kan ikke fortsette.
+    format: 'Fatal feil - ingen navnetjenere på nivået til barnet funnet for sonen %s.'
   ZONE:INVALID_NAME:
     args: 1
     format: '%s er ikke et gyldig navn for en sone.'

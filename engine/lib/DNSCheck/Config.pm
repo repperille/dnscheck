@@ -49,9 +49,11 @@ sub new {
     bless $self, $proto;
 
     my %arg = @_;
+
+	my $dir = "/scratch/dnscheck/engine/config/";
     
     my $default_config = _get_with_path(
-        _catfile(dist_dir('DNSCheck'), 'config.yaml')
+        _catfile($dir, 'config.yaml')
     );
     
     if ($arg{'configfile'} and not -r $arg{'configfile'}) {
@@ -60,17 +62,17 @@ sub new {
     
     my $config = _get_with_path(
         $arg{'configfile'},
-        _catfile($arg{'configdir'}, 'config.yaml'),
+        _catfile($dir, 'config.yaml'),
         '/etc/dnscheck/config.yaml',
     );
     
     my $default_policy = _get_with_path(
-        _catfile(dist_dir('DNSCheck'), 'policy.yaml')
+        _catfile($dir, 'policy.yaml')
     );
     
     my $policy = _get_with_path(
         $arg{'policyfile'},
-        _catfile($arg{'policydir'}, 'policy.yaml'),
+        _catfile($dir, 'policy.yaml'),
         '/etc/dnscheck/policy.yaml',
     );
     

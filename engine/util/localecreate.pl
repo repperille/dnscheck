@@ -41,12 +41,15 @@ if(!defined($replica->{messages}) || ref($replica->{messages}) ne "HASH") {
 # Some simpler references
 my $blueprint_msg = $blueprint->{messages};
 my $replica_msg = $replica->{messages};
+my $update_count = 0;
 
 # Some information
 print "From locale '$blueprint->{locale_id}' to '$replica->{locale_id}'\n";
 print "($blueprint->{locale_name} to $replica->{locale_name})\n";
-print "NOTE: To exit temporarily, write 'last'.\n";
-print "Starts to iterate over messages\n\n";
+print "Commands:\n";
+print "	skip: skip current message\n";
+print "	save: saves and exit.\n";
+print "	quit: quit without saving.\n\n";
 
 # Iterate over the 'source', and add non-existing elements
 foreach my $l (keys %{ $blueprint_msg }) {
@@ -61,6 +64,7 @@ foreach my $l (keys %{ $blueprint_msg }) {
 			print "Format: $ref->{format}\n";
 			print "Input: ";
 			chop ($input = <STDIN>);
+			action($input);
 			$ref->{format} = $input;
 		}
 
@@ -69,18 +73,53 @@ foreach my $l (keys %{ $blueprint_msg }) {
 			print "Description: $ref->{descr}\n";
 			print "Input: ";
 			chop ($input = <STDIN>);
+			action($input);
 			$ref->{descr} = $input;
 		}
+		$update_count++;
+		$replica_msg->{$l} = $ref;
+		# Regular flow, continue to next message
+		next;
 
-		# Escape
-		if($input =~ m/last|exit/) {
-			last;
-		} else {
-			$replica_msg->{$l} = $ref;
-		}
+		# Typed save, save to file and redo last message
+		CURR_SAVE:
+		save($to_file, $replica);
+		print "\nSaved current progress. Continue with last message.\n\n";
+		redo;
+
+		# Skipped current message
+		SKIP:
 	}
+
 }
 
-# Write to file
-print "\nDumping YAML to $ARGV[1]";
-DumpFile($to_file, $replica);
+# Save to file
+SAVE:
+print "\n Saving to file: $ARGV[1] (added $update_count message(s)).\n";
+save($to_file, $replica);
+exit;
+
+EXIT:
+print "\n Did not save to file.\n";
+exit;
+
+# Do something based on input
+sub action {
+	my $action = shift;
+	if(!defined($action)) {
+		return;
+	} elsif ($action =~ m/^skip/) {
+		goto SKIP;
+	} elsif ($action =~ m/^save|^w$/) {
+		goto CURR_SAVE;
+	} elsif ($action =~ m/^wq/) {
+		goto SAVE;
+	} elsif ($action =~ m/^quit|^q/) {
+		goto EXIT;
+	}
+}
+# Save to file
+sub save {
+	my ($to_file, $replica) = @_;
+	DumpFile($to_file, $replica);
+}
