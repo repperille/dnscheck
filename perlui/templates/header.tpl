@@ -1,3 +1,6 @@
+[% TRY %]
+  [% INCLUDE header_local.tpl %]
+[% CATCH %]
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,7 +10,6 @@
     <script type="text/javascript" src="js/collapseable.js"></script>
     <script type="text/javascript" src="js/json2.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="shortcut icon" href="http://www.norid.no/favicon.ico" />
   </head>
  <body>
  <h1>Domain tester</h1>
@@ -44,3 +46,4 @@
    </a>
   </div>
  [% END %]
+[% END %]

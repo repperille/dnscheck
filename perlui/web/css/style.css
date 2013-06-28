@@ -6,6 +6,19 @@ body, form {
 .ok {
 	color: #008000;
 }
+.ok a:link {
+        color: white;
+        text-decoration: none;
+}
+.ok a:visited {
+        color: white;
+        text-decoration: none;
+}
+.ok a:hover {
+        color: white;
+        text-decoration: underline;
+}
+
 /* should be hid when loading with js */
 .skipped {
 	color: #505050;
@@ -20,12 +33,51 @@ body, form {
 .warning {
 	color: #FF8C00;
 }
+.warning a:link {
+        color: #FF8C00;
+        text-decoration: none;
+}
+.warning a:visited {
+        color: #FF8C00;
+        text-decoration: none;
+}
+.warning a:hover {
+        color: #FF8C00;
+        text-decoration: underline;
+}
+
 .error {
 	color: red;
 }
+.error a:link {
+        color: red;
+        text-decoration: none;
+}
+.error a:visited {
+        color: red;
+        text-decoration: none;
+}
+.error a:hover {
+        color: red;
+        text-decoration: underline;
+}
+
 .critical {
 	color: red;
 }
+.critical a:link {
+        color: red;
+        text-decoration: none;
+}
+.critical a:visited {
+        color: red;
+        text-decoration: none;
+}
+.critical a:hover {
+        color: red;
+        text-decoration: underline;
+}
+
 /* Some "general" styling  */
 #domain_info {
 	float: left;
@@ -74,6 +126,10 @@ body, form {
 .menu a {
 	text-decoration: none;
 	color: white;
+}
+.menu a:link {
+	color: white;
+	text-decoration: none;
 }
 .menu a:visited {
 	color: white;
@@ -181,9 +237,6 @@ li.collapsibleListClosed{
 	font-size: 12px;
 	text-align: center;
 
-}
-a {
-	font-weight: normal;
 }
 ul, ol {
 	margin-left:1.5em; 

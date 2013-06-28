@@ -10,7 +10,7 @@ a_service_from_se: A service from .SE
 
 test_and_find_errors: Test your DNS-server and find errors
 
-enter_your_domain_name: Enter your domain name in the field above to test the DNS-servers that are used. E.g. "iis.se"
+enter_your_domain_name: Enter your domain name in the field above to test the DNS-servers that are used. E.g. "norid.no"
 
 test_now: Test now
 
@@ -32,7 +32,7 @@ se_tagline: .SE presents DNSCheck v%s to IP %s
 
 domain_doesnt_exist_header: Domain doesn't exist
 
-domain_doesnt_exist_label: The domain you provided doesn't seem to be delegated or was entered incorrectly. You need to enter only the domain name, like \"iis.se\", not the name of a subdomain, like \"dev.iis.se\" or a webserver like \"www.iis.se\".
+domain_doesnt_exist_label: The domain you provided doesn't seem to be delegated or was entered incorrectly. You need to enter only the domain name, like \"norid.no\", not the name of a subdomain, like \"dev.norid.no\" or a webserver like \"www.norid.no\".
 
 loading_header: Loading
 

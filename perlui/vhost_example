@@ -5,7 +5,8 @@
 
 	# Comment out if running mod_perl
 	<IfModule env_module>
-    		SetEnv PERL5LIB "/var/www/perlui/lib"
+		SetEnv PERL5LIB "/var/www/perlui/lib"
+		SetEnv DNSCHECKWEB_ROOT "/var/www/perlui"
 	</IfModule>
 
 	# Uncomment if mod_perl:
