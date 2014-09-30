@@ -26,7 +26,7 @@
 #
 ######################################################################
 
-# This script should look up the A address for the given host and
+# This script should look up the A/AAAA address(es) for the given host and
 # return that as json to the browser.
 #
 use strict;
@@ -41,17 +41,30 @@ my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
 # Params
-my $nameservers = $cgi->param('nameservers');
+my $nameservers = lc($cgi->param('nameservers'));
 
 my @results = ();
 
 # Resolve host names
 if(defined($nameservers)) {
-	# Split by pipe, and traverse each parameter
-	my @ns = split(/\|/, $nameservers);
-	foreach my $ns (@ns) {
-		push @results, $dnscheck->resolve($ns);
+    # Split by pipe, and traverse each parameter
+    my @ns = split(/\|/, $nameservers);
+    foreach my $ns (@ns) {
+	# How many addresses for this nameserver are there in the results
+	my $count = 0;
+	foreach my $res (@results) {
+	    $count++ if $res->{hostname} eq $ns
 	}
+	# First time resolve the IPv4 addresses
+	if ($count eq '0') {
+	    push @results, $dnscheck->resolve_multiple($ns, 'A');
+	}
+	# Then the IPv6 addresses
+	if ($count eq '1') {
+	    push @results, $dnscheck->resolve_multiple($ns, 'AAAA');
+	}
+    }
+
 }
 
 # Encode and return result

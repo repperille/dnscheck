@@ -68,6 +68,20 @@ connectivity: Connectivity
 
 dnssec: DNSSEC
 
+ds_record: DS record
+
+ds_records: DS records
+
+add_ds_record: Add DS record
+
+ds_key_tag: Key tag
+
+ds_algorithm: Algorithm
+
+ds_digest_type: Digest type
+
+ds_digest: Digest
+
 link_to_this_test: Link to this test
 
 domain_test: Domain test
@@ -100,7 +114,11 @@ enter_your_undelegated_domain_name: Enter your undelegated domain name in the fi
 
 what_is_an_undelegated: What is an undelegated domain test?
 
-remove_name_server: Remove name server
+remove_name_server: -
+
+enter_your_unpublished_ds_record: If you have signed your domain using DNSSEC, enter your unpublished DS records below if you want to test your published DNSSEC keys.
+
+remove_ds_record: -
 
 load_error_header: Connection error
 

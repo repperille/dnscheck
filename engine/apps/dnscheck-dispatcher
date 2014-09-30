@@ -228,7 +228,7 @@ sub initial_cleanup {
     my $dbh;
 
     eval { $dbh = $check->dbh; };
-	print "test";
+
     if ($@) {
         slog 'critical', 'Database not available. Exiting.';
         exit(1);

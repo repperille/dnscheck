@@ -184,7 +184,7 @@ sub test_soa_mname {
 
         my $error =
           $parent->dns->address_is_authoritative($address, $soa->name,
-            $soa->class);
+            $soa->class, "SOA");
 
         if ($error == 0) {
             $logger->auto("SOA:MNAME_IS_AUTH", $zone, $soa->mname);

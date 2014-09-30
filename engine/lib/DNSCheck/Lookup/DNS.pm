@@ -834,12 +834,13 @@ sub address_is_authoritative {
     my $address = shift;
     my $qname   = shift;
     my $qclass  = shift;
+    my $qtype   = shift;
 
     my $logger = $self->logger;
     my $errors = 0;
 
     my $packet =
-      $self->query_explicit($qname, $qclass, "SOA", $address, { aaonly => 0 });
+      $self->query_explicit($qname, $qclass, $qtype, $address, { aaonly => 0 });
 
     goto DONE unless ($packet);
 
@@ -1167,7 +1168,7 @@ Send a query to the default resolver(s). This will be a L<DNSCheck::Lookup::Reso
 
 =item my @addresses = $dns->find_addresses(I<qname>, I<qclass>);
 
-=item my $bool = $dns->address_is_authoritative(I<address>, I<qname>, I<qtype>);
+=item my $bool = $dns->address_is_authoritative(I<address>, I<qname>, I<qclass>, I<qtype>);
 
 =item my $bool = $dns->address_is_recursive(I<address>, I<qclass>);
 

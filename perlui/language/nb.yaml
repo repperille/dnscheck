@@ -68,6 +68,20 @@ connectivity: Tilkobling
 
 dnssec: DNSSEC
 
+ds_record: DS post
+
+ds_records: DS poster
+
+add_ds_record: Legg til ny DS post
+
+ds_key_tag: Key tag
+
+ds_algorithm: Algoritme
+
+ds_digest_type: Digest type
+
+ds_digest: Digest
+
 link_to_this_test: Lenke til testresultatet
 
 domain_test: Domenetest
@@ -96,11 +110,15 @@ note: Noter
 
 this_test_on_undelegated: Testen ble utført på et udelegert domene
 
-enter_your_undelegated_domain_name: Angi ditt udelegerte domenenavn ovenfor, i tillegg til navn og IP-adresser til navnetenerene du vil teste nedenfor.
+enter_your_undelegated_domain_name: Angi ditt udelegerte domenenavn ovenfor, i tillegg til navn og IP-adresser til navnetjenerene du vil teste nedenfor.
 
 what_is_an_undelegated: Hva er en udelgert domenetest?
 
-remove_name_server: Fjern navnetener
+remove_name_server: -
+
+enter_your_unpublished_ds_record: Hvis du har signert domenet mha. DNSSEC, angi dine upubliserte DS-poster nedenfor for å teste mot dine publiserte DNSSEC nøkkler.
+
+remove_ds_record: -
 
 load_error_header: Avslutningsproblem
 

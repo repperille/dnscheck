@@ -212,31 +212,79 @@ sub html_headers {
 		return CGI::header(-type=>'text/html', -expires=>'now', -charset=>'UTF-8');
 	}
 }
+
 sub json_headers {
 	return CGI::header(-type=>'application/json', -expires=>'now', -charset=>'UTF-8');
 }
+
 sub plain_headers {
 	return CGI::header(-type=>'text/plain', -expires=>'now', -charset=>'UTF-8');
 }
 
 # Resolves the given hostname to an A address
 sub resolve {
-	my ($self, $ns) = @_;
+    my ($self, $ns) = @_;
 
-	my $result = {
-		hostname => $ns
-	};
-	my $res = Net::DNS::Resolver->new();
-	my $query = $res->search($ns);
+    my $result = {
+	hostname => $ns
+    };
+    my $res = Net::DNS::Resolver->new();
+    my $query = $res->search($ns);
 
-	if ($query) {
+    if ($query) {
     	foreach my $rr ($query->answer) {
-    		next unless $rr->type eq "A";
-			$result->{addr} = $rr->address;
-    	}
+	    next unless $rr->type eq "A";
+	    $result->{addr} = $rr->address;
 	}
+    }
 
-	return $result;
+    return $result;
+}
+
+# Resolves the given hostname to an AAAA address
+sub resolve6 {
+    my ($self, $ns) = @_;
+
+    my $result = {
+	hostname => $ns
+    };
+    my $res = Net::DNS::Resolver->new();
+    my $query = $res->search($ns, 'AAAA');
+
+    if ($query) {
+    	foreach my $rr ($query->answer) {
+	    next unless $rr->type eq "AAAA";
+	    $result->{addr} = $rr->address;
+	}
+    }
+
+    return $result;
+}
+
+# Resolves the given hostname to an array of result items
+sub resolve_multiple {
+    my ($self, $ns, $type) = @_;
+
+    my @results = ();
+
+    my $res = Net::DNS::Resolver->new();
+    my $query = $res->search($ns, $type);
+
+    if ($query) {
+    	foreach my $rr ($query->answer) {
+	    next unless $rr->type eq $type;
+	    my $address = $rr->address;
+	    my $result = {
+		hostname => $ns,
+		addr     => $rr->address,
+	    };
+	    push @results, $result;
+	}
+    }
+
+    my @sorted = sort {$a->{addr} cmp $b->{addr}} @results;
+
+    return wantarray ? @sorted : "@sorted";
 }
 
 # Will store last visited/result in session, and retrieve
@@ -315,7 +363,7 @@ sub create_hash {
 }
 
 # Encode or decodes a literal from or to an IDNA.
-sub	idna_transform  {
+sub idna_transform  {
 	my ($self, $domain, $encode) = @_;
 
 	# When we encode the literal, we must first properly decode from

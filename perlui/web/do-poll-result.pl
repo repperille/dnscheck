@@ -59,9 +59,9 @@ my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
 # Fetch parameters
-my $domain = $cgi->param("domain");
+my $domain = lc($cgi->param("domain"));
+my $source_data = lc($cgi->param("parameters"));
 
-my $source_data = $cgi->param("parameters");
 my $js = $cgi->param("js");
 my $private = $cgi->param("private");
 

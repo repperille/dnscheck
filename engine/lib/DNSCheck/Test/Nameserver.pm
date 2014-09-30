@@ -272,7 +272,7 @@ sub ns_authoritative {
     $self->logger->auto("NAMESERVER:CHECKING_AUTH", $nameserver, $address);
     if (
         $self->parent->dns->address_is_authoritative(
-            $address, $zone, $self->qclass
+            $address, $zone, $self->qclass, "NS"
         )
       )
     {

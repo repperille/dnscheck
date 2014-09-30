@@ -179,6 +179,17 @@ body, form {
 	color: white;
 }
 
+#ds_records {
+	background: #8e9acc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 1px;
+	color: white;
+}
+
 #result_list ul {
 	color: black;
 	padding-left: 10px;
@@ -202,6 +213,10 @@ body, form {
 }
 
 #nameservers li {
+	list-style: none;
+}
+
+#ds_records li {
 	list-style: none;
 }
 
@@ -241,4 +256,17 @@ li.collapsibleListClosed{
 ul, ol {
 	margin-left:1.5em; 
 	padding-left:0px;
+}
+
+.key_tag {
+    width: 50px;
+}
+.algorithm {
+    width: 20px;
+}
+.digest_type {
+    width: 20px;
+}
+.digest {
+    width: 400px;
 }

@@ -32,6 +32,7 @@ function load() {
 	}
 	loading_bar = setTimeout(load, 200);
 }
+
 // Builds a new AJAX request for this browser
 function initAjax() {
 	if (window.XMLHttpRequest)
@@ -42,6 +43,7 @@ function initAjax() {
 		return new ActiveXObject("Microsoft.XMLHTTP");
 	}
 }
+
 // This will fire off polling
 function run_dnscheck() {
 	interval = setInterval(pollResult, retry_interval);
@@ -97,7 +99,7 @@ function pollResult() {
 		}
   	}
 	// Set some parameters from the DOM
-	var domain = document.getElementById('domain').value;
+	var domain = document.getElementById('domain').value.trim();
 	var type = document.getElementById('type').value;
 
 	// Pass parameters given type of test
@@ -131,19 +133,38 @@ function resolve(params) {
 	xmlhttp.open("GET","do-host-resolve.pl?nameservers=" + params, true);
 	xmlhttp.send();
 }
+
 // Returns the field values, to be queried
 function source_params() {
-	var el = document.getElementById("nameservers").getElementsByTagName("*");
-	var params = "";
-	// Check the fields
-	for (var i=0; i<el.length; i++) {
-		if(el[i].className == "host") {
-			params += el[i].value;
-		} else if(el[i].className == "IP" && el[i].value) {
-			params += "/" + el[i].value + " ";
-		}
+    var el = document.getElementById("nameservers").getElementsByTagName("*");
+    var params = "";
+    // Check the fields
+    for (var i=0; i<el.length; i++) {
+	if(el[i].className == "host") {
+	    params += el[i].value.trim();
+	} else if(el[i].className == "IP" && el[i].value) {
+	    params += "/" + el[i].value + " ";
 	}
-	return params;
+    }
+
+    // Get the DS records and add them to params
+    el = document.getElementById("ds_records").getElementsByTagName("*");
+    var domain = document.getElementById('domain').value.trim();
+    for (var i=0; i<el.length; i++) {
+	if(el[i].className == "key_tag" && el[i].value) {
+	    params += "ds:/" + domain + "_DS_" + el[i].value.trim();
+	} else if(el[i].className == "algorithm" && el[i].value) {
+	    params += "_" + el[i].value.trim();
+	} else if(el[i].className == "algorithm" && el[i].value) {
+	    params += "_" + el[i].value.trim();
+	} else if(el[i].className == "digest_type" && el[i].value) {
+	    params += "_" + el[i].value.trim();
+	} else if(el[i].className == "digest" && el[i].value) {
+	    params += "_" + el[i].value.trim().replace(" ", "") + " ";
+	}
+    }
+
+    return params;
 }
 
 // Returns the list of nameservers from the "HOST" field
@@ -153,7 +174,7 @@ function get_nameservers() {
 	// Check the fields
 	for (var i=0; i<el.length; i++) {
 		if(el[i].className == "host") {
-			params += el[i].value + "|";
+			params += el[i].value.trim() + "|";
 		}
 	}
 	return params;
@@ -161,25 +182,77 @@ function get_nameservers() {
 
 // Writes the resolved IP addresses to DOM
 function print_resolvers(json) {
-	var el = document.getElementById("nameservers").getElementsByTagName("*");
-	for (var i=0; i < el.length; i++) {
-		if(el[i].className == "IP") {
-			var tuple = json.shift();
-			if(tuple != undefined && tuple.addr != undefined) {
-				el[i].value = tuple.addr;
-			} else {
-				el[i].value = '';
-			}
+    var el = document.getElementById("nameservers").getElementsByTagName("*");
+    for (var i=0; i < el.length; i++) {
+	if(el[i].nodeName == "LI") {
+	    var tuple = json.shift();
+	    var subel = el[i].getElementsByTagName("*");
+	    for (var ii=0; ii < subel.length; ii++) {
+		if(subel[ii].className == "host") {
+		    if(tuple != undefined && tuple.hostname != undefined) {
+			subel[ii].value = tuple.hostname;
+		    } else {
+			//subel[ii].value = '';
+		    }
 		}
+		if(subel[ii].className == "IP") {
+		    if(tuple != undefined && tuple.addr != undefined) {
+			subel[ii].value = tuple.addr;
+		    } else {
+			subel[ii].value = '';
+		    }
+		}
+	    }
 	}
+    }
 }
+
 // Adds a new nameserver item to the initial list
 function add_nameserver() {
-	var ul = document.getElementById("nameservers");
-	var new_li = document.createElement('li');
-	new_li.innerHTML = lbl_host + ": <input type=\"text\" class=\"host\" onChange=\"return resolve(get_nameservers());\"/> " + lbl_ip + ": <input type=\"text\" class=\"IP\" /></li>";
-	ul.appendChild(new_li);
+    var ul = document.getElementById("nameservers");
+    var children = ul.childNodes.length;
+    //alert(children);
+    var new_li = document.createElement('li');
+    var remove = '<input type="button" value="' + lbl_remove_host + '" onClick="remove_nameserver(\'host'+children+'\')" />';
+
+    new_li.innerHTML = lbl_host + ': <input type="text" class="host" name="host' + children + '" onChange="return resolve(get_nameservers());"/> ' + lbl_ip + ': <input type="text" class="IP" name="ip' + children + '" />' + remove + '</li>';
+
+    ul.appendChild(new_li);
 }
+
+// Removes a named nameserver item from the list
+function remove_nameserver(name) {
+    var list = document.getElementById("nameservers");
+    var elems = document.getElementsByName(name);
+    var li_elem = elems[0].parentNode;
+    list.removeChild(li_elem);
+}
+
+// Adds a new DS record item to the initial list
+function add_ds_record() {
+    var ul = document.getElementById("ds_records");
+    var children = ul.childNodes.length;
+    //alert(children);
+    var new_li = document.createElement('li');
+    var remove = '<input type="button" value="' + lbl_remove_ds_record + '" onClick="remove_ds_record(\'ds'+children+'\')" />';
+
+    new_li.innerHTML = lbl_ds_key_tag + ': <input type="text" class="key_tag" name="ds' + children + '" /> '
+	+ lbl_ds_algorithm + ': <input type="text" class="algorithm" name="ds' + children + '" />'
+	+ lbl_ds_digest_type + ': <input type="text" class="digest_type" name="ds' + children + '" />'
+	+ lbl_ds_digest + ': <input type="text" class="digest" name="ds' + children + '" />'
+	+ remove + '</li>';
+
+    ul.appendChild(new_li);
+}
+
+// Removes a ds record item from the list
+function remove_ds_record(name) {
+    var list = document.getElementById("ds_records");
+    var elems = document.getElementsByName(name);
+    var li_elem = elems[0].parentNode;
+    list.removeChild(li_elem);
+}
+
 // Displays or hides the specified element
 function toggle_id(id) {
 	var e = document.getElementById(id);
@@ -188,6 +261,7 @@ function toggle_id(id) {
 	else
 		e.style.display = 'block';
 }
+
 // Function that will be triggered when selecting option in select box.
 function load_locale() {
 	var e = document.getElementById("locale_select");
@@ -199,6 +273,7 @@ function load_locale() {
 		window.location = '?locale=' + e.value;
 	}
 }
+
 // Returns a value key par for the parameters for this location
 function get_params() {
 	var params = {};
@@ -206,8 +281,9 @@ function get_params() {
 	function (str, key, value) {
 		params[key] = value;
 	});
-    return params;
+	return params;
 }
+
 // Collapses the initial results (except for important messages)
 function initialize_tree() {
 	var results = document.getElementById('result_list');
@@ -215,7 +291,7 @@ function initialize_tree() {
 	// Hide all descriptions?
 	var descriptions = results.getElementsByTagName('blockquote');
 	for (var i = 0, len = descriptions.length; i < len; i++ ) {
-			descriptions[i].style.display = 'none';
+		descriptions[i].style.display = 'none';
 	}
 }
 
@@ -227,7 +303,9 @@ window.onload = function () {
 	if(params.type != undefined && params.type.match(/undelegated|moved/)) {
 		add_nameserver();
 		add_nameserver();
-	} 
+		add_ds_record();
+	}
+
 	// initialize the result tree	
 	else if(tree_view) {
 		initialize_tree();
