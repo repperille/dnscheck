@@ -15,9 +15,9 @@ install:
 	$(MOD_INSTALL) lib $(APPDEST)/lib
 	$(MOD_INSTALL) language $(APPDEST)/language
 	$(MOD_INSTALL) templates $(APPDEST)/templates
-	$(INSTALL) config-prod.yaml $(APPDEST)/config.yaml
+#	$(INSTALL) config-prod.yaml $(APPDEST)/config.yaml
 	$(INSTALL) startup.pl $(APPDEST)
-	$(INSTALL) vhost_dnscheck $(VHOSTS)/dnscheck
+#	$(INSTALL) vhost_dnscheck $(VHOSTS)/dnscheck
 
 install-test:
 	$(INSTALL) vhost_dnscheck_test $(VHOSTS)/dnscheck-test
