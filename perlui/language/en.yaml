@@ -114,11 +114,11 @@ enter_your_undelegated_domain_name: Enter your undelegated domain name in the fi
 
 what_is_an_undelegated: What is an undelegated domain test?
 
-remove_name_server: -
+remove_name_server: '-'
 
 enter_your_unpublished_ds_record: If you have signed your domain using DNSSEC, enter your unpublished DS records below if you want to test your published DNSSEC keys.
 
-remove_ds_record: -
+remove_ds_record: '-'
 
 load_error_header: Connection error
 

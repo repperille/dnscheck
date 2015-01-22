@@ -114,11 +114,11 @@ enter_your_undelegated_domain_name: Angi ditt udelegerte domenenavn ovenfor, i t
 
 what_is_an_undelegated: Hva er en udelgert domenetest?
 
-remove_name_server: -
+remove_name_server: '-'
 
 enter_your_unpublished_ds_record: Hvis du har signert domenet mha. DNSSEC, angi dine upubliserte DS-poster nedenfor for å teste mot dine publiserte DNSSEC nøkkler.
 
-remove_ds_record: -
+remove_ds_record: '-'
 
 load_error_header: Avslutningsproblem
 
