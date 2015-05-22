@@ -31,13 +31,18 @@ use warnings;
 
 # Load needed libraries
 use DNSCheckWeb;
+use HTML::Entities;
+
+sub xss_protect {
+    return HTML::Entities::encode(shift)
+}
 
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
 # Parameters
-my $type = $cgi->param('type');
-my $locale = $cgi->param('locale');
+my $type = xss_protect($cgi->param('type'));
+my $locale = xss_protect($cgi->param('locale'));
 
 # Unless type was valid, assign standard
 unless (defined($type) && ($type =~ m/standard|undelegated|moved/)) {

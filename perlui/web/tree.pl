@@ -35,14 +35,20 @@ use JSON;
 use DNSCheckWeb;
 use DNSCheckWeb::Exceptions;
 use Scalar::Util qw(looks_like_number);
+use HTML::Entities;
+
+sub xss_protect {
+    return shift;
+#    return HTML::Entities::encode(shift)
+}
 
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 my $dbo = $dnscheck->get_dbo();
 
-my $test_id = $cgi->param('test_id');
-my $key = $cgi->param('key');
-my $locale = $cgi->param('locale');
+my $test_id = xss_protect($cgi->param('test_id'));
+my $key = xss_protect($cgi->param('key'));
+my $locale = xss_protect($cgi->param('locale'));
 
 my $result = { };
 

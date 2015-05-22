@@ -40,6 +40,7 @@ use CGI;
 use JSON;
 use IDNA::Punycode;
 use Encode;
+use HTML::Entities;
 
 # Constants for feedback
 use constant TEST_STARTED => "started";
@@ -53,17 +54,22 @@ use constant TEST_ERROR => "error";
 use constant INITIAL => 5;
 use constant MAX_RETRIES => 5;
 use constant SLEEP_TIME => 2;
+
+sub xss_protect {
+    return HTML::Entities::encode(shift)
+}
+
 my $retries = 0;
 
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
 # Fetch parameters
-my $domain = lc($cgi->param("domain"));
-my $source_data = lc($cgi->param("parameters"));
+my $domain = lc(xss_protect($cgi->param("domain")));
+my $source_data = lc(xss_protect($cgi->param("parameters")));
 
-my $js = $cgi->param("js");
-my $private = $cgi->param("private");
+my $js = xss_protect($cgi->param("js"));
+my $private = xss_protect($cgi->param("private"));
 
 # Check whether this is an ajax call or not
 # Will dictate how the rest of the check carries out
@@ -73,7 +79,7 @@ unless(defined($js) && ($js == 0 || $js == 1)) {
 
 # Set source and concenate source data if it was not provided by js
 my $source;
-if($cgi->param("test") =~ m/undelegated|moved/) {
+if(xss_protect($cgi->param("test")) =~ m/undelegated|moved/) {
 	if(!$js) {
 		$source_data = concat_data($cgi);
 	}
@@ -210,8 +216,10 @@ exit;
 # version
 sub concat_data {
 	my $cgi = shift;
-	my $domain0 = concat_domain($cgi->param('host0'), $cgi->param('ip0'));
-	my $domain1 = concat_domain($cgi->param('host1'), $cgi->param('ip1'));
+	my $domain0 = concat_domain(xss_protect($cgi->param('host0')), 
+				    xss_protect($cgi->param('ip0')));
+	my $domain1 = concat_domain(xss_protect($cgi->param('host1')), 
+				    xss_protect($cgi->param('ip1')));
 
 	return "$domain0 $domain1";
 }

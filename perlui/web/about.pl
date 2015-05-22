@@ -33,10 +33,15 @@ use warnings;
 use DNSCheckWeb;
 use DNSCheckWeb::Exceptions;
 use Data::Dumper;
+use HTML::Entities;
+
+sub xss_protect {
+    return HTML::Entities::encode(shift)
+}
 
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
-my $locale = $cgi->param('locale');
+my $locale = xss_protect($cgi->param('locale'));
 
 # Load language, and sets the locale given that it was valid.
 my $lng = $dnscheck->get_lng($locale);

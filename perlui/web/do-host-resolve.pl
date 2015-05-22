@@ -36,12 +36,17 @@ use warnings;
 use DNSCheckWeb;
 use JSON;
 use Net::DNS;
+use HTML::Entities;
+
+sub xss_protect {
+    return HTML::Entities::encode(shift)
+}
 
 my $dnscheck = DNSCheckWeb->new();
 my $cgi = $dnscheck->get_cgi();
 
 # Params
-my $nameservers = lc($cgi->param('nameservers'));
+my $nameservers = lc(xss_protect($cgi->param('nameservers')));
 
 my @results = ();
 
