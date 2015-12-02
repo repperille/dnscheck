@@ -467,7 +467,7 @@ sub get {
       if $self->{debug};
 
     @ns =
-      map { $_->ip }
+      map { $_->short }
           grep {
               ( $_->version == 4 and $self->config->get('net')->{ipv4} )
               or

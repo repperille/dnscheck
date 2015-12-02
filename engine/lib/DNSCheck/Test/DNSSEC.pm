@@ -58,6 +58,8 @@ sub algorithm_name {
         10  => 'RSA/SHA-512',
         11  => 'Unassigned (11)',
         12  => 'GOST R 34.10-2001',
+        13  => 'ECDSA-P256-SHA256',
+        14  => 'ECDSA-P384-SHA384',
         252 => 'Reserved (Indirect keys)',
         253 => 'Private algorithm (domain name)',
         254 => 'Private algorithm (OID)',
@@ -66,7 +68,7 @@ sub algorithm_name {
 
     if ($names{$aid}) {
         return $names{$aid};
-    } elsif ($aid >= 13 and $aid <= 122) {
+    } elsif ($aid >= 15 and $aid <= 122) {
         return "Unassigned ($aid)";
     } elsif ($aid >= 123 and $aid <= 251) {
         return "Reserved ($aid)";
@@ -276,7 +278,7 @@ sub _check_child {
 
         $keyhash{ $key->keytag } = $key;
 
-        if ($key->is_sep) {
+        if ($key->sep) {
             $logger->auto("DNSSEC:DNSKEY_SEP", $zone, $key->keytag);
             push @{ $result{sep} }, $key->keytag;
             $sep++;
@@ -557,6 +559,8 @@ sub check_algorithm {
     #    10  => RSA/SHA-512
     #    11  => Unassigned
     #    12  => GOST R 34.10-2001
+    #    13  => ECDSA-P256-SHA256
+    #    14  => ECDSA-P384-SHA384
     #    13-122 => Unassigned
     #    123-251 => Reserved
     #    252 => Reserved (Indirect keys)
@@ -567,7 +571,7 @@ sub check_algorithm {
     if ($aid == 0 or $aid == 4 or ($aid >= 123 and $aid <= 252) or $aid == 255)
     {
         return $logger->auto('DNSSEC:ALGORITHM_RESERVED', $aid);
-    } elsif ($aid == 9 or $aid == 11 or ($aid >= 13 and $aid <= 122)) {
+    } elsif ($aid == 9 or $aid == 11 or ($aid >= 15 and $aid <= 122)) {
         return $logger->auto('DNSSEC:ALGORITHM_UNASSIGNED', $aid);
     } elsif ($aid == 253 or $aid == 254) {
         return $logger->auto('DNSSEC:ALGORITHM_PRIVATE', $aid);

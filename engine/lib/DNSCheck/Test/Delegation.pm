@@ -124,7 +124,7 @@ sub _get_glue {
 
         if ($ipv4) {
             my @sorted_ipv4 =
-              sort { $a->{name} cmp $b->{name} }
+              sort { $a->name cmp $b->name }
               ($ipv4->answer, $ipv4->additional);
 
             foreach my $rr (@sorted_ipv4) {
@@ -141,7 +141,7 @@ sub _get_glue {
 
         if ($ipv6) {
             my @sorted_ipv6 =
-              sort { $a->{name} cmp $b->{name} }
+              sort { $a->name cmp $b->name }
               ($ipv6->answer, $ipv6->additional);
 
             foreach my $rr (@sorted_ipv6) {
