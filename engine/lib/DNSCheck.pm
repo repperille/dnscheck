@@ -151,7 +151,8 @@ sub add_fake_ds {
     # Uppercase DS otherwise the Net::DNS::RR->new($data) will fail.
     $data =~ s/\sds\s/ DS /;
     #print STDERR "DS[$data]\n";
-    my $ds = Net::DNS::RR->new($data);
+    my $ds = undef;
+    eval { $ds = Net::DNS::RR->new($data) };
     unless ($ds and $ds->type eq 'DS') {
         $self->logger->auto('FAKEGLUE:MALFORMED_DS', $data);
         return;

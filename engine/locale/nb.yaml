@@ -483,7 +483,7 @@ messages:
     format: "%s's nøkkel med tag %s bruker algoritme nummer %s (%s)."
   DNSSEC:DS_FOUND:
     args: 1
-    descr: 'Et SD (delegation signer) RRset ble funnet hos forelderen. Dette indikerer en sikker delegering, altså må barnet bli signert.'
+    descr: 'Et DS (delegation signer) RRset ble funnet hos forelderen. Dette indikerer en sikker delegering, altså må barnet bli signert.'
     format: Fant DS-innslag for %s hos forelderen.
   DNSSEC:DS_KEYREF_INVALID:
     args: 2
