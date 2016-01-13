@@ -209,24 +209,27 @@ sub test_soa_rname {
 
     # REQUIRE: SOA RNAME must have a valid syntax (@ vs .)
     # REQUIRE: SOA RNAME address should be deliverable
-    if ($soa->rname =~ /^(.+?)(?<!\\)\.(.+)$/)
+    my $rname = $soa->{rname}->string;
+    $rname =~ s/\.$//;
+
+    if ($rname =~ /^(.+?)(?<!\\)\.(.+)$/)
     {    # Check for existence if unescaped dot
-        my $mailaddr = $soa->rname;
+        my $mailaddr = $rname;
         $mailaddr =~ s/(?<!\\)\./@/;    # Replace unescaped dot with at-sign
         $mailaddr =~ s/\\\././g;        # De-escape escaped dots.
 
         if ($parent->config->get('net')->{smtp}) {
             if ($parent->mail->test($mailaddr, $zone)) {
                 $logger->auto("SOA:RNAME_UNDELIVERABLE",
-                    $zone, $soa->rname, $mailaddr);
+                    $zone, $rname, $mailaddr);
             } else {
                 $logger->auto("SOA:RNAME_DELIVERABLE",
-                    $zone, $soa->rname, $mailaddr);
+                    $zone, $rname, $mailaddr);
             }
         }
 
     } else {
-        $errors += $logger->auto("SOA:RNAME_SYNTAX", $zone, $soa->rname);
+        $errors += $logger->auto("SOA:RNAME_SYNTAX", $zone, $rname);
     }
 
     return $errors;

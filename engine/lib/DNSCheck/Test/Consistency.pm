@@ -88,9 +88,12 @@ sub test {
 
             my $serial = $rr->serial;
 
+	    my $rname = $rr->{rname}->string;
+	    $rname =~ s/\.$//;
+
             my $digest = sha1_hex(
                 join(':',
-                    $rr->mname, $rr->rname,  $rr->refresh,
+                    $rr->mname, $rname,  $rr->refresh,
                     $rr->retry, $rr->expire, $rr->minimum)
             );
 
