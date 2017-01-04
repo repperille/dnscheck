@@ -932,6 +932,10 @@ sub check_axfr {
     $resolver->nameservers($address);
     $resolver->axfr_start($qname, $qclass);
 
+    if ($resolver->errorstring() ne 'unknown error or no error') {
+        return 0;
+    }
+
     if ($resolver->axfr_next) {
         return 1;
     }
