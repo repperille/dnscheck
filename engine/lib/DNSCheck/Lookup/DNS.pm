@@ -930,7 +930,9 @@ sub check_axfr {
     $resolver->tcp_timeout($timeout);
 
     $resolver->nameservers($address);
-    $resolver->axfr_start($qname, $qclass);
+    eval {
+        $resolver->axfr_start($qname, $qclass);
+    };
 
     if ($resolver->errorstring() ne 'unknown error or no error') {
         return 0;
