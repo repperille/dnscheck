@@ -80,9 +80,9 @@ sub mname_is_ns {
     my @ns     = @_;
 
     foreach my $rr (@ns) {
-        if ($rr->type eq 'CNAME') {
+        if ($rr->type eq "CNAME") {
             $logger->auto('SOA:MNAME_IS_CNAME', $rr->name, $rr->cname);
-        } elsif (lc($rr->nsdname) eq lc($soa->mname)) {
+        } elsif (($rr->type eq "NS") && (lc($rr->nsdname) eq lc($soa->mname))) {
             return 1;
         }
     }
